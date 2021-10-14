@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const [menuActive, setMenuActive] = useState(false);
@@ -19,6 +19,13 @@ export default function Header() {
       return !status;
     });
   };
+  useEffect(() => {
+    if (menuActive || searchActive) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [menuActive, searchActive]);
 
   return (
     <>
@@ -131,9 +138,11 @@ export default function Header() {
         </nav>
       </header>
       <div
-        className={`fixed w-full h-content right-0 flex flex-col justify-between bg-white z-10 transform ease-in-out duration-200 ${
-          menuActive ? "opacity-100 md:translate-y-0" : "opacity-0 md:-translate-y-full"
-        } backdrop-filter bg-opacity-24 backdrop-saturate-150 backdrop-blur-lg firefox:bg-opacity-100 md:opacity-100 md:h-[25rem] md:top-0`}
+        className={`fixed w-full h-screen right-0 flex flex-col justify-between z-10 bg-white transform ease-in-out duration-200 ${
+          menuActive
+            ? "opacity-100 md:translate-y-0"
+            : "pointer-events-none opacity-0 md:-translate-y-full"
+        } backdrop-filter bg-opacity-24 backdrop-saturate-150 backdrop-blur-lg firefox:bg-opacity-100 md:opacity-100 md:h-[25rem] top-0`}
       >
         <nav className=" mt-56 flex flex-col items-center justify-center italic font-black text-h2 leading-h2 uppercase gap-5 md:mt-32">
           <Link href="/">
