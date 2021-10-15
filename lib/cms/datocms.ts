@@ -68,3 +68,24 @@ export async function getHeroSlides(preview: boolean) {
   );
   return data?.allSlides as Slide[];
 }
+
+export async function getAbout(preview: boolean) {
+  const data = await fetchAPI(
+    `
+    {
+      about {
+        images {
+          blurUpThumb
+          url
+        }
+        intro
+        subheading
+        heading
+        generations
+      }
+    }
+  `,
+    { preview }
+  );
+  return data?.about;
+}

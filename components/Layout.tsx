@@ -14,7 +14,7 @@ const Layout = ({ children, title = "Bakia" }: Props) => (
       <title>{title}</title>
     </Head>
     <Header />
-    <div className="h-screen">{children}</div>
+    <div className="">{children}</div>
     <Footer />
   </div>
 );

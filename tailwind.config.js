@@ -11,6 +11,7 @@ module.exports = {
         content: "calc(100vh - 3.5rem)",
         "content-sm": "calc(100vh - 6rem)",
         "header-sm": "21.875rem",
+        "footer-half": "calc(50% - 0.625rem)",
       },
       colors: {
         main: "#3EFFA8",
@@ -34,12 +35,56 @@ module.exports = {
       backgroundOpacity: {
         24: "0.24",
       },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            h1: {
+              fontWeight: "900",
+              fontStyle: "italic",
+              fontSize: "2.25rem",
+              textTransform: "uppercase",
+              lineHeight: "2.625rem",
+              padding: 0,
+              margin: 0,
+            },
+            h2: {
+              fontWeight: "900",
+              fontStyle: "italic",
+              fontSize: "1.625rem",
+              textTransform: "uppercase",
+              lineHeight: "1.875rem",
+              padding: 0,
+              margin: 0,
+            },
+            h3: {
+              fontWeight: "900",
+              fontStyle: "italic",
+              fontSize: "1rem",
+              textTransform: "uppercase",
+              lineHeight: "1.25rem",
+              padding: 0,
+              margin: 0,
+            },
+            p: {
+              fontWeight: "normal",
+              fontStyle: "normal",
+              fontSize: "1rem",
+              fontFamily: "Bai Jamjuree",
+              fontColor: theme("color.altGrey"),
+              lineHeight: "1.375rem",
+              padding: 0,
+              margin: 0,
+            },
+          },
+        },
+      }),
     },
   },
   variants: {
     extend: {},
   },
   plugins: [
+    require("@tailwindcss/typography"),
     // firefox variant
     plugin(function ({ addVariant, e, postcss }) {
       addVariant("firefox", ({ container, separator }) => {

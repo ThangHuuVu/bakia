@@ -2,10 +2,27 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+function useIsScrollTop() {
+  const [isTop, setIsTop] = useState(true);
+  useEffect(() => {
+    function onScroll() {
+      setIsTop(window.scrollY <= 0);
+    }
+    window.addEventListener("scroll", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  return isTop;
+}
+
 export default function Header() {
   const [menuActive, setMenuActive] = useState(false);
   const [searchActive, setSearchActive] = useState(false);
   const router = useRouter();
+  const isTop = useIsScrollTop();
 
   const onMenuToggle = () => {
     setMenuActive((status) => {
@@ -29,7 +46,11 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-20 flex items-center justify-center bg-background">
+      <header
+        className={`sticky top-0 z-20 flex items-center justify-center ${
+          isTop || menuActive || searchActive ? "bg-transparent" : "bg-white"
+        }`}
+      >
         <nav className="w-full h-14 flex items-center justify-between px-6 md:max-w-6xl md:h-[3.125rem]">
           <button className="inline-block" onClick={onMenuToggle}>
             {menuActive ? (
@@ -145,7 +166,7 @@ export default function Header() {
             : "pointer-events-none opacity-0 -translate-y-full"
         } backdrop-filter bg-opacity-24 backdrop-saturate-150 backdrop-blur-lg firefox:bg-opacity-100 md:opacity-100 md:h-[21.875rem]`}
       >
-        <nav className="flex flex-col items-center justify-center gap-5 mt-56 italic font-black uppercase  text-h2 leading-h2 md:mt-32">
+        <nav className="flex flex-col items-center justify-center gap-5 mt-56 italic font-black uppercase text-h2 leading-h2 md:mt-32">
           <Link href="/">
             <a className={router.pathname === "/" ? "text-mediumMint" : "text-black"}>Trang chủ</a>
           </Link>
