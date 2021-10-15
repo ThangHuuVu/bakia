@@ -138,11 +138,11 @@ export default function Header() {
         </nav>
       </header>
       <div
-        className={`fixed w-full h-screen right-0 flex flex-col justify-between z-10 bg-white transform ease-in-out duration-200 ${
+        className={`fixed w-full h-screen right-0 top-0 flex flex-col justify-between z-10 bg-white transition-opacity md:transform md:transition-transform ${
           menuActive
             ? "opacity-100 md:translate-y-0"
             : "pointer-events-none opacity-0 md:-translate-y-full"
-        } backdrop-filter bg-opacity-24 backdrop-saturate-150 backdrop-blur-lg firefox:bg-opacity-100 md:opacity-100 md:h-[25rem] top-0`}
+        } backdrop-filter bg-opacity-24 backdrop-saturate-150 backdrop-blur-lg firefox:bg-opacity-100 md:opacity-100 md:h-[21.875rem]`}
       >
         <nav className=" mt-56 flex flex-col items-center justify-center italic font-black text-h2 leading-h2 uppercase gap-5 md:mt-32">
           <Link href="/">
@@ -159,7 +159,7 @@ export default function Header() {
             </a>
           </Link>
         </nav>
-        <div className="mb-8 flex flex-col items-center justify-center gap-2 font-s3 text-s3 md:flex-row md:gap-10">
+        <div className="mb-8 flex flex-col items-center justify-center gap-2 font-body text-s3 md:flex-row md:gap-10">
           <div className="flex items-center gap-2">
             <svg
               width="15"

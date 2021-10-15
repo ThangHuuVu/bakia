@@ -29,7 +29,7 @@ module.exports = {
         h2: "1.875rem",
       },
       fontFamily: {
-        s3: ['"Bai Jamjuree"', ...defaultTheme.fontFamily.sans],
+        body: ['"Bai Jamjuree"', ...defaultTheme.fontFamily.sans],
       },
       backgroundOpacity: {
         24: "0.24",

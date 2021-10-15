@@ -1,30 +1,28 @@
 import { Container } from "@/lib/types/Common";
 
 interface ProgressRingProps extends Container {
-  color: string;
-  radius: number;
-  stroke: number;
+  radius?: number;
+  strokeWidth: number;
   running: boolean;
   progress: number;
 }
 
 export const ProgressRing = ({
-  color,
-  radius,
-  stroke,
+  radius = 20,
+  strokeWidth,
   running,
   progress,
   children,
 }: ProgressRingProps) => {
-  const normalizedRadius = radius - stroke * 2;
+  const normalizedRadius = radius - strokeWidth * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
   const strokeDashoffset = running ? circumference - (progress / 100) * circumference : 0;
 
   return (
-    <div className="w-10 h-10 flex items-center justify-center text-main">
+    <div className={`w-10 h-10 relative ${running ? "text-main" : "text-black"}`}>
       <svg height={radius * 2} width={radius * 2}>
         <circle
-          stroke={color}
+          stroke="black"
           fill="transparent"
           strokeWidth={1}
           r={radius - 4}
@@ -35,7 +33,7 @@ export const ProgressRing = ({
           <circle
             className="stroke-current"
             fill="transparent"
-            strokeWidth={stroke}
+            strokeWidth={strokeWidth}
             strokeDasharray={circumference + " " + circumference}
             style={{ strokeDashoffset }}
             r={normalizedRadius}
@@ -44,7 +42,9 @@ export const ProgressRing = ({
           />
         )}
       </svg>
-      <div>{children}</div>
+      <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        {children}
+      </div>
     </div>
   );
 };

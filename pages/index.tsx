@@ -1,7 +1,21 @@
-import HomeLayout from "../components/HomeLayout";
+import HomeLayout from "@/components/HomeLayout";
 import Link from "next/link";
+import { getHeroSlides, Slide } from "@/lib/cms/datocms";
+import { InferGetStaticPropsType } from "next";
+import Hero from "@/components/Hero";
 
-const IndexPage = () => (
+export const getStaticProps = async ({ preview = false }) => {
+  const allSlides: Slide[] = (await getHeroSlides(preview)) || [];
+
+  return {
+    props: {
+      slides: allSlides.sort((a, b) => a.order - b.order),
+    },
+    revalidate: 600,
+  };
+};
+
+const IndexPage = ({ slides }: InferGetStaticPropsType<typeof getStaticProps>) => (
   <HomeLayout title="Home">
     <video
       playsInline
@@ -22,8 +36,8 @@ const IndexPage = () => (
     <div className="absolute bottom-2 w-full px-4 md:hidden">
       <div className="flex justify-between mb-3 items-end">
         <div className="uppercase italic font-black">
-          <h1 className="text-h2 leading-h2">sáng tạo bakia</h1>
-          <p className="text-base">của chính bạn</p>
+          <h1 className="text-h2 leading-h2">{slides[0].title}</h1>
+          <h2 className="text-base">{slides[0].subheading}</h2>
         </div>
         <svg
           width="12"
@@ -40,16 +54,16 @@ const IndexPage = () => (
         </svg>
       </div>
 
-      <Link href="/custom">
+      <Link href={slides[0].cta.href}>
         <a>
           <div className="w-full h-14 flex items-center justify-center rounded-lg bg-main uppercase italic text-xl font-black">
-            tạo ngay
+            {slides[0].cta.title}
           </div>
         </a>
       </Link>
     </div>
     <div className="hidden w-full h-full md:flex items-center justify-between fixed">
-      <div className="w-full max-w-[86rem] h-full flex justify-between mx-auto mt-[12.5rem]">
+      <div className="w-full max-w-[86rem] h-full flex justify-between mx-auto mt-[15.625rem]">
         <svg
           width="262"
           height="246"
@@ -151,7 +165,7 @@ const IndexPage = () => (
             fill="#3EFFA8"
           />
         </svg>
-        <div className="w-[18.5rem] h-[25rem]"></div>
+        <Hero slides={slides} />
       </div>
     </div>
   </HomeLayout>
