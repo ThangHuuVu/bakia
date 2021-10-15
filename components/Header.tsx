@@ -29,7 +29,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky z-20 top-0 flex items-center justify-center">
+      <header className="sticky top-0 z-20 flex items-center justify-center bg-background">
         <nav className="w-full h-14 flex items-center justify-between px-6 md:max-w-6xl md:h-[3.125rem]">
           <button className="inline-block" onClick={onMenuToggle}>
             {menuActive ? (
@@ -145,7 +145,7 @@ export default function Header() {
             : "pointer-events-none opacity-0 -translate-y-full"
         } backdrop-filter bg-opacity-24 backdrop-saturate-150 backdrop-blur-lg firefox:bg-opacity-100 md:opacity-100 md:h-[21.875rem]`}
       >
-        <nav className=" mt-56 flex flex-col items-center justify-center italic font-black text-h2 leading-h2 uppercase gap-5 md:mt-32">
+        <nav className="flex flex-col items-center justify-center gap-5 mt-56 italic font-black uppercase  text-h2 leading-h2 md:mt-32">
           <Link href="/">
             <a className={router.pathname === "/" ? "text-mediumMint" : "text-black"}>Trang chủ</a>
           </Link>
@@ -160,7 +160,7 @@ export default function Header() {
             </a>
           </Link>
         </nav>
-        <div className="mb-8 flex flex-col items-center justify-center gap-2 font-body text-s3 md:flex-row md:gap-10">
+        <div className="flex flex-col items-center justify-center gap-2 mb-8 font-body text-s3 md:flex-row md:gap-10">
           <div className="flex items-center gap-2">
             <svg
               width="15"
@@ -193,7 +193,7 @@ export default function Header() {
             </svg>
             BAKIA Exclusive and Premium
           </div>
-          <div className="flex items-center gap-3  md:gap-9">
+          <div className="flex items-center gap-3 md:gap-9">
             <div className="flex items-center gap-2">
               <svg
                 width="12"

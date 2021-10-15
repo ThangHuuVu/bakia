@@ -23,7 +23,7 @@ const IndexPage = ({ slides }: InferGetStaticPropsType<typeof getStaticProps>) =
       autoPlay
       muted
       src={"static/home/main_video_responsive.mp4"}
-      className="w-full h-screen md:hidden fixed top-0"
+      className="fixed top-0 w-full h-screen md:hidden"
     />
     <video
       playsInline
@@ -31,11 +31,11 @@ const IndexPage = ({ slides }: InferGetStaticPropsType<typeof getStaticProps>) =
       autoPlay
       muted
       src={"static/home/main_video.mp4"}
-      className="w-full h-content hidden md:block absolute left-0 top-14"
+      className="absolute left-0 hidden w-full h-content md:block top-14"
     />
-    <div className="absolute bottom-2 w-full px-4 md:hidden">
-      <div className="flex justify-between mb-3 items-end">
-        <div className="uppercase italic font-black">
+    <div className="absolute w-full px-4 bottom-2 md:hidden">
+      <div className="flex items-end justify-between mb-3">
+        <div className="italic font-black uppercase">
           <h1 className="text-h2 leading-h2">{slides[0].title}</h1>
           <h2 className="text-base">{slides[0].subheading}</h2>
         </div>
@@ -56,13 +56,13 @@ const IndexPage = ({ slides }: InferGetStaticPropsType<typeof getStaticProps>) =
 
       <Link href={slides[0].cta.href}>
         <a>
-          <div className="w-full h-14 flex items-center justify-center rounded-lg bg-main uppercase italic text-xl font-black">
+          <div className="flex items-center justify-center w-full text-xl italic font-black uppercase rounded-lg h-14 bg-main">
             {slides[0].cta.title}
           </div>
         </a>
       </Link>
     </div>
-    <div className="hidden w-full h-full md:flex items-center justify-between fixed">
+    <div className="fixed items-center justify-between hidden w-full h-full md:flex">
       <div className="w-full max-w-[86rem] h-full flex justify-between mx-auto mt-[15.625rem]">
         <svg
           width="262"

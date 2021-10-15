@@ -78,7 +78,7 @@ const SlideItem = ({ slide, currentHighlight, progress, order }: SlideItemProps)
         {isHighlighting && (
           <>
             <p
-              className="font-body normal-case font-normal not-italic"
+              className="not-italic font-normal normal-case font-body"
               dangerouslySetInnerHTML={{
                 __html: slide.paragraph.replace(/(?:\r\n|\r|\n)/g, "<br>"),
               }}
