@@ -7,11 +7,15 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      spacing: {
+      spacing: {},
+      height: {
         content: "calc(100vh - 3.5rem)",
-        "content-sm": "calc(100vh - 6rem)",
-        "header-sm": "21.875rem",
-        "footer-half": "calc(50% - 0.625rem)",
+      },
+      maxWidth: {
+        content: "69.375rem",
+      },
+      borderWidth: {
+        0.5: "0.5px",
       },
       colors: {
         main: "#3EFFA8",

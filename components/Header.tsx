@@ -51,7 +51,7 @@ export default function Header() {
           isTop || menuActive || searchActive ? "bg-transparent" : "bg-white"
         }`}
       >
-        <nav className="w-full h-14 flex items-center justify-between px-6 md:max-w-6xl md:h-[3.125rem]">
+        <nav className="w-full h-14 flex items-center justify-between md:max-w-content md:h-[3.188rem]">
           <button className="inline-block" onClick={onMenuToggle}>
             {menuActive ? (
               <svg

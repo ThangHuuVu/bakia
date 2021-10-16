@@ -9,14 +9,14 @@ type Props = {
 };
 
 const Layout = ({ children, title = "Bakia" }: Props) => (
-  <div>
+  <>
     <Head>
       <title>{title}</title>
     </Head>
     <Header />
-    <div className="">{children}</div>
+    <div className="min-h-screen mx-auto max-w-content">{children}</div>
     <Footer />
-  </div>
+  </>
 );
 
 export default Layout;
