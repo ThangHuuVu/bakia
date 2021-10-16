@@ -17,6 +17,9 @@ module.exports = {
       borderWidth: {
         0.5: "0.5px",
       },
+      padding: {
+        content: "calc((100vw - 69.375rem)/2) ",
+      },
       colors: {
         main: "#3EFFA8",
         mediumMint: "#2ED98C",
