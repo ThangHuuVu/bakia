@@ -45,8 +45,8 @@ const AboutPage = ({
           <h3>{subheading}</h3>
         </div>
       </div>
-      <div className="relative md:h-[51.25rem] md:w-screen px-4 pt-20 pb-[5.875rem] bg-white md:pt-[7.75rem]">
-        <div className="md:w-screen md:absolute md:left-1/2 md:transform md:-translate-x-1/2 md:px-content md:flex md:justify-between">
+      <div className="relative md:h-[51.25rem] md:w-content px-4 pt-20 pb-[5.875rem] bg-white md:pt-[7.75rem] md:px-content">
+        <div className="md:w-full md:absolute md:left-1/2 md:transform md:-translate-x-1/2 md:px-content md:flex md:justify-between">
           <p
             className="mb-40 bg-white text-altGrey  md:max-w-[45.5rem] md:mb-0"
             dangerouslySetInnerHTML={{ __html: intro }}

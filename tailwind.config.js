@@ -11,6 +11,9 @@ module.exports = {
       height: {
         content: "calc(100vh - 3.5rem)",
       },
+      width: {
+        content: "calc(100vw - 1rem)"
+      },
       maxWidth: {
         content: "69.375rem",
       },
