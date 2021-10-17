@@ -1,7 +1,7 @@
 import Link from "next/link";
 const Footer = () => {
   return (
-    <footer className="bg-white w-full px-4 pb-7 pt-[3.75rem] flex items-center flex-col space-y-6 border-t md:flex-col-reverse md:pt-20 md:border-t-0">
+    <footer className="bg-white w-full px-4 pb-7 pt-[3.75rem] flex items-center flex-col space-y-6 border-t md:flex-col-reverse md:pt-[12.75rem] md:border-t-0  md:space-y-0">
       <div className="flex flex-col pb-6 border-b md:border-b-0 md:border-t md:pt-14 md:flex-row">
         <div className="flex flex-wrap justify-between gap-[1.25rem] md:flex-nowrap md:flex-row-reverse">
           <div className="w-[10.25rem] flex-grow-0 md:w-auto md:mr-[4.313rem] space-y-2">
