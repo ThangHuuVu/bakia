@@ -1,4 +1,4 @@
-import HomeLayout from "@/components/HomeLayout";
+import Layout from "@/components/Layout";
 import Link from "next/link";
 import { getHeroSlides, Slide } from "@/lib/cms/datocms";
 import { InferGetStaticPropsType } from "next";
@@ -16,7 +16,7 @@ export const getStaticProps = async ({ preview = false }) => {
 };
 
 const IndexPage = ({ slides }: InferGetStaticPropsType<typeof getStaticProps>) => (
-  <HomeLayout title="Home">
+  <Layout title="Home">
     <video
       playsInline
       loop
@@ -168,7 +168,7 @@ const IndexPage = ({ slides }: InferGetStaticPropsType<typeof getStaticProps>) =
         <Hero slides={slides} />
       </div>
     </div>
-  </HomeLayout>
+  </Layout>
 );
 
 export default IndexPage;

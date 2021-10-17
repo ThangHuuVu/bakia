@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import Head from "next/head";
 import Header from "./Header";
-import Footer from "./Footer";
 
 type Props = {
   children?: ReactNode;
@@ -9,7 +8,7 @@ type Props = {
 };
 
 const Layout = ({ children, title = "Bakia" }: Props) => (
-  <>
+  <div>
     <Head>
       <meta charSet="utf-8" />
       <meta
@@ -19,9 +18,8 @@ const Layout = ({ children, title = "Bakia" }: Props) => (
       <title>{title}</title>
     </Head>
     <Header />
-    <div className="min-h-screen mx-auto max-w-content">{children}</div>
-    <Footer />
-  </>
+    <div className="h-content">{children}</div>
+  </div>
 );
 
 export default Layout;
