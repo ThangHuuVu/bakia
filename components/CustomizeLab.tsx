@@ -4,8 +4,8 @@ import { useState } from "react";
 
 export default function CustomizeLab() {
   return (
-    <div className="relative h-full overflow-hidden">
-      <div className="flex w-full h-[3.25rem] items-center justify-between px-4 mb-5">
+    <div className="relative h-full px-4 overflow-hidden">
+      <div className="flex w-full h-[3.25rem] items-center justify-between mb-5">
         <div className="flex items-center w-1/2 h-full gap-2">
           <svg
             width="29"
@@ -24,29 +24,25 @@ export default function CustomizeLab() {
             <p className="text-s3 text-[#4D5254]">Nhấn xem thông tin</p>
           </div>
         </div>
-        <Link href="/checkout">
-          <a className="w-1/2 h-full">
-            <div className="flex items-center justify-center w-full h-full text-lg italic font-bold uppercase rounded-lg bg-main">
-              hoàn thành
-            </div>
-          </a>
-        </Link>
+        <button className="flex items-center justify-center w-1/2 h-full text-lg italic font-bold uppercase rounded-lg bg-main">
+          hoàn thành
+        </button>
       </div>
-      <div className="px-4">
+      <div className="flex items-center justify-center w-full px-auto">
         <Image src="/static/assets/bakia_model.png" width={348} height={545} alt="bakia model" />
       </div>
-      <Panel />
+      <SelectPanel />
     </div>
   );
 }
 
-const Panel = () => {
+const SelectPanel = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <div
-      className={`absolute px-2 w-full h-[21.25rem] transform ${
+      className={`absolute w-full h-[21.25rem] transform ${
         isOpen ? "translate-y-0" : "translate-y-[20rem]"
-      } transition-transform bottom-0`}
+      } transition-transform bottom-0 left-1/2 -translate-x-1/2 px-2`}
     >
       <div className=" h-full w-full bg-white rounded-t-[0.625rem] pt-[1.875rem]">
         <div className={isOpen ? "flex flex-col items-center prose" : "hidden"}>
