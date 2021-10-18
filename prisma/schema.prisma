@@ -10,37 +10,57 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
-model Product {
-  id               Int              @id @default(autoincrement())
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  name             String
-  description      String
-  price            Int
-  availability     String
-  productVarieties ProductVariety[]
-  category         Category?        @relation(fields: [categoryId], references: [id])
-  categoryId       Int?
+model Gene {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  image       String
+  name        String
+  description String
+  price       Int
 }
 
-model ProductVariety {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  product   Product  @relation(fields: [productId], references: [id])
-  productId Int
-  thumbnail String
-  image     String
-  color     String
+model Product {
+  id         Int              @id @default(autoincrement())
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  name       String
+  variants   ProductVariant[]
+  category   Category         @relation(fields: [categoryId], references: [id])
+  categoryId Int
+}
+
+model ProductVariant {
+  id             Int              @id @default(autoincrement())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  thumbnail      String
+  image          String
+  name           String
+  price          Int
+  product        Product          @relation(fields: [productId], references: [id])
+  productId      Int
+  color          VariantColor     @relation(fields: [colorId], references: [id])
+  colorId        Int
+  prerequisite   ProductVariant?  @relation("ProductVariantToProductVariant", fields: [prerequisiteId], references: [id])
+  options        ProductVariant[] @relation("ProductVariantToProductVariant")
+  prerequisiteId Int?             @map("productVariantId")
 }
 
 model Category {
   id        Int        @id @default(autoincrement())
   name      String
-  layer     Int
+  layer     Int?
   thumbnail String
   products  Product[]
   parent    Category   @relation("CategoryToCategory", fields: [parentId], references: [id])
   children  Category[] @relation("CategoryToCategory")
   parentId  Int        @map("categoryId")
+}
+
+model VariantColor {
+  id       Int              @id @default(autoincrement())
+  name     String
+  code     String
+  variants ProductVariant[]
 }
