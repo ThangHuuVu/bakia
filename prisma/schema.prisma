@@ -1,0 +1,46 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Product {
+  id               Int              @id @default(autoincrement())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  name             String
+  description      String
+  price            Int
+  availability     String
+  productVarieties ProductVariety[]
+  category         Category?        @relation(fields: [categoryId], references: [id])
+  categoryId       Int?
+}
+
+model ProductVariety {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+  thumbnail String
+  image     String
+  color     String
+}
+
+model Category {
+  id        Int        @id @default(autoincrement())
+  name      String
+  layer     Int
+  thumbnail String
+  products  Product[]
+  parent    Category   @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryToCategory")
+  parentId  Int        @map("categoryId")
+}
