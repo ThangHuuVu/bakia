@@ -12,6 +12,7 @@ export const getAllCategories = async () => {
   });
   return categories.map((category) => ({
     ...category,
+    thumbnail: `${process.env.IMG_URL}/Big+item/Desktop/${category.thumbnail}`,
     products: category.products.map(({ updatedAt, createdAt, variants, ...rest }) => ({
       ...rest,
       variants: variants.map(({ createdAt, updatedAt, ...variantRest }) => ({ ...variantRest })),

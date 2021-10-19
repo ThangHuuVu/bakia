@@ -73,7 +73,11 @@ const SelectPanel = ({ categories }) => {
             <SwiperSlide>
               <div className="grid grid-cols-3 grid-rows-2 gap-x-[1.875rem] mt-[1.125rem] gap-y-2">
                 {topCategories.slice(MAX_COUNT, topCategories.length).map((category) => (
-                  <Category key={category.id} category={category} />
+                  <Category
+                    key={category.id}
+                    category={category}
+                    onCategoryClick={onCategoryClick}
+                  />
                 ))}
               </div>
             </SwiperSlide>
@@ -125,12 +129,7 @@ const Category = ({ category, onCategoryClick }) => {
       className="w-[3.75rem] flex flex-col items-center cursor-pointer"
       onClick={onCategoryClick}
     >
-      <Image
-        src={`https://img.bakia.vn/Big+item/Desktop/${category.thumbnail}`}
-        alt={category.name}
-        width={60}
-        height={60}
-      />
+      <Image src={category.thumbnail} alt={category.name} width={60} height={60} />
       <span className="mt-1">{category.name}</span>
     </div>
   );
