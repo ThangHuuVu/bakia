@@ -7,6 +7,7 @@ CREATE TABLE `Gene` (
     `name` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NOT NULL,
     `price` INTEGER NOT NULL,
+    `currencyId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -23,6 +24,17 @@ CREATE TABLE `Product` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Currency` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `abbreviationSign` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `ProductVariant` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -32,8 +44,9 @@ CREATE TABLE `ProductVariant` (
     `name` VARCHAR(191) NOT NULL,
     `price` INTEGER NOT NULL,
     `productId` INTEGER NOT NULL,
-    `colorId` INTEGER NOT NULL,
-    `productVariantId` INTEGER,
+    `colorId` INTEGER,
+    `baseId` INTEGER,
+    `currencyId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -44,7 +57,7 @@ CREATE TABLE `Category` (
     `name` VARCHAR(191) NOT NULL,
     `layer` INTEGER,
     `thumbnail` VARCHAR(191) NOT NULL,
-    `categoryId` INTEGER NOT NULL,
+    `parentId` INTEGER,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

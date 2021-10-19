@@ -18,6 +18,8 @@ model Gene {
   name        String
   description String
   price       Int
+  currency    Currency @relation(fields: [currencyId], references: [id])
+  currencyId  Int
 }
 
 model Product {
@@ -30,21 +32,33 @@ model Product {
   categoryId Int
 }
 
+model Currency {
+  id               Int              @id @default(autoincrement())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  name             String
+  abbreviationSign String
+  genes            Gene[]
+  productVariants  ProductVariant[]
+}
+
 model ProductVariant {
-  id             Int              @id @default(autoincrement())
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  thumbnail      String
-  image          String
-  name           String
-  price          Int
-  product        Product          @relation(fields: [productId], references: [id])
-  productId      Int
-  color          VariantColor     @relation(fields: [colorId], references: [id])
-  colorId        Int
-  prerequisite   ProductVariant?  @relation("ProductVariantToProductVariant", fields: [prerequisiteId], references: [id])
-  options        ProductVariant[] @relation("ProductVariantToProductVariant")
-  prerequisiteId Int?             @map("productVariantId")
+  id         Int              @id @default(autoincrement())
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  thumbnail  String
+  image      String
+  name       String
+  price      Int
+  currency   Currency         @relation(fields: [currencyId], references: [id])
+  product    Product          @relation(fields: [productId], references: [id])
+  productId  Int
+  color      VariantColor?    @relation(fields: [colorId], references: [id])
+  colorId    Int?
+  base       ProductVariant?  @relation("ProductVariantToProductVariant", fields: [baseId], references: [id])
+  addons     ProductVariant[] @relation("ProductVariantToProductVariant")
+  baseId     Int?
+  currencyId Int
 }
 
 model Category {
@@ -53,9 +67,9 @@ model Category {
   layer     Int?
   thumbnail String
   products  Product[]
-  parent    Category   @relation("CategoryToCategory", fields: [parentId], references: [id])
+  parent    Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
   children  Category[] @relation("CategoryToCategory")
-  parentId  Int        @map("categoryId")
+  parentId  Int?
 }
 
 model VariantColor {
