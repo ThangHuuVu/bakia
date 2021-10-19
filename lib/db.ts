@@ -1,21 +1,35 @@
 import prisma from "./prisma";
+import { ArrayElement } from "./types/common";
 
-export const getAllCategories = async () => {
+export const getCategories = async () => {
   try {
     const categories = await prisma.category.findMany({
       include: {
+        children: true,
         products: {
           include: {
-            variants: {},
+            variants: true,
+            category: true,
           },
         },
       },
     });
-    const res = categories.map((category) => ({
+    return categories.map<ArrayElement<typeof categories>>((category) => ({
       ...category,
       thumbnail: `${process.env.IMG_URL}/Big+item/Desktop/${category.thumbnail}`,
+      children: category.children.map((child) => ({
+        ...child,
+        thumbnail: `${process.env.IMG_URL}/Big+item/Desktop/${child.thumbnail}`,
+      })),
+      products: category.products.map((product) => ({
+        ...product,
+        variants: product.variants.map((variant) => ({
+          ...variant,
+          thumbnail: `${process.env.IMG_URL}/${variant.thumbnail}`,
+          image: `${process.env.IMG_URL}/${variant.image}`,
+        })),
+      })),
     }));
-    return res;
   } catch (e) {
     console.error(e);
     return [];
