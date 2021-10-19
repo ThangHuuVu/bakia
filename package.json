@@ -5,15 +5,15 @@
     "clean": "rm -rf ./.next",
     "build": "next build",
     "start": "next start",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "seed": "npx prisma db seed"
   },
   "dependencies": {
     "@prisma/client": "3.1.1",
     "next": "latest",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "swiper": "^7.0.9",
-    "swr": "^1.0.1"
+    "swiper": "^7.0.9"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.4.1",

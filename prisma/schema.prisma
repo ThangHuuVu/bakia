@@ -12,8 +12,6 @@ datasource db {
 
 model Gene {
   id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
   image       String
   name        String
   description String
@@ -24,8 +22,6 @@ model Gene {
 
 model Product {
   id         Int              @id @default(autoincrement())
-  createdAt  DateTime         @default(now())
-  updatedAt  DateTime         @updatedAt
   name       String
   variants   ProductVariant[]
   category   Category         @relation(fields: [categoryId], references: [id])
@@ -34,8 +30,6 @@ model Product {
 
 model Currency {
   id               Int              @id @default(autoincrement())
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
   name             String
   abbreviationSign String
   genes            Gene[]
@@ -44,8 +38,6 @@ model Currency {
 
 model ProductVariant {
   id         Int              @id @default(autoincrement())
-  createdAt  DateTime         @default(now())
-  updatedAt  DateTime         @updatedAt
   thumbnail  String
   image      String
   name       String
