@@ -131,7 +131,7 @@ async function main() {
     update: { name: "Kính", thumbnail: "Glasses.svg", layer: 10, parentId: others.id },
   });
 
-  const gene1White = await prisma.product.upsert({
+  const set1 = await prisma.product.upsert({
     where: { id: 1 },
     create: {
       name: "GENE 1 White",
@@ -150,7 +150,7 @@ async function main() {
       thumbnail: "02-1+Outfit/set1_thumb.png",
       price: 2500000,
       currencyId: vndCurrency.id,
-      productId: gene1White.id,
+      productId: set1.id,
     },
     update: {
       name: "GENE 1 White",
@@ -158,7 +158,97 @@ async function main() {
       thumbnail: "02-1+Outfit/set1_thumb.png",
       price: 2500000,
       currencyId: vndCurrency.id,
-      productId: gene1White.id,
+      productId: set1.id,
+    },
+  });
+  const set2 = await prisma.product.upsert({
+    where: { id: 2 },
+    create: {
+      name: "GENE 1 Black",
+      categoryId: clothes.id,
+    },
+    update: {
+      name: "GENE 1 Black",
+      categoryId: clothes.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 2 },
+    create: {
+      name: "GENE 1 Black",
+      image: "02-1+Outfit/set2.png",
+      thumbnail: "02-1+Outfit/set2_thumb.png",
+      price: 2500000,
+      currencyId: vndCurrency.id,
+      productId: set2.id,
+    },
+    update: {
+      name: "GENE 1 Black",
+      image: "02-1+Outfit/set2.png",
+      thumbnail: "02-1+Outfit/set2_thumb.png",
+      price: 2500000,
+      currencyId: vndCurrency.id,
+      productId: set2.id,
+    },
+  });
+  const set3 = await prisma.product.upsert({
+    where: { id: 3 },
+    create: {
+      name: "GENE 1 Black & White",
+      categoryId: clothes.id,
+    },
+    update: {
+      name: "GENE 1 Black & White",
+      categoryId: clothes.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 3 },
+    create: {
+      name: "GENE 1 Black & White",
+      image: "02-1+Outfit/set3.png",
+      thumbnail: "02-1+Outfit/set3_thumb.png",
+      price: 2500000,
+      currencyId: vndCurrency.id,
+      productId: set3.id,
+    },
+    update: {
+      name: "GENE 1 Black & White",
+      image: "02-1+Outfit/set3.png",
+      thumbnail: "02-1+Outfit/set3_thumb.png",
+      price: 2500000,
+      currencyId: vndCurrency.id,
+      productId: set3.id,
+    },
+  });
+  const set4 = await prisma.product.upsert({
+    where: { id: 4 },
+    create: {
+      name: "GENE 1 White & Black",
+      categoryId: clothes.id,
+    },
+    update: {
+      name: "GENE 1 White & Black",
+      categoryId: clothes.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 4 },
+    create: {
+      name: "GENE 1 White & Black",
+      image: "02-1+Outfit/set4.png",
+      thumbnail: "02-1+Outfit/set4_thumb.png",
+      price: 2500000,
+      currencyId: vndCurrency.id,
+      productId: set4.id,
+    },
+    update: {
+      name: "GENE 1 White & Black",
+      image: "02-1+Outfit/set4.png",
+      thumbnail: "02-1+Outfit/set4_thumb.png",
+      price: 2500000,
+      currencyId: vndCurrency.id,
+      productId: set4.id,
     },
   });
 }
