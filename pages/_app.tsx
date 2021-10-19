@@ -1,3 +1,5 @@
+import "swiper/css";
+import "swiper/css/pagination";
 import "../styles/globals.css";
 // import App from "next/app";
 import type { AppProps } from "next/app";

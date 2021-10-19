@@ -1,0 +1,80 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Gene {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  image       String
+  name        String
+  description String
+  price       Int
+  currency    Currency @relation(fields: [currencyId], references: [id])
+  currencyId  Int
+}
+
+model Product {
+  id         Int              @id @default(autoincrement())
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  name       String
+  variants   ProductVariant[]
+  category   Category         @relation(fields: [categoryId], references: [id])
+  categoryId Int
+}
+
+model Currency {
+  id               Int              @id @default(autoincrement())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  name             String
+  abbreviationSign String
+  genes            Gene[]
+  productVariants  ProductVariant[]
+}
+
+model ProductVariant {
+  id         Int              @id @default(autoincrement())
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  thumbnail  String
+  image      String
+  name       String
+  price      Int
+  currency   Currency         @relation(fields: [currencyId], references: [id])
+  product    Product          @relation(fields: [productId], references: [id])
+  productId  Int
+  color      VariantColor?    @relation(fields: [colorId], references: [id])
+  colorId    Int?
+  base       ProductVariant?  @relation("ProductVariantToProductVariant", fields: [baseId], references: [id])
+  addons     ProductVariant[] @relation("ProductVariantToProductVariant")
+  baseId     Int?
+  currencyId Int
+}
+
+model Category {
+  id        Int        @id @default(autoincrement())
+  name      String
+  layer     Int?
+  thumbnail String
+  products  Product[]
+  parent    Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryToCategory")
+  parentId  Int?
+}
+
+model VariantColor {
+  id       Int              @id @default(autoincrement())
+  name     String
+  code     String
+  variants ProductVariant[]
+}
