@@ -1,14 +1,21 @@
 import Image from "next/image";
 import { useState } from "react";
-import useSWR from "swr";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Pagination } from "swiper";
+import { format } from "@/lib/currency";
+import { getAllCategories, getGene } from "@/lib/db";
 
 SwiperCore.use([Pagination]);
 const MAX_COUNT = 6;
+type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
+interface CustomizeLabProps {
+  categories: Awaited<ReturnType<typeof getAllCategories>>;
+  gene: Awaited<ReturnType<typeof getGene>>;
+}
+type ArrayElement<ArrayType extends readonly unknown[]> =
+  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
-export default function CustomizeLab({ fallbackData }) {
-  const { data: categories } = useSWR("/api/category", { fallbackData });
+export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
   return (
     <div className="relative h-full px-4 overflow-hidden">
       <div className="flex w-full h-[3.25rem] items-center justify-between mb-5">
@@ -26,7 +33,10 @@ export default function CustomizeLab({ fallbackData }) {
             />
           </svg>
           <div className="flex flex-col">
-            <p className="text-base leading-5 tracking-[-0.3px]">1 500 000 VND</p>
+            <p className="text-base leading-5 tracking-[-0.3px]">{`${format(
+              gene.price,
+              gene.currency.abbreviationSign
+            )}`}</p>
             <p className="text-s3 text-[#4D5254]">Nhấn xem thông tin</p>
           </div>
         </div>
@@ -35,19 +45,28 @@ export default function CustomizeLab({ fallbackData }) {
         </button>
       </div>
       <div className="flex items-center justify-center w-full px-auto">
-        <Image src="/static/assets/bakia_model.png" width={348} height={545} alt="bakia model" />
+        <Image
+          src="/static/assets/bakia_model.png"
+          width={348}
+          height={545}
+          alt={gene.description}
+        />
       </div>
       <SelectPanel categories={categories} />
     </div>
   );
 }
+interface SelectPanelProps {
+  categories: Awaited<ReturnType<typeof getAllCategories>>;
+}
 
-const SelectPanel = ({ categories }) => {
+const SelectPanel = ({ categories }: SelectPanelProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const topCategories = categories.filter((category) => category.parentId === null);
-  const onCategoryClick = (id) => {
+  const onCategoryClick = (id: number) => {
     console.log(id);
   };
+
   return (
     <div
       className={`absolute w-full h-[21.25rem] transform ${
@@ -62,7 +81,7 @@ const SelectPanel = ({ categories }) => {
             <SwiperSlide>
               <div className="w-full px-[3.25rem] grid grid-cols-3 grid-rows-2 gap-x-[1.875rem] mt-[1.125rem] gap-y-2">
                 {topCategories.slice(0, MAX_COUNT).map((category) => (
-                  <Category
+                  <CategoryButton
                     key={category.id}
                     category={category}
                     onCategoryClick={() => onCategoryClick(category.id)}
@@ -73,10 +92,10 @@ const SelectPanel = ({ categories }) => {
             <SwiperSlide>
               <div className="w-full px-[3.25rem] grid grid-cols-3 grid-rows-2 gap-x-[1.875rem] mt-[1.125rem] gap-y-2">
                 {topCategories.slice(MAX_COUNT, topCategories.length).map((category) => (
-                  <Category
+                  <CategoryButton
                     key={category.id}
                     category={category}
-                    onCategoryClick={onCategoryClick}
+                    onCategoryClick={() => onCategoryClick(category.id)}
                   />
                 ))}
               </div>
@@ -123,7 +142,11 @@ const SelectPanel = ({ categories }) => {
   );
 };
 
-const Category = ({ category, onCategoryClick }) => {
+interface CategoryButtonProps {
+  category: ArrayElement<Awaited<ReturnType<typeof getAllCategories>>>;
+  onCategoryClick: () => void;
+}
+const CategoryButton = ({ category, onCategoryClick }: CategoryButtonProps) => {
   return (
     <div
       className="w-[3.75rem] flex flex-col items-center cursor-pointer"

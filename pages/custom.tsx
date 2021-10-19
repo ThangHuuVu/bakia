@@ -1,20 +1,22 @@
 import CustomizeLab from "@/components/CustomizeLab";
 import Layout from "@/components/Layout";
-import { getAllCategories } from "@/lib/db";
+import { getAllCategories, getGene } from "@/lib/db";
 import { InferGetStaticPropsType } from "next";
 
-const CustomPage = ({ fallbackData }: InferGetStaticPropsType<typeof getStaticProps>) => (
-  <Layout title="Custom">
-    <CustomizeLab fallbackData={fallbackData} />
+const CustomPage = ({ categories, gene }: InferGetStaticPropsType<typeof getStaticProps>) => (
+  <Layout title="Custom - Bakia">
+    <CustomizeLab categories={categories} gene={gene} />
   </Layout>
 );
 
 export const getStaticProps = async () => {
-  const fallbackData = await getAllCategories();
+  const categories = await getAllCategories();
+  const gene = await getGene();
 
   return {
     props: {
-      fallbackData,
+      categories,
+      gene,
     },
   };
 };
