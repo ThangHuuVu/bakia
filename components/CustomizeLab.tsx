@@ -60,7 +60,7 @@ const SelectPanel = ({ categories }) => {
           <p>Tùy chỉnh ngoại hình- sáng tạo Bakia của bạn</p>
           <Swiper className="w-full" pagination={{ el: ".swiper-pagination", type: "bullets" }}>
             <SwiperSlide>
-              <div className="w-full  px-[3.25rem] grid grid-cols-3 grid-rows-2 gap-x-[1.875rem] mt-[1.125rem] gap-y-2">
+              <div className="w-full px-[3.25rem] grid grid-cols-3 grid-rows-2 gap-x-[1.875rem] mt-[1.125rem] gap-y-2">
                 {topCategories.slice(0, MAX_COUNT).map((category) => (
                   <Category
                     key={category.id}
@@ -71,7 +71,7 @@ const SelectPanel = ({ categories }) => {
               </div>
             </SwiperSlide>
             <SwiperSlide>
-              <div className="grid grid-cols-3 grid-rows-2 gap-x-[1.875rem] mt-[1.125rem] gap-y-2">
+              <div className="w-full px-[3.25rem] grid grid-cols-3 grid-rows-2 gap-x-[1.875rem] mt-[1.125rem] gap-y-2">
                 {topCategories.slice(MAX_COUNT, topCategories.length).map((category) => (
                   <Category
                     key={category.id}
