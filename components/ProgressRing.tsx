@@ -1,4 +1,4 @@
-import { Container } from "@/lib/types/Common";
+import { Container } from "@/lib/types/common";
 
 interface ProgressRingProps extends Container {
   radius?: number;
