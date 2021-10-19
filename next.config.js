@@ -7,6 +7,8 @@ const nextConfig = {
     domains: [
       // cms assets
       "www.datocms-assets.com",
+      // img
+      "img.bakia.vn",
     ],
   },
 };
