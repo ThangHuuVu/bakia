@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Pagination } from "swiper";
 import { format } from "@/lib/currency";
 import { getCategories } from "@/lib/db";
-import { Category } from ".prisma/client";
+import { Category, VariantColor } from ".prisma/client";
 import { Awaited } from "@/lib/types/common";
-import { CategoryType, GeneType, ProductType } from "@/lib/types/custom";
+import { CategoryType, GeneType, ProductType, VariantType } from "@/lib/types/custom";
 
 SwiperCore.use([Pagination]);
 
@@ -19,43 +19,68 @@ interface CustomizeLabProps {
 }
 
 export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
-  const [selectedProducts, setSelectedProducts] = useState<ProductType[]>([]);
+  const [selectedVariants, setSelectedVariants] = useState<VariantType[]>([]);
   const [currentProduct, setCurrentProduct] = useState<ProductType | null>(null);
   const [currentCategory, setCurrentCategory] = useState<CategoryType | null>(null);
+  const [currentVariant, setCurrentVariant] = useState<VariantType | null>(null);
+  const [currentColor, setCurrentColor] = useState<VariantColor | null>(null);
   const onCategoryClick = useCallback(
     (id: number) => {
-      setCurrentCategory(categories.find((c) => c.id === id));
+      const nextCategory = categories.find((category) => category.id === id);
+      if (nextCategory) {
+        setCurrentCategory(nextCategory);
+      }
     },
     [categories]
   );
   const onBackButtonClick = useCallback(() => {
-    if (currentCategory.parentId) {
-      setCurrentCategory(categories.find((c) => c.id === currentCategory.parentId));
+    const nextCategory = categories.find((category) => category.id === currentCategory?.parentId);
+    if (nextCategory) {
+      setCurrentCategory(nextCategory);
     } else {
       setCurrentCategory(null);
     }
     setCurrentProduct(null);
+    setCurrentVariant(null);
   }, [categories, currentCategory]);
   const onProductClick = useCallback(
     (id: number) => {
-      setCurrentProduct(
-        id === 0 ? null : currentCategory.products.find((product) => product.id === id)
-      );
+      if (id === 0) {
+        setCurrentProduct(null);
+      } else {
+        const nextProduct = currentCategory?.products.find((product) => product.id === id);
+        if (nextProduct) {
+          setCurrentProduct(nextProduct);
+        }
+      }
     },
     [currentCategory]
   );
   const onSelectProduct = useCallback(() => {
-    if (currentProduct === null) {
-      setSelectedProducts([
-        ...selectedProducts.filter((product) => product.categoryId !== currentCategory.id),
+    if (currentVariant === null) {
+      setSelectedVariants([
+        ...selectedVariants.filter((variant) => variant.product.categoryId !== currentCategory?.id),
       ]);
     } else {
-      setSelectedProducts([
-        ...selectedProducts.filter((product) => product.categoryId !== currentCategory.id),
-        currentProduct,
+      setSelectedVariants([
+        ...selectedVariants.filter((variant) => variant.product.categoryId !== currentCategory?.id),
+        currentVariant,
       ]);
     }
-  }, [currentCategory, currentProduct, selectedProducts]);
+  }, [currentCategory, currentVariant, selectedVariants]);
+  const onColorClick = useCallback((color: VariantColor) => {
+    setCurrentColor(color);
+  }, []);
+  useEffect(() => {
+    if (currentProduct) {
+      setCurrentVariant(
+        currentProduct.variants.find((v) => v.colorId === currentColor?.id) ||
+          currentProduct.variants[0]
+      );
+    } else {
+      setCurrentVariant(null);
+    }
+  }, [currentProduct, currentColor]);
 
   return (
     <div className="relative h-full px-4 overflow-hidden">
@@ -74,10 +99,12 @@ export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
             />
           </svg>
           <div className="flex flex-col">
-            <p className="text-base leading-5 tracking-[-0.3px]">{`${format(
-              gene.price,
-              gene.currency.abbreviationSign
-            )}`}</p>
+            {gene && (
+              <p className="text-base leading-5 tracking-[-0.3px]">{`${format(
+                gene.price,
+                gene.currency.abbreviationSign
+              )}`}</p>
+            )}
             <p className="text-s3 text-[#4D5254]">Nhấn xem thông tin</p>
           </div>
         </div>
@@ -86,32 +113,32 @@ export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
         </button>
       </div>
       <div className="flex items-center justify-center w-full px-auto">
-        <Image
-          src="/static/assets/bakia_model.png"
-          width={348}
-          height={545}
-          alt={gene.description}
-        />
-        {selectedProducts &&
-          Boolean(selectedProducts.length) &&
-          selectedProducts.map((product) => (
-            <div key={product.id} className="absolute" style={{ zIndex: product?.category?.layer }}>
-              <Image src={product.variants[0].image} width={348} height={545} alt={product.name} />
+        {gene && (
+          <Image
+            src="/static/assets/bakia_model.png"
+            width={348}
+            height={545}
+            alt={gene.description}
+          />
+        )}
+        {Boolean(selectedVariants?.length) &&
+          selectedVariants.map((variant) => (
+            <div
+              key={variant.id}
+              className="absolute"
+              style={{ zIndex: variant.product.category.layer || 0 }}
+            >
+              <Image src={variant.image} width={348} height={545} alt={variant.name} />
             </div>
           ))}
-        {currentProduct && (
-          <div className="absolute" style={{ zIndex: currentProduct?.category?.layer }}>
-            <Image
-              src={currentProduct.variants[0].image}
-              width={348}
-              height={545}
-              alt={currentProduct.name}
-            />
+        {currentVariant && (
+          <div className="absolute" style={{ zIndex: currentVariant.product.category.layer || 0 }}>
+            <Image src={currentVariant.image} width={348} height={545} alt={currentVariant.name} />
           </div>
         )}
       </div>
       <SelectPanel
-        selectedProducts={selectedProducts}
+        selectedVariants={selectedVariants}
         currentProduct={currentProduct}
         currentCategory={currentCategory}
         categories={categories}
@@ -119,6 +146,9 @@ export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
         onProductClick={onProductClick}
         onBackButtonClick={onBackButtonClick}
         onSelectProduct={onSelectProduct}
+        onColorClick={onColorClick}
+        currentColor={currentColor}
+        currentVariant={currentVariant}
       />
     </div>
   );
@@ -126,24 +156,30 @@ export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
 
 interface SelectPanelProps {
   categories: Awaited<ReturnType<typeof getCategories>>;
-  selectedProducts: ProductType[];
-  currentProduct: ProductType;
-  currentCategory: CategoryType;
+  selectedVariants: VariantType[];
+  currentProduct: ProductType | null;
+  currentCategory: CategoryType | null;
+  currentColor: VariantColor | null;
+  currentVariant: VariantType | null;
   onCategoryClick: (id: number) => void;
   onProductClick: (id: number) => void;
   onBackButtonClick: () => void;
   onSelectProduct: () => void;
+  onColorClick: (color: VariantColor) => void;
 }
 
 const SelectPanel = ({
-  selectedProducts,
+  selectedVariants,
   currentProduct,
   currentCategory,
+  currentColor,
+  currentVariant,
   categories,
   onCategoryClick,
   onProductClick,
   onBackButtonClick,
   onSelectProduct,
+  onColorClick,
 }: SelectPanelProps) => {
   const topCategories = categories.filter((c) => c.parentId === null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -195,11 +231,14 @@ const SelectPanel = ({
                   </div>
                 ) : (
                   <SelectProductPanel
-                    selectedProducts={selectedProducts}
+                    selectedVariants={selectedVariants}
                     products={currentCategory.products}
+                    currentColor={currentColor}
+                    currentVariant={currentVariant}
                     currentProduct={currentProduct}
                     onProductClick={onProductClick}
                     onSelectProduct={onSelectProduct}
+                    onColorClick={onColorClick}
                   />
                 )}
               </div>
@@ -281,31 +320,47 @@ const SelectPanel = ({
 };
 
 interface SelectProductPanelProps {
-  selectedProducts: ProductType[];
+  selectedVariants: VariantType[];
   products: ProductType[];
-  currentProduct: ProductType;
+  currentProduct: ProductType | null;
+  currentColor: VariantColor | null;
+  currentVariant: VariantType | null;
   onProductClick: (id: number) => void;
   onSelectProduct: () => void;
+  onColorClick: (color: VariantColor) => void;
 }
+
 const SelectProductPanel = ({
-  selectedProducts,
+  selectedVariants,
+  currentColor,
+  currentVariant,
   products,
   currentProduct,
   onProductClick,
   onSelectProduct,
+  onColorClick,
 }: SelectProductPanelProps) => {
-  const [swiperInstance, setSwiperInstance] = useState(null);
+  const [swiperInstance, setSwiperInstance] = useState<SwiperCore | null>(null);
+  const [colorSlides, setColorSlides] = useState<VariantColor[][]>([]);
   const hasColor = products.some((product) => product.variants.some((variant) => variant.colorId));
-  const colors = currentProduct?.variants.map((variant) => variant.color);
-  let colorSlides = [];
-  if (colors) {
-    for (let i = 0; i <= colors.length; i += MAX_COLOR_COUNT) {
-      colorSlides.push(colors.slice(i, i + MAX_COLOR_COUNT));
+  useEffect(() => {
+    if (currentProduct) {
+      const colors = currentProduct.variants
+        .filter((variant) => variant.color)
+        .map((variant) => variant.color as VariantColor);
+      let slides: VariantColor[][] = [];
+      if (colors) {
+        for (let i = 0; i <= colors.length; i += MAX_COLOR_COUNT) {
+          slides.push(colors.slice(i, i + MAX_COLOR_COUNT));
+        }
+      }
+      setColorSlides(slides);
     }
-  }
-  const isButtonDisabled =
-    (currentProduct === null && selectedProducts.length === 0) ||
-    (currentProduct && selectedProducts.some((p) => p.id === currentProduct.id));
+  }, [currentProduct]);
+  const isButtonDisabled = Boolean(
+    (currentProduct === null && selectedVariants.length === 0) ||
+      (currentVariant && selectedVariants.some((variant) => variant.id === currentVariant.id))
+  );
 
   return (
     <div className="w-full h-full flex flex-col justify-between space-y-[0.75rem] px-2 pb-4">
@@ -338,7 +393,7 @@ const SelectProductPanel = ({
               setWrapperSize
               onSwiper={(swiper) => setSwiperInstance(swiper)}
               slidesPerView={"auto"}
-              className="w-full color-swiper"
+              className="w-full h-full color-swiper"
             >
               {colorSlides.map((slide, idx) => (
                 <SwiperSlide
@@ -349,7 +404,10 @@ const SelectProductPanel = ({
                     <div
                       key={color.id}
                       style={{ background: color.code }}
-                      className="h-[2.5rem] w-[2.5rem] rounded-full cursor-pointer p-1 border  border-solid flex-none"
+                      className={`h-[2.5rem] w-[2.5rem] rounded-full cursor-pointer p-1 border  border-solid flex-none ${
+                        currentColor?.id === color.id ? "outline-solidBlack" : "outline-none"
+                      }`}
+                      onClick={() => onColorClick(color)}
                     />
                   ))}
                 </SwiperSlide>
@@ -386,27 +444,35 @@ const SelectProductPanel = ({
             } bg-background cursor-pointer`}
             onClick={() => onProductClick(0)}
           />
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
-                selectedProducts.some((p) => p.id === product.id)
-                  ? "border-2 border-solid border-darkMint"
-                  : currentProduct?.id === product.id
-                  ? "border border-black border-solid"
-                  : "border-none"
-              }`}
-            >
-              <div className="w-16 h-16 cursor-pointer" onClick={() => onProductClick(product.id)}>
-                <Image
-                  src={product.variants[0].thumbnail}
-                  alt={product.name}
-                  width={64}
-                  height={64}
-                />
+          {products.map((product) => {
+            const matchingVariant =
+              product.variants.find((variant) => variant.colorId === currentColor?.id) ||
+              product.variants[0];
+            return (
+              <div
+                key={product.id}
+                className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
+                  selectedVariants.some((variant) => variant.productId === product.id)
+                    ? "border-2 border-solid border-darkMint"
+                    : currentProduct?.id === product.id
+                    ? "border border-black border-solid"
+                    : "border-none"
+                }`}
+              >
+                <div
+                  className="w-16 h-16 cursor-pointer"
+                  onClick={() => onProductClick(product.id)}
+                >
+                  <Image
+                    src={matchingVariant.thumbnail}
+                    alt={product.name}
+                    width={64}
+                    height={64}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
       <button

@@ -11,6 +11,11 @@ export const getCategories = async () => {
             variants: {
               include: {
                 color: true,
+                product: {
+                  include: {
+                    category: true,
+                  },
+                },
               },
             },
             category: true,
