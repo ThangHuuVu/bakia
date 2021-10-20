@@ -12,7 +12,7 @@ module.exports = {
         content: "calc(100vh - 3.5rem)",
       },
       width: {
-        content: "calc(100vw - 1rem)"
+        content: "calc(100vw - 1rem)",
       },
       maxWidth: {
         content: "69.375rem",
@@ -31,6 +31,10 @@ module.exports = {
         background: "#F7F5F4",
         altGrey: "#768489",
         error: "#FF3C3C",
+        grey3: "#E5E5E5",
+      },
+      outline: {
+        solidBlack: ["1px black solid", "2px"],
       },
       fontSize: {
         s3: "0.8125rem",
