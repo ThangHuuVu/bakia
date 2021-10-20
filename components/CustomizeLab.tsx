@@ -68,17 +68,26 @@ export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
       ]);
     }
   }, [currentCategory, currentVariant, selectedVariants]);
-  const onColorClick = useCallback((color: VariantColor) => {
-    setCurrentColor(color);
-  }, []);
+  const onColorClick = useCallback(
+    (color: VariantColor) => {
+      if (currentProduct) {
+        setCurrentColor(color);
+      } else {
+        setCurrentColor(null);
+      }
+    },
+    [currentProduct]
+  );
   useEffect(() => {
     if (currentProduct) {
-      setCurrentVariant(
+      const nextVariant =
         currentProduct.variants.find((v) => v.colorId === currentColor?.id) ||
-          currentProduct.variants[0]
-      );
+        currentProduct.variants[0];
+      setCurrentVariant(nextVariant);
+      setCurrentColor(nextVariant.color);
     } else {
       setCurrentVariant(null);
+      setCurrentColor(null);
     }
   }, [currentProduct, currentColor]);
 
@@ -344,23 +353,27 @@ const SelectProductPanel = ({
   const [colorSlides, setColorSlides] = useState<VariantColor[][]>([]);
   const hasColor = products.some((product) => product.variants.some((variant) => variant.colorId));
   useEffect(() => {
-    if (currentProduct) {
-      const colors = currentProduct.variants
-        .filter((variant) => variant.color)
-        .map((variant) => variant.color as VariantColor);
-      let slides: VariantColor[][] = [];
-      if (colors) {
-        for (let i = 0; i <= colors.length; i += MAX_COLOR_COUNT) {
-          slides.push(colors.slice(i, i + MAX_COLOR_COUNT));
-        }
+    const colors = currentProduct
+      ? currentProduct.variants
+          .filter((variant) => variant.color)
+          .map((variant) => variant.color as VariantColor)
+      : products[0].variants
+          .filter((variant) => variant.color)
+          .map((variant) => variant.color as VariantColor);
+    let slides: VariantColor[][] = [];
+    if (colors) {
+      for (let i = 0; i <= colors.length; i += MAX_COLOR_COUNT) {
+        slides.push(colors.slice(i, i + MAX_COLOR_COUNT));
       }
-      setColorSlides(slides);
     }
-  }, [currentProduct]);
+    setColorSlides(slides);
+  }, [currentProduct, products]);
   const isButtonDisabled = Boolean(
     (currentProduct === null && selectedVariants.length === 0) ||
       (currentVariant && selectedVariants.some((variant) => variant.id === currentVariant.id))
   );
+  const [isBeginning, setIsBeginning] = useState<boolean>(true);
+  const [isEnd, setIsEnd] = useState<boolean>(false);
 
   return (
     <div className="w-full h-full flex flex-col justify-between space-y-[0.75rem] px-2 pb-4">
@@ -371,7 +384,11 @@ const SelectProductPanel = ({
             style={{ width: "calc(100% - 2rem)" }}
           >
             <div
-              className="flex-none cursor-pointer prev"
+              className={`flex-none`}
+              style={{
+                cursor: isBeginning ? "none" : "pointer",
+                opacity: isBeginning ? 0.4 : 1,
+              }}
               onClick={() => swiperInstance?.slidePrev()}
             >
               <svg
@@ -391,8 +408,14 @@ const SelectProductPanel = ({
             </div>
             <Swiper
               setWrapperSize
-              onSwiper={(swiper) => setSwiperInstance(swiper)}
-              slidesPerView={"auto"}
+              onAfterInit={(swiper) => {
+                setSwiperInstance(swiper);
+              }}
+              onSlideChange={(swiper) => {
+                setIsBeginning(swiper.isBeginning);
+                setIsEnd(swiper.isEnd);
+              }}
+              slidesPerView="auto"
               className="w-full h-full color-swiper"
             >
               {colorSlides.map((slide, idx) => (
@@ -414,7 +437,11 @@ const SelectProductPanel = ({
               ))}
             </Swiper>
             <div
-              className="flex-none cursor-pointer next"
+              className={`flex-none`}
+              style={{
+                cursor: isEnd ? "none" : "pointer",
+                opacity: isEnd ? 0.4 : 1,
+              }}
               onClick={() => {
                 swiperInstance?.slideNext();
               }}
