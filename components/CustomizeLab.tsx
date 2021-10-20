@@ -11,6 +11,7 @@ import { CategoryType, GeneType, ProductType } from "@/lib/types/custom";
 SwiperCore.use([Pagination]);
 
 const MAX_COUNT = 6;
+
 interface CustomizeLabProps {
   categories: CategoryType[];
   gene: GeneType;
@@ -26,14 +27,14 @@ export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
     },
     [categories]
   );
-  const onBackButtonClick = () => {
-    setCurrentProduct(null);
+  const onBackButtonClick = useCallback(() => {
     if (currentCategory.parentId) {
       setCurrentCategory(categories.find((c) => c.id === currentCategory.parentId));
     } else {
       setCurrentCategory(null);
     }
-  };
+    setCurrentProduct(null);
+  }, [categories, currentCategory]);
   const onProductClick = useCallback(
     (id: number) => {
       setCurrentProduct(
@@ -42,13 +43,18 @@ export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
     },
     [currentCategory]
   );
-  const onSelectProduct = () => {
-    setCurrentProduct(null);
-    setSelectedProducts([
-      ...selectedProducts.filter((product) => product.id !== currentProduct.id),
-      currentProduct,
-    ]);
-  };
+  const onSelectProduct = useCallback(() => {
+    if (currentProduct === null) {
+      setSelectedProducts([
+        ...selectedProducts.filter((product) => product.categoryId !== currentCategory.id),
+      ]);
+    } else {
+      setSelectedProducts([
+        ...selectedProducts.filter((product) => product.categoryId !== currentCategory.id),
+        currentProduct,
+      ]);
+    }
+  }, [currentCategory, currentProduct, selectedProducts]);
 
   return (
     <div className="relative h-full px-4 overflow-hidden">
@@ -85,6 +91,13 @@ export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
           height={545}
           alt={gene.description}
         />
+        {selectedProducts &&
+          Boolean(selectedProducts.length) &&
+          selectedProducts.map((product) => (
+            <div key={product.id} className="absolute" style={{ zIndex: product?.category?.layer }}>
+              <Image src={product.variants[0].image} width={348} height={545} alt={product.name} />
+            </div>
+          ))}
         {currentProduct && (
           <div className="absolute" style={{ zIndex: currentProduct?.category?.layer }}>
             <Image
@@ -95,15 +108,9 @@ export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
             />
           </div>
         )}
-        {selectedProducts &&
-          Boolean(selectedProducts.length) &&
-          selectedProducts.map((product) => (
-            <div key={product.id} className="absolute" style={{ zIndex: product?.category?.layer }}>
-              <Image src={product.variants[0].image} width={348} height={545} alt={product.name} />
-            </div>
-          ))}
       </div>
       <SelectPanel
+        selectedProducts={selectedProducts}
         currentProduct={currentProduct}
         currentCategory={currentCategory}
         categories={categories}
@@ -118,6 +125,7 @@ export default function CustomizeLab({ categories, gene }: CustomizeLabProps) {
 
 interface SelectPanelProps {
   categories: Awaited<ReturnType<typeof getCategories>>;
+  selectedProducts: ProductType[];
   currentProduct: ProductType;
   currentCategory: CategoryType;
   onCategoryClick: (id: number) => void;
@@ -127,6 +135,7 @@ interface SelectPanelProps {
 }
 
 const SelectPanel = ({
+  selectedProducts,
   currentProduct,
   currentCategory,
   categories,
@@ -185,6 +194,7 @@ const SelectPanel = ({
                   </div>
                 ) : (
                   <SelectProductPanel
+                    selectedProducts={selectedProducts}
                     products={currentCategory.products}
                     currentProduct={currentProduct}
                     onProductClick={onProductClick}
@@ -268,18 +278,23 @@ const SelectPanel = ({
 };
 
 interface SelectProductPanelProps {
+  selectedProducts: ProductType[];
   products: ProductType[];
   currentProduct: ProductType;
   onProductClick: (id: number) => void;
   onSelectProduct: () => void;
 }
 const SelectProductPanel = ({
+  selectedProducts,
   products,
   currentProduct,
   onProductClick,
   onSelectProduct,
 }: SelectProductPanelProps) => {
   const hasColor = products.some((product) => product.variants.some((variant) => variant.colorId));
+  const isButtonDisabled =
+    (currentProduct === null && selectedProducts.length === 0) ||
+    (currentProduct && selectedProducts.some((p) => p.id === currentProduct.id));
 
   return (
     <div className="w-full h-full flex flex-col justify-between space-y-[0.75rem] px-2 pb-4">
@@ -292,14 +307,16 @@ const SelectProductPanel = ({
             key={0}
             className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
               !currentProduct ? "border border-black border-solid" : "border-none"
-            } bg-background`}
+            } bg-background cursor-pointer`}
             onClick={() => onProductClick(0)}
           />
           {products.map((product) => (
             <div
               key={product.id}
               className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
-                currentProduct?.id === product.id
+                selectedProducts.some((p) => p.id === product.id)
+                  ? "border-2 border-solid border-darkMint"
+                  : currentProduct?.id === product.id
                   ? "border border-black border-solid"
                   : "border-none"
               }`}
@@ -319,7 +336,7 @@ const SelectProductPanel = ({
       <button
         className="flex items-center justify-center text-xl italic font-black uppercase rounded-lg h-[3.125rem]
           text-black bg-main disabled:bg-grey3 disabled:text-opacity-[0.4]"
-        disabled={currentProduct === null}
+        disabled={isButtonDisabled}
         onClick={onSelectProduct}
       >
         chọn
