@@ -131,6 +131,7 @@ async function main() {
     update: { name: "Kính", thumbnail: "Glasses.svg", layer: 10, parentId: others.id },
   });
 
+  // outfit
   const set1 = await prisma.product.upsert({
     where: { id: 1 },
     create: {
@@ -249,6 +250,327 @@ async function main() {
       price: 2500000,
       currencyId: vndCurrency.id,
       productId: set4.id,
+    },
+  });
+
+  // eyes color
+  const eyeColor1 = await prisma.variantColor.upsert({
+    where: {
+      id: 1,
+    },
+    create: {
+      code: "#6b503c",
+      name: "Natural brown",
+    },
+    update: {
+      code: "#6b503c",
+      name: "Natural brown",
+    },
+  });
+  const eyeColor2 = await prisma.variantColor.upsert({
+    where: {
+      id: 2,
+    },
+    create: {
+      code: "#9edefe",
+      name: "Vibrant sky",
+    },
+    update: {
+      code: "#9edefe",
+      name: "Vibrant sky",
+    },
+  });
+  const eyeColor3 = await prisma.variantColor.upsert({
+    where: {
+      id: 3,
+    },
+    create: {
+      code: "#8b94a4",
+      name: "Ashes",
+    },
+    update: {
+      code: "#8b94a4",
+      name: "Ashes",
+    },
+  });
+  const eyeColor4 = await prisma.variantColor.upsert({
+    where: {
+      id: 4,
+    },
+    create: {
+      code: "#a8a38c",
+      name: "Mistique",
+    },
+    update: {
+      code: "#a8a38c",
+      name: "Mistique",
+    },
+  });
+  const eyeColor5 = await prisma.variantColor.upsert({
+    where: {
+      id: 5,
+    },
+    create: {
+      code: "#ffdb92",
+      name: "Luster",
+    },
+    update: {
+      code: "#ffdb92",
+      name: "Luster",
+    },
+  });
+  const eyeColor6 = await prisma.variantColor.upsert({
+    where: {
+      id: 6,
+    },
+    create: {
+      code: "#ffffff",
+      name: "Futuristic",
+    },
+    update: {
+      code: "#ffffff",
+      name: "Futuristic",
+    },
+  });
+  const eyeColor7 = await prisma.variantColor.upsert({
+    where: {
+      id: 7,
+    },
+    create: {
+      code: "#ff3333",
+      name: "Red zone",
+    },
+    update: {
+      code: "#ff3333",
+      name: "Red zone",
+    },
+  });
+  const eyeColor8 = await prisma.variantColor.upsert({
+    where: {
+      id: 8,
+    },
+    create: {
+      code: "#23120b",
+      name: "Galantus",
+    },
+    update: {
+      code: "#23120b",
+      name: "Galantus",
+    },
+  });
+  const eyeColor9 = await prisma.variantColor.upsert({
+    where: {
+      id: 9,
+    },
+    create: {
+      code: "#000000",
+      name: "Shinobi",
+    },
+    update: {
+      code: "#000000",
+      name: "Shinobi",
+    },
+  });
+
+  // eye shape
+  const eyeShape1 = await prisma.product.upsert({
+    where: { id: 5 },
+    create: {
+      name: "Mắt phương đông",
+      categoryId: eyeShape.id,
+    },
+    update: {
+      name: "Mắt phương đông",
+      categoryId: eyeShape.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 5 },
+    create: {
+      name: "Mắt phương đông Natural brown",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl1.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl1_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor1.id,
+    },
+    update: {
+      name: "Mắt phương đông Natural brown",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl1.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl1_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor1.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 6 },
+    create: {
+      name: "Mắt phương đông Vibrant sky",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl2.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl2_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor2.id,
+    },
+    update: {
+      name: "Mắt phương đông Vibrant sky",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl2.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl2_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor2.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 7 },
+    create: {
+      name: "Mắt phương đông Ashes",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl3.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl3_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor3.id,
+    },
+    update: {
+      name: "Mắt phương đông Ashes",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl3.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl3_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor3.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 8 },
+    create: {
+      name: "Mắt phương đông Mistique",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl4.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl4_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor4.id,
+    },
+    update: {
+      name: "Mắt phương đông Mistique",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl4.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl4_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor4.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 9 },
+    create: {
+      name: "Mắt phương đông Luster",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl5.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl5_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor5.id,
+    },
+    update: {
+      name: "Mắt phương đông Luster",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl5.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl5_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor5.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 10 },
+    create: {
+      name: "Mắt phương đông Futuristic",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl6.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl6_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor6.id,
+    },
+    update: {
+      name: "Mắt phương đông Futuristic",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl6.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl6_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor6.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 11 },
+    create: {
+      name: "Mắt phương đông Red zone",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl7.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl7_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor7.id,
+    },
+    update: {
+      name: "Mắt phương đông Red zone",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl7.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl7_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor7.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 12 },
+    create: {
+      name: "Mắt phương đông Galantus",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl8.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl8_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor8.id,
+    },
+    update: {
+      name: "Mắt phương đông Galantus",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl8.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl8_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor8.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 13 },
+    create: {
+      name: "Mắt phương đông Galantus",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl9.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl9_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor9.id,
+    },
+    update: {
+      name: "Mắt phương đông Galantus",
+      image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl9.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl9_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape1.id,
+      colorId: eyeColor9.id,
     },
   });
 }
