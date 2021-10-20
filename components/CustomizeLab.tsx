@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Pagination } from "swiper";
 import { format } from "@/lib/currency";
@@ -10,7 +10,8 @@ import { CategoryType, GeneType, ProductType } from "@/lib/types/custom";
 
 SwiperCore.use([Pagination]);
 
-const MAX_COUNT = 6;
+const MAX_CATEGORY_COUNT = 6;
+const MAX_COLOR_COUNT = 5;
 
 interface CustomizeLabProps {
   categories: CategoryType[];
@@ -158,7 +159,7 @@ const SelectPanel = ({
           {currentCategory ? (
             <>
               <div
-                className="flex items-center justify-between px-2 mx-4 border-b h-9"
+                className="flex items-center justify-between w-full px-2 mx-4 border-b h-9"
                 style={{ width: "calc(100% - 2rem)" }}
               >
                 <button
@@ -213,7 +214,7 @@ const SelectPanel = ({
               >
                 <SwiperSlide>
                   <div className="w-full h-full px-[3.25rem] grid grid-cols-3 grid-rows-2 gap-x-[1.875rem] mt-[1.125rem] gap-y-2 pb-2">
-                    {topCategories.slice(0, MAX_COUNT).map((category) => (
+                    {topCategories.slice(0, MAX_CATEGORY_COUNT).map((category) => (
                       <CategoryButton
                         key={category.id}
                         category={category}
@@ -224,13 +225,15 @@ const SelectPanel = ({
                 </SwiperSlide>
                 <SwiperSlide>
                   <div className="w-full px-[3.25rem] grid grid-cols-3 grid-rows-2 gap-x-[1.875rem] mt-[1.125rem] gap-y-2  pb-2">
-                    {topCategories.slice(MAX_COUNT, topCategories.length).map((category) => (
-                      <CategoryButton
-                        key={category.id}
-                        category={category}
-                        onCategoryClick={() => onCategoryClick(category.id)}
-                      />
-                    ))}
+                    {topCategories
+                      .slice(MAX_CATEGORY_COUNT, topCategories.length)
+                      .map((category) => (
+                        <CategoryButton
+                          key={category.id}
+                          category={category}
+                          onCategoryClick={() => onCategoryClick(category.id)}
+                        />
+                      ))}
                   </div>
                 </SwiperSlide>
               </Swiper>
@@ -291,16 +294,89 @@ const SelectProductPanel = ({
   onProductClick,
   onSelectProduct,
 }: SelectProductPanelProps) => {
+  const [swiperInstance, setSwiperInstance] = useState(null);
   const hasColor = products.some((product) => product.variants.some((variant) => variant.colorId));
+  const colors = currentProduct?.variants.map((variant) => variant.color);
+  let colorSlides = [];
+  if (colors) {
+    for (let i = 0; i <= colors.length; i += MAX_COLOR_COUNT) {
+      colorSlides.push(colors.slice(i, i + MAX_COLOR_COUNT));
+    }
+  }
   const isButtonDisabled =
     (currentProduct === null && selectedProducts.length === 0) ||
     (currentProduct && selectedProducts.some((p) => p.id === currentProduct.id));
 
   return (
     <div className="w-full h-full flex flex-col justify-between space-y-[0.75rem] px-2 pb-4">
-      <div className="flex flex-col justify-center min-h-[9.125rem] mb-[1.375rem] mt-[0.875rem] flex-grow gap-3">
+      <div className="flex flex-col justify-between min-h-[9.125rem] mb-[1.375rem] mt-[0.875rem] flex-grow gap-3">
         {hasColor && (
-          <div className="h-[3.125rem] w-full bg-red-500  overflow-x-scroll overflow-y-hidden"></div>
+          <div
+            className="h-[3.125rem] flex overflow-hidden items-center mx-4 gap-1"
+            style={{ width: "calc(100% - 2rem)" }}
+          >
+            <div
+              className="flex-none cursor-pointer prev"
+              onClick={() => swiperInstance?.slidePrev()}
+            >
+              <svg
+                width="15"
+                height="26"
+                viewBox="0 0 15 26"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M13.3137 1.68629L2.00002 13L13.3137 24.3137"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+            <Swiper
+              setWrapperSize
+              onSwiper={(swiper) => setSwiperInstance(swiper)}
+              slidesPerView={"auto"}
+              className="w-full color-swiper"
+            >
+              {colorSlides.map((slide, idx) => (
+                <SwiperSlide
+                  key={idx}
+                  className="flex gap-[0.875rem] w-full h-full items-center flex-auto mx-2"
+                >
+                  {slide?.map((color) => (
+                    <div
+                      key={color.id}
+                      style={{ background: color.code }}
+                      className="h-[2.5rem] w-[2.5rem] rounded-full cursor-pointer p-1 border  border-solid flex-none"
+                    />
+                  ))}
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            <div
+              className="flex-none cursor-pointer next"
+              onClick={() => {
+                swiperInstance?.slideNext();
+              }}
+            >
+              <svg
+                width="15"
+                height="26"
+                viewBox="0 0 15 26"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1.94115 24.3137L13.2549 13L1.94115 1.68629"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+          </div>
         )}
         <div className="flex items-center gap-1 overflow-x-scroll overflow-y-hidden">
           <div

@@ -5,3 +5,7 @@
 .swiper-pagination-bullet.swiper-pagination-bullet-active {
   background: black;
 }
+
+.color-swiper .swiper-wrapper {
+  display: flex;
+}
