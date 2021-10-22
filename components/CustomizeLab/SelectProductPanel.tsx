@@ -15,6 +15,7 @@ const MAX_COLOR_COUNT = 5;
 export const SelectProductPanel = ({ products }: SelectProductPanelProps) => {
   const {
     selectedVariants,
+    currentCategory,
     currentColor,
     currentVariant,
     currentProduct,
@@ -46,13 +47,18 @@ export const SelectProductPanel = ({ products }: SelectProductPanelProps) => {
   }, [currentProduct, products]);
 
   const isButtonDisabled = Boolean(
-    (currentProduct === null && selectedVariants.length === 0) ||
+    (currentProduct === null &&
+      selectedVariants.some((variant) => variant.product.categoryId !== currentCategory.id)) ||
       (currentVariant && selectedVariants.some((variant) => variant.id === currentVariant.id))
   );
 
   return (
     <div className="w-full h-full flex flex-col justify-between space-y-[0.75rem] px-2 pb-4">
-      <div className="flex flex-col justify-between min-h-[9.125rem] mb-[1.375rem] mt-[0.875rem] flex-grow gap-3">
+      <div
+        className={`flex flex-col ${
+          hasColor ? "justify-between" : "justify-center"
+        } min-h-[9.125rem] mb-[1.375rem] mt-[0.875rem] flex-grow gap-3`}
+      >
         {hasColor && <ColorSlider colorSlides={colorSlides} />}
         <div className="flex items-center gap-1 overflow-x-scroll overflow-y-hidden">
           <div
