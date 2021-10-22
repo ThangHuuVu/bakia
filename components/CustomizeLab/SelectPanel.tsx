@@ -1,30 +1,29 @@
-import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Pagination } from "swiper";
-import { getCategories } from "@/lib/db";
-import { Awaited } from "@/lib/types/common";
 import { useCustomizeLab } from "./context";
 import { CategoryButton } from "./CategoryButton";
 import { SelectProductPanel } from "./SelectProductPanel";
+import { CategoryType } from "@/lib/types/custom";
 
 SwiperCore.use([Pagination]);
 
 const MAX_CATEGORY_COUNT = 6;
 
 interface SelectPanelProps {
-  categories: Awaited<ReturnType<typeof getCategories>>;
+  categories: CategoryType[];
+  isOpen: boolean;
+  onTogglePanel: () => void;
 }
 
-export const SelectPanel = ({ categories }: SelectPanelProps) => {
+export const SelectPanel = ({ categories, isOpen, onTogglePanel }: SelectPanelProps) => {
   const { currentCategory, onBackButtonClick, onCategoryClick } = useCustomizeLab();
   const topCategories = categories.filter((c) => c.parentId === null);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <div
-      className={`absolute w-full h-[21.25rem] transform ${
-        isOpen ? "translate-y-0" : "translate-y-[20rem]"
-      } transition-transform bottom-0 left-1/2 -translate-x-1/2 px-2 z-30`}
+      className={`w-full ${
+        isOpen ? "h-[20rem] min-h-[21.25rem] translate-y-5" : "translate-y-5"
+      } transition-transform px-2 z-50`}
     >
       <div className=" h-full w-full bg-white rounded-t-[0.625rem] pt-[1.875rem]">
         <div className={isOpen ? "flex flex-col items-center prose h-full" : "hidden"}>
@@ -110,7 +109,7 @@ export const SelectPanel = ({ categories }: SelectPanelProps) => {
       </div>
       <button
         className="absolute transform -translate-x-1/2 left-1/2 w-[3.75rem] h-[3.75rem] flex items-center justify-center rounded-full bg-white top-[-1.875rem]"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={onTogglePanel}
       >
         {isOpen ? (
           <svg
