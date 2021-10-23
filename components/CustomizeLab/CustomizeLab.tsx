@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { GeneType, VariantType } from "@/lib/types/custom";
 
 export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
-  const { selectedVariants } = useCustomizeLab();
+  const { selectedVariants, currentVariant } = useCustomizeLab();
   const totalVariantPrice = useMemo(
     () => selectedVariants.map((variant) => variant.price).reduce((a, b) => a + b, 0),
     [selectedVariants]
@@ -57,20 +57,20 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
   }, []);
 
   return (
-    <div className="relative w-full h-full">
-      <div className="absolute flex items-center justify-center w-full transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 px-auto">
+    <div className="relative w-full h-full md:grid md:place-content-center">
+      <div className="absolute flex items-center justify-center w-full transform -translate-x-1/2 -translate-y-1/2 md:hidden top-1/2 left-1/2 px-auto">
         <DisplayModel
           selectedVariants={selectedVariants}
           gene={gene}
           width={348}
           height={545}
-          includeCurrentVariant
+          currentVariant={currentVariant}
         />
       </div>
       <div
         className={`flex flex-col overflow-y-hidden w-full p-2 ${
           isShowMore ? "max-h-[200vh] h-auto" : "max-h-full min-h-full"
-        }`}
+        } md:hidden`}
         style={{
           transition: "max-height 200ms ease-in-out",
         }}
@@ -232,6 +232,18 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
         </div>
         <SelectPanel categories={categories} isOpen={isPanelOpen} onTogglePanel={onTogglePanel} />
       </div>
+      <div className="hidden md:flex md:gap-[10.875rem]">
+        <DisplayModel
+          selectedVariants={selectedVariants}
+          gene={gene}
+          width={480}
+          height={754}
+          currentVariant={currentVariant}
+        />
+        <div className="h-full w-[21.75rem] flex flex-col prose items-center">
+          <SelectPanel categories={categories} />
+        </div>
+      </div>
     </div>
   );
 };
@@ -239,9 +251,9 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
 interface DisplayModelProps {
   gene: GeneType;
   selectedVariants: VariantType[];
+  currentVariant?: VariantType;
   width: number;
   height: number;
-  includeCurrentVariant?: boolean;
 }
 
 const DisplayModel = ({
@@ -249,10 +261,8 @@ const DisplayModel = ({
   selectedVariants,
   width,
   height,
-  includeCurrentVariant = false,
+  currentVariant,
 }: DisplayModelProps) => {
-  const { currentVariant } = useCustomizeLab();
-
   return (
     <>
       {gene && (
@@ -273,7 +283,7 @@ const DisplayModel = ({
             <Image src={variant.image} width={width} height={height} alt={variant.name} />
           </div>
         ))}
-      {currentVariant && includeCurrentVariant && (
+      {currentVariant && (
         <div className="absolute" style={{ zIndex: currentVariant.product.category.layer || 0 }}>
           <Image
             src={currentVariant.image}
