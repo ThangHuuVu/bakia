@@ -149,7 +149,7 @@ export const SelectPanel = ({ categories, isOpen, onTogglePanel }: SelectPanelPr
           )}
         </button>
       </div>
-      <div className="flex-col items-center hidden w-full h-full md:flex">
+      <div className="flex-col items-center hidden w-full md:flex">
         <h2>Customize Lab</h2>
         <p>Tùy chỉnh ngoại hình - sáng tạo Bakia của bạn</p>
         {currentCategory ? (

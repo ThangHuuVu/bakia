@@ -60,44 +60,46 @@ export const SelectProductPanel = ({ products }: SelectProductPanelProps) => {
         } min-h-[9.125rem] mb-[1.375rem] mt-[0.875rem] flex-grow gap-3 md:mt-0 md:mb-0 md:w-full md:justify-start`}
       >
         {hasColor && <ColorSlider colorSlides={colorSlides} />}
-        <div className="flex items-center gap-1 overflow-x-scroll overflow-y-hidden md:grid md:grid-cols-3 md:grid-flow-row md:overflow-x-hidden md:overflow-y-auto md:gap-x-6 md:gap-y-1 md:max-h-[17.5rem]">
-          <div
-            key={0}
-            className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
-              !currentProduct ? "border border-black border-solid" : "border-none"
-            } bg-background cursor-pointer`}
-            onClick={() => onProductClick(0)}
-          />
-          {products.map((product) => {
-            const matchingVariant =
-              product.variants.find((variant) => variant.colorId === currentColor?.id) ||
-              product.variants[0];
-            return (
-              <div
-                key={product.id}
-                className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
-                  selectedVariants.some((variant) => variant.productId === product.id)
-                    ? "border-2 border-solid border-darkMint"
-                    : currentProduct?.id === product.id
-                    ? "border border-black border-solid"
-                    : "border-none"
-                } md:w-[5.5rem] md:h-[5.5rem] m-auto`}
-              >
+        {Boolean(products?.length) && (
+          <div className="flex items-center gap-1 overflow-x-scroll overflow-y-hidden md:grid md:grid-cols-3 md:grid-flow-row md:overflow-x-hidden md:overflow-y-auto md:gap-x-6 md:gap-y-1 md:max-h-[17.5rem]">
+            <div
+              key={0}
+              className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
+                !currentProduct ? "border border-black border-solid" : "border-none"
+              } bg-background cursor-pointer`}
+              onClick={() => onProductClick(0)}
+            />
+            {products.map((product) => {
+              const matchingVariant =
+                product.variants.find((variant) => variant.colorId === currentColor?.id) ||
+                product.variants[0];
+              return (
                 <div
-                  className="w-16 h-16 cursor-pointer"
-                  onClick={() => onProductClick(product.id)}
+                  key={product.id}
+                  className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
+                    selectedVariants.some((variant) => variant.productId === product.id)
+                      ? "border-2 border-solid border-darkMint"
+                      : currentProduct?.id === product.id
+                      ? "border border-black border-solid"
+                      : "border-none"
+                  } md:w-[5.5rem] md:h-[5.5rem] m-auto`}
                 >
-                  <Image
-                    src={matchingVariant.thumbnail}
-                    alt={product.name}
-                    width={64}
-                    height={64}
-                  />
+                  <div
+                    className="w-16 h-16 cursor-pointer"
+                    onClick={() => onProductClick(product.id)}
+                  >
+                    <Image
+                      src={matchingVariant.thumbnail}
+                      alt={product.name}
+                      width={64}
+                      height={64}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
       <button
         className="flex items-center justify-center text-xl italic font-black uppercase rounded-lg h-[3.125rem]

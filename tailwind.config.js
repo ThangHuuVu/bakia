@@ -34,9 +34,10 @@ module.exports = {
         error: "#FF3C3C",
         grey3: "#E5E5E5",
       },
-      outline: {
+      outline: (theme) => ({
         solidBlack: ["1px black solid", "2px"],
-      },
+        main: [`2px ${theme("colors.main")} solid`],
+      }),
       fontSize: {
         s3: "0.8125rem",
         h2: "1.625rem",
