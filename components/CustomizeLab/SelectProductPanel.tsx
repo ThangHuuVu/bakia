@@ -48,60 +48,62 @@ export const SelectProductPanel = ({ products }: SelectProductPanelProps) => {
 
   const isButtonDisabled = Boolean(
     (currentProduct === null &&
-      selectedVariants.some((variant) => variant.product.categoryId !== currentCategory.id)) ||
+      !selectedVariants.some((variant) => variant.product.categoryId === currentCategory.id)) ||
       (currentVariant && selectedVariants.some((variant) => variant.id === currentVariant.id))
   );
 
   return (
-    <div className="w-full h-full flex flex-col justify-between space-y-[0.75rem] px-2 pb-4">
+    <div className="w-full h-full flex flex-col justify-between space-y-[0.75rem] px-2 pb-4 md:space-y-0 md:mt-[3.125rem] md:gap-11 md:items-center">
       <div
         className={`flex flex-col ${
           hasColor ? "justify-between" : "justify-center"
-        } min-h-[9.125rem] mb-[1.375rem] mt-[0.875rem] flex-grow gap-3`}
+        } min-h-[9.125rem] mb-[1.375rem] mt-[0.875rem] flex-grow gap-3 md:mt-0 md:mb-0 md:w-full md:justify-start`}
       >
         {hasColor && <ColorSlider colorSlides={colorSlides} />}
-        <div className="flex items-center gap-1 overflow-x-scroll overflow-y-hidden">
-          <div
-            key={0}
-            className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
-              !currentProduct ? "border border-black border-solid" : "border-none"
-            } bg-background cursor-pointer`}
-            onClick={() => onProductClick(0)}
-          />
-          {products.map((product) => {
-            const matchingVariant =
-              product.variants.find((variant) => variant.colorId === currentColor?.id) ||
-              product.variants[0];
-            return (
-              <div
-                key={product.id}
-                className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
-                  selectedVariants.some((variant) => variant.productId === product.id)
-                    ? "border-2 border-solid border-darkMint"
-                    : currentProduct?.id === product.id
-                    ? "border border-black border-solid"
-                    : "border-none"
-                }`}
-              >
+        {Boolean(products?.length) && (
+          <div className="flex items-center gap-1 overflow-x-scroll overflow-y-hidden md:grid md:grid-cols-3 md:grid-flow-row md:overflow-x-hidden md:overflow-y-auto md:gap-x-6 md:gap-y-1 md:max-h-[17.5rem]">
+            <div
+              key={0}
+              className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
+                !currentProduct ? "border border-black border-solid" : "border-none"
+              } bg-background cursor-pointer`}
+              onClick={() => onProductClick(0)}
+            />
+            {products.map((product) => {
+              const matchingVariant =
+                product.variants.find((variant) => variant.colorId === currentColor?.id) ||
+                product.variants[0];
+              return (
                 <div
-                  className="w-16 h-16 cursor-pointer"
-                  onClick={() => onProductClick(product.id)}
+                  key={product.id}
+                  className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
+                    selectedVariants.some((variant) => variant.productId === product.id)
+                      ? "border-2 border-solid border-darkMint"
+                      : currentProduct?.id === product.id
+                      ? "border border-black border-solid"
+                      : "border-none"
+                  } md:w-[5.5rem] md:h-[5.5rem] m-auto`}
                 >
-                  <Image
-                    src={matchingVariant.thumbnail}
-                    alt={product.name}
-                    width={64}
-                    height={64}
-                  />
+                  <div
+                    className="w-16 h-16 cursor-pointer"
+                    onClick={() => onProductClick(product.id)}
+                  >
+                    <Image
+                      src={matchingVariant.thumbnail}
+                      alt={product.name}
+                      width={64}
+                      height={64}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
       <button
         className="flex items-center justify-center text-xl italic font-black uppercase rounded-lg h-[3.125rem]
-          text-black bg-main disabled:bg-grey3 disabled:text-opacity-[0.4]"
+          text-black bg-main disabled:bg-grey3 disabled:text-opacity-[0.4] md:w-[6.25rem] md:h-10 md:font-bold md:text-[1.125rem] md:leading-[1.313rem]"
         disabled={isButtonDisabled}
         onClick={onSelectProductVariant}
       >

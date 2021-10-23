@@ -8,7 +8,7 @@ type Props = {
 };
 
 const Layout = ({ children, title = "Bakia" }: Props) => (
-  <div>
+  <>
     <Head>
       <meta charSet="utf-8" />
       <meta
@@ -18,8 +18,8 @@ const Layout = ({ children, title = "Bakia" }: Props) => (
       <title>{title}</title>
     </Head>
     <Header />
-    <div className="h-content">{children}</div>
-  </div>
+    <div className="overflow-y-hidden h-content md:h-md-content">{children}</div>
+  </>
 );
 
 export default Layout;
