@@ -10,6 +10,7 @@ module.exports = {
       spacing: {},
       height: {
         content: "calc(100vh - 3.5rem)",
+        "md-content": "calc(100vh - 3.25rem)",
       },
       width: {
         content: "calc(100vw - 1rem)",

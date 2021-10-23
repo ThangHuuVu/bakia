@@ -48,7 +48,7 @@ export const SelectProductPanel = ({ products }: SelectProductPanelProps) => {
 
   const isButtonDisabled = Boolean(
     (currentProduct === null &&
-      selectedVariants.some((variant) => variant.product.categoryId !== currentCategory.id)) ||
+      !selectedVariants.some((variant) => variant.product.categoryId === currentCategory.id)) ||
       (currentVariant && selectedVariants.some((variant) => variant.id === currentVariant.id))
   );
 
