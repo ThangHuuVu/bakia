@@ -9,3 +9,9 @@
 .color-swiper .swiper-wrapper {
   display: flex;
 }
+
+.half-circle {
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(135deg, #3effa8 20px, #3effa8 0) top / 60px 20px border-box;
+  background-repeat: no-repeat;
+}

@@ -13,11 +13,11 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
     () => selectedVariants.map((variant) => variant.price).reduce((a, b) => a + b, 0),
     [selectedVariants]
   );
-  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
+  const [isMobilePanelOpen, setIsMobilePanelOpen] = useState<boolean>(false);
   const [isOverviewOpen, setOverviewOpen] = useState<boolean>(false);
-  const [isShowMore, setIsShowMore] = useState<boolean>(false);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
-  const [showMoreVisible, setShowMoreVisible] = useState<boolean>(false);
+  const [isMobileMoreShowing, setIsMobileMoreShowing] = useState<boolean>(false);
+  const [mobileMoreVisible, setMobileMoreVisible] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -26,11 +26,11 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
 
   const onTogglePanel = () => {
     setOverviewOpen(false);
-    setIsPanelOpen(!isPanelOpen);
+    setIsMobilePanelOpen(!isMobilePanelOpen);
   };
   const onToggleOverview = () => {
-    setIsPanelOpen(false);
-    setIsShowMore(false);
+    setIsMobilePanelOpen(false);
+    setIsMobileMoreShowing(false);
     setIsConfirmed(false);
     setOverviewOpen(!isOverviewOpen);
   };
@@ -47,11 +47,12 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
     }
   }, [isOverviewOpen, isConfirmed, router]);
   const btnTitle = isOverviewOpen ? (isConfirmed ? "đặt hàng" : "xác nhận") : "hoàn thành";
+  const isHighlight = totalVariantPrice > 0 && !isOverviewOpen;
 
   useEffect(() => {
     if (contentRef.current && containerRef.current) {
       if (containerRef.current.offsetHeight < contentRef.current.scrollHeight) {
-        setShowMoreVisible(true);
+        setMobileMoreVisible(true);
       }
     }
   }, []);
@@ -69,7 +70,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
       </div>
       <div
         className={`flex flex-col overflow-y-hidden w-full p-2 ${
-          isShowMore ? "max-h-[200vh] h-auto" : "max-h-full min-h-full"
+          isMobileMoreShowing ? "max-h-[200vh] h-auto" : "max-h-full min-h-full"
         } md:hidden`}
         style={{
           transition: "max-height 200ms ease-in-out",
@@ -102,7 +103,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
               {gene && (
                 <p
                   className={`text-base leading-5 relative tracking-[-0.3px] ${
-                    totalVariantPrice > 0 && !isOverviewOpen
+                    isHighlight
                       ? "text-darkMint after:absolute after:w-2 after:h-2 after:rounded-full after:bg-main after:right-5"
                       : "text-black"
                   }`}
@@ -207,10 +208,10 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
               bị lỗi vui lòng liên hệ chúng tôi để được giải quyết.
             </p>
           </div>
-          {showMoreVisible && (
+          {mobileMoreVisible && (
             <div
               className="bottom-0 flex items-center justify-center w-full pb-2 text-center bg-white cursor-pointer text-darkMint gap-[0.375rem]"
-              onClick={() => setIsShowMore(!isShowMore)}
+              onClick={() => setIsMobileMoreShowing(!isMobileMoreShowing)}
             >
               <svg
                 width="10"
@@ -218,7 +219,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                 viewBox="0 0 10 10"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className={isShowMore ? "" : "transform transition-transform rotate-180"}
+                className={isMobileMoreShowing ? "" : "transform transition-transform rotate-180"}
               >
                 <path
                   d="M8.98532 4.99991L4.74268 0.757272L0.500035 4.99991"
@@ -226,11 +227,17 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                   strokeLinecap="round"
                 />
               </svg>
-              <p className="">{isShowMore ? "Ẩn bớt thông tin" : "Xem đầy đủ thông tin"}</p>
+              <p className="">
+                {isMobileMoreShowing ? "Ẩn bớt thông tin" : "Xem đầy đủ thông tin"}
+              </p>
             </div>
           )}
         </div>
-        <SelectPanel categories={categories} isOpen={isPanelOpen} onTogglePanel={onTogglePanel} />
+        <SelectPanel
+          categories={categories}
+          isOpen={isMobilePanelOpen}
+          onTogglePanel={onTogglePanel}
+        />
       </div>
       <div className="hidden md:flex md:gap-[10.875rem]">
         <DisplayModel
@@ -245,14 +252,14 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
           <div
             className={`absolute bottom-0 flex flex-col justify-between w-full z-30 bg-white ${
               isOverviewOpen ? "h-full max-h-full" : "max-h-20 h-20"
-            } ${totalVariantPrice > 0 && !isOverviewOpen ? "outline-main" : "outline-none"}`}
+            } ${isHighlight ? "outline-main" : "outline-none"}`}
             style={{
               transition: "max-height 200ms ease-in-out",
             }}
           >
             <button
-              className={`absolute transform -translate-x-1/2 left-1/2 w-[3.75rem] h-[3.75rem] flex items-center justify-center rounded-full bg-white top-[-1.875rem] ${
-                totalVariantPrice > 0 && !isOverviewOpen ? "outline-main" : "outline-none"
+              className={`absolute transform -translate-x-1/2 left-1/2 w-[3.75rem] h-[3.75rem] flex items-center justify-center rounded-full bg-white -top-5 ${
+                isHighlight ? "border-2 border-transparent border-solid half-circle" : ""
               }`}
               onClick={onToggleOverview}
             >
@@ -387,8 +394,8 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                   {gene && (
                     <p
                       className={`text-base leading-5 relative tracking-[-0.3px] ${
-                        totalVariantPrice > 0 && !isOverviewOpen
-                          ? "text-darkMint after:absolute after:w-2 after:h-2 after:rounded-full after:bg-main after:right-12"
+                        isHighlight
+                          ? "text-darkMint after:absolute after:w-2 after:h-2 after:rounded-full after:bg-main after:right-10"
                           : "text-black"
                       }`}
                     >{`${format(
