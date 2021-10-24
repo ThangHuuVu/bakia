@@ -82,7 +82,7 @@ export const SelectProductPanel = ({ products }: SelectProductPanelProps) => {
                       : currentProduct?.id === product.id
                       ? "border border-black border-solid"
                       : "border-none"
-                  } md:w-[5.5rem] md:h-[5.5rem] m-auto`}
+                  } md:w-[5.5rem] md:h-[5.5rem] md:m-auto`}
                 >
                   <div
                     className="w-16 h-16 cursor-pointer"
