@@ -18,6 +18,7 @@ export const getStaticProps = async () => {
       categories,
       gene,
     },
+    revalidate: 60,
   };
 };
 export default CustomPage;
