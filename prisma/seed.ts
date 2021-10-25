@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Category, Currency, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
@@ -131,6 +131,11 @@ async function main() {
     update: { name: "Kính", thumbnail: "Glasses.svg", layer: 10, parentId: others.id },
   });
 
+  await upsertClothes(clothes, vndCurrency);
+  await upsertEyeShapes(eyeShape, vndCurrency, eyeLine, eyeShadow, eyeLashes);
+}
+
+async function upsertClothes(clothes: Category, vndCurrency: Currency) {
   // outfit
   const set1 = await prisma.product.upsert({
     where: { id: 1 },
@@ -252,7 +257,9 @@ async function main() {
       productId: set4.id,
     },
   });
+}
 
+async function upsertEyeShapes(eyeShape, vndCurrency, eyeLine, eyeShadow, eyeLashes) {
   // eyes color
   const eyeColor1 = await prisma.variantColor.upsert({
     where: {
@@ -372,7 +379,7 @@ async function main() {
     },
   });
 
-  // eye shape
+  // eye shape 1
   const eyeShape1 = await prisma.product.upsert({
     where: { id: 5 },
     create: {
@@ -555,7 +562,7 @@ async function main() {
   await prisma.productVariant.upsert({
     where: { id: 13 },
     create: {
-      name: "Mắt phương đông Galantus",
+      name: "Mắt phương đông Shinobi",
       image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl9.png",
       thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl9_thumb.png",
       price: 50000,
@@ -564,13 +571,440 @@ async function main() {
       colorId: eyeColor9.id,
     },
     update: {
-      name: "Mắt phương đông Galantus",
+      name: "Mắt phương đông Shinobi",
       image: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl9.png",
       thumbnail: "04-2+Eyes+shape/eye_shape1/eye_shape1_cl9_thumb.png",
       price: 50000,
       currencyId: vndCurrency.id,
       productId: eyeShape1.id,
       colorId: eyeColor9.id,
+    },
+  });
+
+  // eye shape 2
+  const eyeShape2 = await prisma.product.upsert({
+    where: { id: 6 },
+    create: {
+      name: "Mắt sắc xảo",
+      categoryId: eyeShape.id,
+    },
+    update: {
+      name: "Mắt sắc xảo",
+      categoryId: eyeShape.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 14 },
+    create: {
+      name: "Mắt sắc xảo Natural brown",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl1.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl1_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor1.id,
+    },
+    update: {
+      name: "Mắt sắc xảo Natural brown",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl1.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl1_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor1.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 15 },
+    create: {
+      name: "Mắt sắc xảo Vibrant sky",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl2.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl2_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor2.id,
+    },
+    update: {
+      name: "Mắt sắc xảo Vibrant sky",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl2.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl2_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor2.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 16 },
+    create: {
+      name: "Mắt sắc xảo Ashes",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl3.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl3_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor3.id,
+    },
+    update: {
+      name: "Mắt sắc xảo Ashes",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl3.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl3_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor3.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 17 },
+    create: {
+      name: "Mắt sắc xảo Mistique",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl4.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl4_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor4.id,
+    },
+    update: {
+      name: "Mắt sắc xảo Mistique",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl4.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl4_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor4.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 18 },
+    create: {
+      name: "Mắt sắc xảo Luster",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl5.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl5_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor5.id,
+    },
+    update: {
+      name: "Mắt sắc xảo Luster",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl5.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl5_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor5.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 19 },
+    create: {
+      name: "Mắt sắc xảo Futuristic",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl6.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl6_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor6.id,
+    },
+    update: {
+      name: "Mắt sắc xảo Futuristic",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl6.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl6_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor6.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 20 },
+    create: {
+      name: "Mắt sắc xảo Red zone",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl7.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl7_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor7.id,
+    },
+    update: {
+      name: "Mắt sắc xảo Red zone",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl7.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl7_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor7.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 21 },
+    create: {
+      name: "Mắt sắc xảo Galantus",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl8.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl8_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor8.id,
+    },
+    update: {
+      name: "Mắt sắc xảo Galantus",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl8.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl8_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor8.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 22 },
+    create: {
+      name: "Mắt sắc xảo Shinobi",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl9.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl9_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor9.id,
+    },
+    update: {
+      name: "Mắt sắc xảo Shinobi",
+      image: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl9.png",
+      thumbnail: "04-2+Eyes+shape/eye_shape2/eye_shape2_cl9_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeShape2.id,
+      colorId: eyeColor9.id,
+    },
+  });
+
+  const eyeLashes1EyeShape1 = await prisma.product.upsert({
+    where: { id: 7 },
+    create: {
+      name: "Kiểu tự nhiên",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+    update: {
+      name: "Kiểu tự nhiên",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 23 },
+    create: {
+      name: "Kiểu tự nhiên",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh1.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh1_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes1EyeShape1.id,
+    },
+    update: {
+      name: "Kiểu tự nhiên",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh1.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh1_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes1EyeShape1.id,
+    },
+  });
+  const eyeLashes2EyeShape1 = await prisma.product.upsert({
+    where: { id: 8 },
+    create: {
+      name: "Kiểu mi dài",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+    update: {
+      name: "Kiểu mi dài",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 24 },
+    create: {
+      name: "Kiểu mi dài",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh2.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh2_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes2EyeShape1.id,
+    },
+    update: {
+      name: "Kiểu mi dài",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh2.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh2_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes2EyeShape1.id,
+    },
+  });
+  const eyeLashes3EyeShape1 = await prisma.product.upsert({
+    where: { id: 9 },
+    create: {
+      name: "Kiểu mi cong",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+    update: {
+      name: "Kiểu mi cong",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 25 },
+    create: {
+      name: "Kiểu mi cong",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh3.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh3_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes3EyeShape1.id,
+    },
+    update: {
+      name: "Kiểu mi cong",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh3.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh3_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes3EyeShape1.id,
+    },
+  });
+  const eyeLashes4EyeShape1 = await prisma.product.upsert({
+    where: { id: 10 },
+    create: {
+      name: "Kiểu mi sợi",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+    update: {
+      name: "Kiểu mi sợi",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 26 },
+    create: {
+      name: "Kiểu mi sợi",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh4.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh4_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes4EyeShape1.id,
+    },
+    update: {
+      name: "Kiểu mi sợi",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh4.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh4_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes4EyeShape1.id,
+    },
+  });
+  const eyeLashes5EyeShape1 = await prisma.product.upsert({
+    where: { id: 11 },
+    create: {
+      name: "Kiểu tối giản",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+    update: {
+      name: "Kiểu tối giản",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 27 },
+    create: {
+      name: "Kiểu tối giản",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh5.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh5_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes5EyeShape1.id,
+    },
+    update: {
+      name: "Kiểu tối giản",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh5.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh5_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes5EyeShape1.id,
+    },
+  });
+  const eyeLashes6EyeShape1 = await prisma.product.upsert({
+    where: { id: 12 },
+    create: {
+      name: "Kiểu anime",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+    update: {
+      name: "Kiểu anime",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 28 },
+    create: {
+      name: "Kiểu anime",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh6.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh6_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes6EyeShape1.id,
+    },
+    update: {
+      name: "Kiểu anime",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh6.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh6_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes6EyeShape1.id,
+    },
+  });
+  const eyeLashes7EyeShape1 = await prisma.product.upsert({
+    where: { id: 13 },
+    create: {
+      name: "Kiểu punk",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+    update: {
+      name: "Kiểu punk",
+      categoryId: eyeLashes.id,
+      baseId: eyeShape1.id,
+    },
+  });
+  await prisma.productVariant.upsert({
+    where: { id: 29 },
+    create: {
+      name: "Kiểu punk",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh7.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh7_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes7EyeShape1.id,
+    },
+    update: {
+      name: "Kiểu punk",
+      image: "04-4+Eyelashes/eye_shape1/eye_lsh7.png",
+      thumbnail: "04-4+Eyelashes/eye_shape1/eye_lsh7_thumb.png",
+      price: 50000,
+      currencyId: vndCurrency.id,
+      productId: eyeLashes7EyeShape1.id,
     },
   });
 }

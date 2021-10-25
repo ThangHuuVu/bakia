@@ -26,6 +26,9 @@ model Product {
   variants   ProductVariant[]
   category   Category         @relation(fields: [categoryId], references: [id])
   categoryId Int
+  base       Product?         @relation("ProductToProduct", fields: [baseId], references: [id])
+  addons     Product[]        @relation("ProductToProduct")
+  baseId     Int?
 }
 
 model Currency {
@@ -37,19 +40,16 @@ model Currency {
 }
 
 model ProductVariant {
-  id         Int              @id @default(autoincrement())
+  id         Int           @id @default(autoincrement())
   thumbnail  String
   image      String
   name       String
   price      Int
-  currency   Currency         @relation(fields: [currencyId], references: [id])
-  product    Product          @relation(fields: [productId], references: [id])
+  currency   Currency      @relation(fields: [currencyId], references: [id])
+  product    Product       @relation(fields: [productId], references: [id])
   productId  Int
-  color      VariantColor?    @relation(fields: [colorId], references: [id])
+  color      VariantColor? @relation(fields: [colorId], references: [id])
   colorId    Int?
-  base       ProductVariant?  @relation("ProductVariantToProductVariant", fields: [baseId], references: [id])
-  addons     ProductVariant[] @relation("ProductVariantToProductVariant")
-  baseId     Int?
   currencyId Int
 }
 

@@ -1,11 +1,10 @@
-import Image from "next/image";
 import { format } from "@/lib/currency";
 import { useCustomizeLab } from "./context";
 import { SelectPanel } from "./SelectPanel";
+import DisplayModel from "./DisplayModel";
 import { CustomizeLabProps } from ".";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { GeneType, VariantType } from "@/lib/types/custom";
 
 export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
   const { selectedVariants, currentVariant } = useCustomizeLab();
@@ -441,54 +440,5 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
         </div>
       </div>
     </div>
-  );
-};
-
-interface DisplayModelProps {
-  gene: GeneType;
-  selectedVariants: VariantType[];
-  currentVariant?: VariantType;
-  width: number;
-  height: number;
-}
-
-const DisplayModel = ({
-  gene,
-  selectedVariants,
-  width,
-  height,
-  currentVariant,
-}: DisplayModelProps) => {
-  return (
-    <>
-      {gene && (
-        <Image
-          src="/static/assets/bakia_model.png"
-          width={width}
-          height={height}
-          alt={gene.description}
-        />
-      )}
-      {Boolean(selectedVariants?.length) &&
-        selectedVariants.map((variant) => (
-          <div
-            key={variant.id}
-            className="absolute"
-            style={{ zIndex: variant.product.category.layer || 0 }}
-          >
-            <Image src={variant.image} width={width} height={height} alt={variant.name} />
-          </div>
-        ))}
-      {currentVariant && (
-        <div className="absolute" style={{ zIndex: currentVariant.product.category.layer || 0 }}>
-          <Image
-            src={currentVariant.image}
-            width={width}
-            height={height}
-            alt={currentVariant.name}
-          />
-        </div>
-      )}
-    </>
   );
 };

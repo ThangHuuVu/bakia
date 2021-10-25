@@ -79,13 +79,22 @@ export function CustomizeLabProvider({ categories, children }: CustomizeLabProvi
     [currentCategory]
   );
   const onSelectProductVariant = useCallback(() => {
+    const variantToRemove = selectedVariants.find(
+      (variant) => variant.product.categoryId === currentCategory.id
+    );
     if (currentVariant === null) {
+      // deselect
       setSelectedVariants([
-        ...selectedVariants.filter((variant) => variant.product.categoryId !== currentCategory?.id),
+        ...selectedVariants
+          .filter((variant) => variant.id !== variantToRemove?.id)
+          .filter((variant) => variant.product.baseId !== variantToRemove?.productId),
       ]);
     } else {
+      // select
       setSelectedVariants([
-        ...selectedVariants.filter((variant) => variant.product.categoryId !== currentCategory?.id),
+        ...selectedVariants
+          .filter((variant) => variant.id !== variantToRemove?.id)
+          .filter((variant) => variant.product.baseId !== variantToRemove?.productId),
         currentVariant,
       ]);
     }
