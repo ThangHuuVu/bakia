@@ -16,9 +16,9 @@ const useDisplayVariants = (selectedVariants: VariantType[], currentVariant: Var
     if (currentVariant) {
       setDisplayVariants([
         currentVariant,
-        ...selectedVariants.filter(
-          (variant) => variant.product.categoryId !== currentVariant.product.categoryId
-        ),
+        ...selectedVariants
+          .filter((variant) => variant.product.categoryId !== currentVariant.product.categoryId)
+          .filter((variant) => variant.product.baseId === currentVariant.productId),
       ]);
     } else {
       setDisplayVariants(selectedVariants);

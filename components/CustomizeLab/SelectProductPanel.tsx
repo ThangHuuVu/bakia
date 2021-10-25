@@ -1,31 +1,15 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { VariantColor } from ".prisma/client";
-import { ProductType } from "@/lib/types/custom";
+import { ProductType, VariantType } from "@/lib/types/custom";
 import { useCustomizeLab } from "./context";
-
-interface SelectProductPanelProps {
-  products: ProductType[];
-}
 
 const MAX_COLOR_COUNT = 5;
 
-export const SelectProductPanel = ({ products }: SelectProductPanelProps) => {
-  const {
-    selectedVariants,
-    currentCategory,
-    currentColor,
-    currentVariant,
-    currentProduct,
-    onProductClick,
-    onSelectProductVariant,
-  } = useCustomizeLab();
-
+const useColorSlides = (currentProduct: ProductType, products: ProductType[]) => {
   const [colorSlides, setColorSlides] = useState<VariantColor[][]>([]);
-
-  const hasColor = products.some((product) => product.variants.some((variant) => variant.colorId));
 
   useEffect(() => {
     const colors = currentProduct
@@ -46,10 +30,52 @@ export const SelectProductPanel = ({ products }: SelectProductPanelProps) => {
     setColorSlides(slides);
   }, [currentProduct, products]);
 
-  const isButtonDisabled = Boolean(
-    (currentProduct === null &&
-      !selectedVariants.some((variant) => variant.product.categoryId === currentCategory.id)) ||
-      (currentVariant && selectedVariants.some((variant) => variant.id === currentVariant.id))
+  return colorSlides;
+};
+
+const useDisplayProducts = (products: ProductType[], selectedVariants: VariantType[]) => {
+  const [displayProducts, setDisplayProducts] = useState<ProductType[]>([]);
+
+  useEffect(() => {
+    const isProductsHaveBase = products.some((product) => product.baseId);
+    if (isProductsHaveBase) {
+      const isBasedSelected = selectedVariants.some(
+        (variant) => variant.productId === products[0].baseId
+      );
+      if (isBasedSelected) setDisplayProducts(products);
+    } else {
+      setDisplayProducts(products);
+    }
+  }, [products, selectedVariants]);
+  return displayProducts;
+};
+
+export const SelectProductPanel = () => {
+  const {
+    selectedVariants,
+    currentCategory: { id: categoryId, products },
+    currentColor,
+    currentVariant,
+    currentProduct,
+    onProductClick,
+    onSelectProductVariant,
+  } = useCustomizeLab();
+  const displayProducts = useDisplayProducts(products, selectedVariants);
+  const colorSlides = useColorSlides(currentProduct, displayProducts);
+
+  const hasColor = useMemo(
+    () => displayProducts.some((product) => product.variants.some((variant) => variant.colorId)),
+    [displayProducts]
+  );
+
+  const isButtonDisabled = useMemo(
+    () =>
+      Boolean(
+        (currentProduct === null &&
+          !selectedVariants.some((variant) => variant.product.categoryId === categoryId)) ||
+          (currentVariant && selectedVariants.some((variant) => variant.id === currentVariant.id))
+      ),
+    [categoryId, currentProduct, selectedVariants, currentVariant]
   );
 
   return (
@@ -60,7 +86,7 @@ export const SelectProductPanel = ({ products }: SelectProductPanelProps) => {
         } min-h-[9.125rem] mb-[1.375rem] mt-[0.875rem] flex-grow gap-3 md:mt-0 md:mb-0 md:w-full md:justify-start`}
       >
         {hasColor && <ColorSlider colorSlides={colorSlides} />}
-        {Boolean(products?.length) && (
+        {Boolean(displayProducts?.length) && (
           <div className="flex items-center gap-1 overflow-x-scroll overflow-y-hidden md:grid md:grid-cols-3 md:grid-flow-row md:overflow-x-hidden md:overflow-y-auto md:gap-x-6 md:gap-y-1 md:max-h-[17.5rem]">
             <div
               key={0}
@@ -69,7 +95,7 @@ export const SelectProductPanel = ({ products }: SelectProductPanelProps) => {
               } bg-background cursor-pointer`}
               onClick={() => onProductClick(0)}
             />
-            {products.map((product) => {
+            {displayProducts.map((product) => {
               const matchingVariant =
                 product.variants.find((variant) => variant.colorId === currentColor?.id) ||
                 product.variants[0];

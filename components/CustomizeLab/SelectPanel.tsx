@@ -72,7 +72,7 @@ export const SelectPanel = ({ categories, isOpen, onTogglePanel }: SelectPanelPr
                       ))}
                     </div>
                   ) : (
-                    <SelectProductPanel products={currentCategory.products} />
+                    <SelectProductPanel />
                   )}
                 </div>
               </>
@@ -186,7 +186,7 @@ export const SelectPanel = ({ categories, isOpen, onTogglePanel }: SelectPanelPr
                 ))}
               </div>
             ) : (
-              <SelectProductPanel products={currentCategory.products} />
+              <SelectProductPanel />
             )}
           </div>
         ) : (
