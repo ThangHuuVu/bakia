@@ -13,12 +13,20 @@ interface DisplayModelProps {
 const useDisplayVariants = (selectedVariants: VariantType[], currentVariant: VariantType) => {
   const [displayVariants, setDisplayVariants] = useState<VariantType[]>([]);
   useEffect(() => {
+    const nextVariants = [
+      currentVariant,
+      ...selectedVariants.filter(
+        (variant) => variant.product.categoryId !== currentVariant?.product.categoryId
+      ),
+    ];
+    const isBaseSelected = (id: number) => {
+      return nextVariants.some((variant) => variant.productId === id);
+    };
     if (currentVariant) {
       setDisplayVariants([
-        currentVariant,
-        ...selectedVariants
-          .filter((variant) => variant.product.categoryId !== currentVariant.product.categoryId)
-          .filter((variant) => variant.product.baseId === currentVariant.productId),
+        ...nextVariants.filter(
+          (variant) => !variant.product.baseId || isBaseSelected(variant.product.baseId)
+        ),
       ]);
     } else {
       setDisplayVariants(selectedVariants);
