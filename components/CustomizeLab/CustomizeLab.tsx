@@ -28,12 +28,13 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
     setOverviewOpen(false);
     setIsMobilePanelOpen(!isMobilePanelOpen);
   };
-  const onToggleOverview = () => {
+  const onToggleOverview = useCallback(() => {
     setIsMobilePanelOpen(false);
     setIsMobileMoreShowing(false);
     setIsConfirmed(false);
     setOverviewOpen(!isOverviewOpen);
-  };
+  }, [isOverviewOpen]);
+
   const onButtonClick = useCallback(() => {
     if (isOverviewOpen) {
       if (isConfirmed) {
@@ -43,10 +44,12 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
         setIsConfirmed(true);
       }
     } else {
-      setOverviewOpen(true);
+      onToggleOverview();
     }
-  }, [isOverviewOpen, isConfirmed, router]);
+  }, [isOverviewOpen, isConfirmed, router, onToggleOverview]);
+
   const btnTitle = isOverviewOpen ? (isConfirmed ? "đặt hàng" : "xác nhận") : "hoàn thành";
+
   const isHighlight = totalVariantPrice > 0 && !isOverviewOpen;
 
   useEffect(() => {
