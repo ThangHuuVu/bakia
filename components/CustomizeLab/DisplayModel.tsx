@@ -8,6 +8,7 @@ interface DisplayModelProps {
   currentVariant?: VariantType;
   width: number;
   height: number;
+  attachId?: boolean;
 }
 
 const useDisplayVariants = (selectedVariants: VariantType[], currentVariant: VariantType) => {
@@ -32,7 +33,7 @@ const useDisplayVariants = (selectedVariants: VariantType[], currentVariant: Var
       setDisplayVariants(selectedVariants);
     }
   }, [selectedVariants, currentVariant]);
-  return displayVariants;
+  return displayVariants.sort((a, b) => a.product.category.layer - b.product.category.layer);
 };
 
 const DisplayModel = ({
@@ -41,27 +42,27 @@ const DisplayModel = ({
   width,
   height,
   currentVariant,
+  attachId,
 }: DisplayModelProps) => {
   const displayVariants = useDisplayVariants(selectedVariants, currentVariant);
 
   return (
     <>
       {gene && (
-        <Image
-          src="/static/assets/bakia_model.png"
-          width={width}
-          height={height}
-          alt={gene.description}
-        />
+        <Image src={gene.image} width={width} height={height} alt={gene.description} id="gene" />
       )}
       {Boolean(displayVariants?.length) &&
         displayVariants.map((variant) => (
-          <div
-            key={variant.id}
-            className="absolute"
-            style={{ zIndex: variant.product.category.layer || 0 }}
-          >
-            <Image src={variant.image} width={width} height={height} alt={variant.name} />
+          <div key={variant.id} className="absolute">
+            <Image
+              id={attachId && `variant_${variant.id.toString()}`}
+              src={variant.image}
+              width={width}
+              height={height}
+              alt={variant.name}
+              blurDataURL={variant.thumbnail}
+              placeholder="blur"
+            />
           </div>
         ))}
     </>
