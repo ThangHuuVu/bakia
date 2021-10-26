@@ -79,8 +79,10 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
         />
       </div>
       <div
-        className={`flex flex-col overflow-y-hidden w-full p-2 ${
-          isMobileMoreShowing ? "max-h-[200vh] h-auto" : "max-h-full min-h-full"
+        className={`flex flex-col w-full p-2 ${
+          isMobileMoreShowing
+            ? "max-h-[200vh] h-auto overflow-y-auto"
+            : "max-h-full min-h-full overflow-y-hidden"
         } md:hidden`}
         style={{
           transition: "max-height 200ms ease-in-out",
@@ -133,11 +135,11 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
         </div>
         <div
           ref={containerRef}
-          className={`flex flex-col items-center justify-between flex-grow w-full h-full mb-4 pt-6 prose transform  ${
+          className={`flex flex-col items-center justify-between flex-grow w-full h-full mb-4 pt-6 prose transform ${
             isOverviewOpen ? "bg-white opacity-100 z-30" : "bg-transparent opacity-0"
-          } px-[0.625rem] overflow-y-hidden transition-opacity  gap-[0.875rem]`}
+          } px-[0.625rem] overflow-y-auto transition-opacity gap-[0.875rem]`}
         >
-          <div ref={contentRef} className="flex flex-col items-center gap-4 overflow-y-hidden">
+          <div ref={contentRef} className="flex flex-col items-center gap-4 overflow-y-auto">
             {isConfirmed ? (
               <div className="flex flex-col items-center w-full gap-6">
                 <div className="flex items-center justify-between w-full">
@@ -360,7 +362,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                     <div className="flex-none w-full h-8 px-4 mt-4 text-right border-b">
                       <h3>chi tiết</h3>
                     </div>
-                    <dl className="w-full flex flex-col gap-[0.875rem]">
+                    <dl className="w-full flex flex-col gap-[0.875rem] overflow-y-auto">
                       <div className="flex items-center justify-between text-black">
                         <dt>{gene.name}</dt>
                         <dd>{format(gene.price, gene.currency.abbreviationSign)}</dd>
