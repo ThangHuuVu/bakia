@@ -5,6 +5,7 @@ import DisplayModel from "./DisplayModel";
 import { CustomizeLabProps } from ".";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import download from "@/lib/download";
 
 export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
   const { selectedVariants, currentVariant } = useCustomizeLab();
@@ -55,6 +56,12 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
       }
     }
   }, []);
+  const onDownloadClick = useCallback(async () => {
+    const variantIds = selectedVariants
+      .sort((a, b) => a.product.category.layer - b.product.category.layer)
+      .map((variant) => `variant_${variant.id.toString()}`);
+    await download(variantIds);
+  }, [selectedVariants]);
 
   return (
     <div className="relative w-full h-full md:grid md:place-content-center">
@@ -65,6 +72,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
           width={348}
           height={545}
           currentVariant={currentVariant}
+          attachId
         />
       </div>
       <div
@@ -149,7 +157,10 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                         />
                       </svg>
                     </div>
-                    <div className="w-[2.375rem] h-[2.375rem] grid place-content-center cursor-pointer">
+                    <div
+                      className="w-[2.375rem] h-[2.375rem] grid place-content-center cursor-pointer"
+                      onClick={onDownloadClick}
+                    >
                       <svg
                         width="20"
                         height="22"
@@ -245,6 +256,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
           width={480}
           height={754}
           currentVariant={currentVariant}
+          attachId
         />
         <div className="h-full w-[21.75rem] flex flex-col prose items-center relative">
           <SelectPanel categories={categories} />
@@ -301,7 +313,10 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                             />
                           </svg>
                         </div>
-                        <div className="w-[2.375rem] h-[2.375rem] grid place-content-center cursor-pointer">
+                        <div
+                          className="w-[2.375rem] h-[2.375rem] grid place-content-center cursor-pointer"
+                          onClick={onDownloadClick}
+                        >
                           <svg
                             width="20"
                             height="22"
