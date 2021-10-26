@@ -100,28 +100,30 @@ export const SelectProductPanel = () => {
                 product.variants.find((variant) => variant.colorId === currentColor?.id) ||
                 product.variants[0];
               return (
-                <div
-                  key={product.id}
-                  className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
-                    selectedVariants.some((variant) => variant.productId === product.id)
-                      ? "border-2 border-solid border-darkMint"
-                      : currentProduct?.id === product.id
-                      ? "border border-black border-solid"
-                      : "border-none"
-                  } md:w-[5.5rem] md:h-[5.5rem] md:m-auto`}
-                >
+                matchingVariant && (
                   <div
-                    className="w-16 h-16 cursor-pointer"
-                    onClick={() => onProductClick(product.id)}
+                    key={product.id}
+                    className={`w-[4.875rem] h-[4.875rem] flex-shrink-0 flex items-center justify-center border rounded-lg ${
+                      selectedVariants.some((variant) => variant.productId === product.id)
+                        ? "border-2 border-solid border-darkMint"
+                        : currentProduct?.id === product.id
+                        ? "border border-black border-solid"
+                        : "border-none"
+                    } md:w-[5.5rem] md:h-[5.5rem] md:m-auto`}
                   >
-                    <Image
-                      src={matchingVariant.thumbnail}
-                      alt={product.name}
-                      width={64}
-                      height={64}
-                    />
+                    <div
+                      className="w-16 h-16 cursor-pointer"
+                      onClick={() => onProductClick(product.id)}
+                    >
+                      <Image
+                        src={matchingVariant.thumbnail}
+                        alt={product.name}
+                        width={64}
+                        height={64}
+                      />
+                    </div>
                   </div>
-                </div>
+                )
               );
             })}
           </div>
