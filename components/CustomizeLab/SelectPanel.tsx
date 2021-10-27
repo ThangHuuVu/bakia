@@ -30,7 +30,7 @@ export const SelectPanel = ({ categories, isOpen, onTogglePanel }: SelectPanelPr
       <div
         className={`w-full ${
           isOpen ? "h-[20rem] min-h-[21.25rem] translate-y-5" : "translate-y-5"
-        } transition-transform px-2 z-50 md:hidden`}
+        } transition-transform px-2 z-30 md:hidden`}
       >
         <div className=" h-full w-full bg-white rounded-t-[0.625rem] pt-[1.875rem]">
           <div className={isOpen ? "flex flex-col items-center prose h-full" : "hidden"}>
