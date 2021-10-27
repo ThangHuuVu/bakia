@@ -20,7 +20,6 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
   const [mobileMoreVisible, setMobileMoreVisible] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
 
@@ -53,12 +52,11 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
   const isHighlight = totalVariantPrice > 0 && !isOverviewOpen;
 
   useEffect(() => {
-    if (contentRef.current && containerRef.current) {
-      if (containerRef.current.offsetHeight < contentRef.current.scrollHeight) {
-        setMobileMoreVisible(true);
-      }
+    if (containerRef.current) {
+      setMobileMoreVisible(containerRef.current.offsetHeight < containerRef.current.scrollHeight);
     }
-  }, []);
+  }, [selectedVariants, isOverviewOpen]);
+
   const onDownloadClick = useCallback(async () => {
     const variantIds = selectedVariants
       .sort((a, b) => a.product.category.layer - b.product.category.layer)
@@ -111,7 +109,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                 fill="currentColor"
               />
             </svg>
-            <div className="flex flex-col ">
+            <div className="flex flex-col">
               {gene && (
                 <p
                   className={`text-base leading-5 relative tracking-[-0.3px] ${
@@ -134,12 +132,11 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
           </button>
         </div>
         <div
-          ref={containerRef}
           className={`flex flex-col items-center justify-between flex-grow w-full h-full mb-4 pt-6 prose transform ${
             isOverviewOpen ? "bg-white opacity-100 z-30" : "bg-transparent opacity-0"
           } px-[0.625rem] overflow-y-auto transition-opacity gap-[0.875rem]`}
         >
-          <div ref={contentRef} className="flex flex-col items-center gap-4 overflow-y-auto">
+          <div className="flex flex-col items-center gap-4 overflow-y-auto">
             {isConfirmed ? (
               <div className="flex flex-col items-center w-full gap-6">
                 <div className="flex items-center justify-between w-full">
@@ -192,7 +189,10 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col items-center w-full gap-4 overflow-y-hidden">
+              <div
+                ref={containerRef}
+                className="flex flex-col items-center w-full gap-4 overflow-y-hidden"
+              >
                 <h2 className="flex-none">bakia của bạn</h2>
                 <div className="flex-none w-full h-8 px-4 mt-4 text-right border-b">
                   <h3>chi tiết</h3>
@@ -212,11 +212,11 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                     </div>
                   ))}
                 </dl>
-                <div className="w-full h-8 px-4 mt-4 text-right border-b">
-                  <h3>lưu ý</h3>
-                </div>
               </div>
             )}
+            <div className="w-full h-8 px-4 mt-4 text-right border-b">
+              <h3>lưu ý</h3>
+            </div>
             <p>
               Các Bakia được customize sẽ có thời gian ra đời lâu hơn do được sản xuất hoàn toàn
               dành riêng cho bạn. Bakia sau khi customize không thể được đổi trả. Trường hợp Bakia
@@ -254,6 +254,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
           onTogglePanel={onTogglePanel}
         />
       </div>
+      {/* Md screen */}
       <div className="hidden md:flex md:gap-[10.875rem]">
         <div className=" relative w-[30rem] h-[47.125rem]">
           <DisplayModel
