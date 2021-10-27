@@ -255,14 +255,16 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
         />
       </div>
       <div className="hidden md:flex md:gap-[10.875rem]">
-        <DisplayModel
-          selectedVariants={selectedVariants}
-          gene={gene}
-          width={480}
-          height={754}
-          currentVariant={currentVariant}
-          attachId
-        />
+        <div className=" relative w-[30rem] h-[47.125rem]">
+          <DisplayModel
+            selectedVariants={selectedVariants}
+            gene={gene}
+            width={480}
+            height={754}
+            currentVariant={currentVariant}
+            attachId
+          />
+        </div>
         <div className="h-full w-[21.75rem] flex flex-col prose items-center relative">
           <SelectPanel categories={categories} />
           <div

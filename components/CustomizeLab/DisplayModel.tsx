@@ -49,7 +49,9 @@ const DisplayModel = ({
   return (
     <>
       {gene && (
-        <Image src={gene.image} width={width} height={height} alt={gene.description} id="gene" />
+        <div className="absolute">
+          <Image src={gene.image} width={width} height={height} alt={gene.description} id="gene" />
+        </div>
       )}
       {Boolean(displayVariants?.length) &&
         displayVariants.map((variant) => (
