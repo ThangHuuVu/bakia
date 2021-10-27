@@ -62,8 +62,6 @@ const DisplayModel = ({
               width={width}
               height={height}
               alt={variant.name}
-              blurDataURL={variant.thumbnail}
-              placeholder="blur"
             />
           </div>
         ))}
