@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import useClickOutside from "@/lib/hooks/useClickOutside";
 
 function useIsScrollTop() {
   const [isTop, setIsTop] = useState(true);
@@ -43,6 +44,8 @@ export default function Header() {
       document.body.style.overflow = "auto";
     }
   }, [menuActive, searchActive]);
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => setMenuActive(false));
 
   return (
     <>
@@ -160,6 +163,7 @@ export default function Header() {
       </header>
       <div
         onClick={onMenuToggle}
+        ref={ref}
         className={`fixed w-full h-screen right-0 top-0 flex flex-col justify-between z-40 bg-white transition-opacity md:transform md:transition-transform ${
           menuActive
             ? "opacity-100 md:translate-y-0"
