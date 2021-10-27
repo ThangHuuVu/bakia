@@ -179,7 +179,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                     </div>
                   </div>
                 </div>
-                <div className="grid place-content-center px-auto pb-[0.625rem]">
+                <div className="grid place-content-center px-auto pb-[0.625rem] w-[11.75rem] h-[18.75rem] ">
                   <DisplayModel
                     selectedVariants={selectedVariants}
                     gene={gene}
@@ -347,7 +347,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                         </div>
                       </div>
                     </div>
-                    <div className="grid place-content-center px-auto pb-[0.625rem]">
+                    <div className="grid place-content-center px-auto pb-[0.625rem] w-[11.75rem] h-[18.75rem]">
                       <DisplayModel
                         selectedVariants={selectedVariants}
                         gene={gene}
