@@ -145,7 +145,10 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                     <p>{gene.description}</p>
                   </div>
                   <div className="flex items-center justify-between gap-1">
-                    <div className="w-[2.375rem] h-[2.375rem] grid place-content-center cursor-pointer">
+                    <button
+                      title="Share"
+                      className="w-[2.375rem] h-[2.375rem] grid place-content-center"
+                    >
                       <svg
                         width="20"
                         height="22"
@@ -158,9 +161,10 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                           fill="black"
                         />
                       </svg>
-                    </div>
-                    <div
-                      className="w-[2.375rem] h-[2.375rem] grid place-content-center cursor-pointer"
+                    </button>
+                    <button
+                      title="Download"
+                      className="w-[2.375rem] h-[2.375rem] grid place-content-center"
                       onClick={onDownloadClick}
                     >
                       <svg
@@ -176,7 +180,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                         />
                         <rect y="19.5432" width="20" height="2.45686" rx="1.22843" fill="black" />
                       </svg>
-                    </div>
+                    </button>
                   </div>
                 </div>
                 <div className="grid place-content-center px-auto pb-[0.625rem] w-[11.75rem] h-[18.75rem] ">
@@ -307,7 +311,10 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                         <p>{gene.description}</p>
                       </div>
                       <div className="flex items-center justify-between gap-1">
-                        <div className="w-[2.375rem] h-[2.375rem] grid place-content-center cursor-pointer">
+                        <button
+                          title="Share"
+                          className="w-[2.375rem] h-[2.375rem] grid place-content-center"
+                        >
                           <svg
                             width="20"
                             height="22"
@@ -320,9 +327,10 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                               fill="black"
                             />
                           </svg>
-                        </div>
-                        <div
-                          className="w-[2.375rem] h-[2.375rem] grid place-content-center cursor-pointer"
+                        </button>
+                        <button
+                          title="Download"
+                          className="w-[2.375rem] h-[2.375rem] grid place-content-center"
                           onClick={onDownloadClick}
                         >
                           <svg
@@ -344,7 +352,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
                               fill="black"
                             />
                           </svg>
-                        </div>
+                        </button>
                       </div>
                     </div>
                     <div className="grid place-content-center px-auto pb-[0.625rem] w-[11.75rem] h-[18.75rem]">
