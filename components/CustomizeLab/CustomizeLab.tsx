@@ -357,8 +357,11 @@ export const CustomizeLab = () => {
                         height={300}
                       />
                     </div>
-                    <button className="flex items-center justify-center w-[8.5rem] h-[2.625rem] text-lg italic font-bold uppercase rounded-lg bg-main">
-                      đặt hàng
+                    <button
+                      onClick={onButtonClick}
+                      className="flex items-center justify-center w-[8.5rem] h-[2.625rem] text-lg italic font-bold uppercase rounded-lg bg-main"
+                    >
+                      {btnTitle}
                     </button>
                   </div>
                 ) : (
