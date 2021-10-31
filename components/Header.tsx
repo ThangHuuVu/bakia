@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import useClickOutside from "@/lib/hooks/useClickOutside";
+import useLocalStorage from "@/lib/hooks/useLocalStorage";
+import { CartItem } from "@/lib/types/cart";
 
 function useIsScrollTop() {
   const [isTop, setIsTop] = useState(true);
@@ -22,8 +24,21 @@ function useIsScrollTop() {
 export default function Header() {
   const [menuActive, setMenuActive] = useState(false);
   const [searchActive, setSearchActive] = useState(false);
+  const [cartActive, setCartActive] = useState(false);
+
+  const [cart, setCart] = useLocalStorage<CartItem[]>("cart", []);
+  const isCartHasItem = cart.length > 0;
+
   const router = useRouter();
   const isTop = useIsScrollTop();
+
+  useEffect(() => {
+    if (searchActive || menuActive) {
+      setCartActive(false);
+    } else {
+      setCartActive(router.pathname === "/cart");
+    }
+  }, [router, menuActive, searchActive]);
 
   const onMenuToggle = () => {
     setMenuActive((status) => {
@@ -37,6 +52,9 @@ export default function Header() {
       return !status;
     });
   };
+  const onGoToCart = () => {
+    router.push("/cart");
+  };
   useEffect(() => {
     if (menuActive || searchActive) {
       document.body.style.overflow = "hidden";
@@ -45,32 +63,28 @@ export default function Header() {
     }
   }, [menuActive, searchActive]);
   const ref = useRef<HTMLDivElement>(null);
-  useClickOutside(ref, () => setMenuActive(false));
+  useClickOutside(ref, () => {
+    if (menuActive) {
+      setMenuActive(false);
+    }
+  });
 
   return (
     <>
       <header
+        ref={ref}
         className={`sticky top-0 z-50 flex items-center justify-center ${
           isTop || menuActive || searchActive ? "bg-transparent" : "bg-white"
         }`}
       >
         <nav className="w-full h-14 flex items-center justify-between md:max-w-content md:h-[3.188rem]">
-          <button className="inline-block" onClick={onMenuToggle}>
-            {menuActive ? (
-              <svg
-                width="48"
-                height="48"
-                viewBox="0 0 48 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="24" cy="24" r="24" fill="#3EFFA8" />
-                <path
-                  d="M14 32H34V29.3333H14V32ZM14 25.3333H34V22.6667H14V25.3333ZM14 16V18.6667H34V16H14Z"
-                  fill="black"
-                />
-              </svg>
-            ) : (
+          <div className="flex">
+            <button
+              className={`rounded-full w-12 h-12 grid place-content-center ${
+                menuActive ? "bg-main" : "bg-transparent"
+              } transition-colors`}
+              onClick={onMenuToggle}
+            >
               <svg
                 width="48"
                 height="48"
@@ -83,8 +97,9 @@ export default function Header() {
                   fill="black"
                 />
               </svg>
-            )}
-          </button>
+            </button>
+            <div className="ml-[-0.5rem] rounded-full w-12 h-12" />
+          </div>
           <Link href="/">
             <a>
               <svg
@@ -129,22 +144,13 @@ export default function Header() {
               </svg>
             </a>
           </Link>
-          <button onClick={onSearchToggle}>
-            {searchActive ? (
-              <svg
-                width="48"
-                height="48"
-                viewBox="0 0 48 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="24" cy="24" r="24" fill="#3EFFA8" />
-                <path
-                  d="M27.4286 26.0571H26.6971L26.4229 25.7829C27.3371 24.7771 27.8857 23.4057 27.8857 21.9429C27.8857 18.6514 25.2343 16 21.9429 16C18.6514 16 16 18.6514 16 21.9429C16 25.2343 18.6514 27.8857 21.9429 27.8857C23.4057 27.8857 24.7771 27.3371 25.7829 26.4229L26.0571 26.6971V27.4286L30.6286 32L32 30.6286L27.4286 26.0571ZM21.9429 26.0571C19.6571 26.0571 17.8286 24.2286 17.8286 21.9429C17.8286 19.6571 19.6571 17.8286 21.9429 17.8286C24.2286 17.8286 26.0571 19.6571 26.0571 21.9429C26.0571 24.2286 24.2286 26.0571 21.9429 26.0571Z"
-                  fill="black"
-                />
-              </svg>
-            ) : (
+          <div className="flex">
+            <button
+              className={`rounded-full w-12 h-12 grid place-content-center ${
+                searchActive ? "bg-main" : "bg-transparent"
+              } transition-colors`}
+              onClick={onSearchToggle}
+            >
               <svg
                 width="48"
                 height="48"
@@ -157,13 +163,35 @@ export default function Header() {
                   fill="black"
                 />
               </svg>
-            )}
-          </button>
+            </button>
+            <button
+              className={`ml-[-0.5rem] rounded-full w-12 h-12 grid place-content-center ${
+                cartActive ? "bg-main" : "bg-transparent"
+              } transition-colors ${
+                isCartHasItem
+                  ? "relative after:absolute after:w-2 after:h-2 after:rounded-full after:bg-main after:right-[0.375rem] after:top-[0.375rem]"
+                  : ""
+              }`}
+              onClick={onGoToCart}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.2 12.8C12.08 12.8 12.8 13.52 12.8 14.4C12.8 15.28 12.08 16 11.2 16C10.32 16 9.6 15.28 9.6 14.4C9.6 13.52 10.32 12.8 11.2 12.8ZM16 0V1.6H14.4L11.52 7.68L12.56 9.6C12.72 9.84 12.8 10.08 12.8 10.4C12.8 11.28 12.08 12 11.2 12H1.6V10.4H10.88C10.96 10.4 11.12 10.32 11.12 10.16V10.08L10.32 8.8H4.4C3.84 8.8 3.28 8.48 3.04 8L0.160001 2.8C0 2.64 0 2.56 0 2.4C0 1.92 0.4 1.6 0.8 1.6H12.64L13.36 0H16ZM3.2 12.8C4.08 12.8 4.8 13.52 4.8 14.4C4.8 15.28 4.08 16 3.2 16C2.32 16 1.6 15.28 1.6 14.4C1.6 13.52 2.32 12.8 3.2 12.8Z"
+                  fill="black"
+                />
+              </svg>
+            </button>
+          </div>
         </nav>
       </header>
       <div
         onClick={onMenuToggle}
-        ref={ref}
         className={`fixed w-full h-screen right-0 top-0 flex flex-col justify-between z-40 bg-white transition-opacity md:transform md:transition-transform ${
           menuActive
             ? "opacity-100 md:translate-y-0"

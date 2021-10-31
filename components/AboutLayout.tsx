@@ -1,7 +1,9 @@
 import React, { ReactNode } from "react";
 import Head from "next/head";
-import Header from "./Header";
 import Footer from "./Footer";
+import dynamic from "next/dynamic";
+
+const Header = dynamic(() => import("@/components/Header"), { ssr: false });
 
 type Props = {
   children?: ReactNode;

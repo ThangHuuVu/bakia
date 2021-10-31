@@ -1,9 +1,12 @@
 import { VariantColor } from ".prisma/client";
 import { Container } from "@/lib/types/common";
-import { CategoryType, ProductType, VariantType } from "@/lib/types/custom";
+import { CategoryType, GeneType, ProductType, VariantType } from "@/lib/types/custom";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import useAddToCart from "./useAddToCart";
 
 type State = {
+  categories: CategoryType[];
+  gene: GeneType;
   currentCategory: CategoryType | null;
   currentProduct: ProductType | null;
   currentVariant: VariantType | null;
@@ -17,6 +20,8 @@ type State = {
 };
 
 const initialState: State = {
+  categories: [],
+  gene: null,
   currentCategory: null,
   currentProduct: null,
   currentVariant: null,
@@ -37,9 +42,10 @@ export function useCustomizeLab() {
 
 interface CustomizeLabProviderProps extends Container {
   categories: CategoryType[];
+  gene: GeneType;
 }
 
-export function CustomizeLabProvider({ categories, children }: CustomizeLabProviderProps) {
+export function CustomizeLabProvider({ categories, gene, children }: CustomizeLabProviderProps) {
   const [selectedVariants, setSelectedVariants] = useState<VariantType[]>([]);
   const [currentProduct, setCurrentProduct] = useState<ProductType | null>(null);
   const [currentCategory, setCurrentCategory] = useState<CategoryType | null>(null);
@@ -109,6 +115,13 @@ export function CustomizeLabProvider({ categories, children }: CustomizeLabProvi
     },
     [currentProduct]
   );
+  const { modifyingCartItem } = useAddToCart(selectedVariants, gene);
+  useEffect(() => {
+    if (Boolean(modifyingCartItem)) {
+      setSelectedVariants(modifyingCartItem.selectedVariants);
+    }
+  }, [modifyingCartItem]);
+
   useEffect(() => {
     if (currentProduct) {
       const nextVariant =
@@ -123,6 +136,8 @@ export function CustomizeLabProvider({ categories, children }: CustomizeLabProvi
   }, [currentProduct, currentColor]);
 
   const value: State = {
+    categories,
+    gene,
     currentCategory,
     currentProduct,
     currentVariant,

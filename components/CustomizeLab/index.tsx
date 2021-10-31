@@ -9,8 +9,8 @@ export interface CustomizeLabProps {
 
 export default function CustomizeLabWrapper({ categories, gene }: CustomizeLabProps) {
   return (
-    <CustomizeLabProvider categories={categories}>
-      <CustomizeLab gene={gene} categories={categories} />
+    <CustomizeLabProvider categories={categories} gene={gene}>
+      <CustomizeLab />
     </CustomizeLabProvider>
   );
 }

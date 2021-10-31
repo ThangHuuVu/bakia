@@ -1,7 +1,9 @@
-import CustomizeLab from "@/components/CustomizeLab";
 import Layout from "@/components/Layout";
 import { getCategories, getGene } from "@/lib/db";
 import { InferGetStaticPropsType } from "next";
+import dynamic from "next/dynamic";
+
+const CustomizeLab = dynamic(() => import("@/components/CustomizeLab"), { ssr: false });
 
 const CustomPage = ({ categories, gene }: InferGetStaticPropsType<typeof getStaticProps>) => (
   <Layout title="Custom - Bakia">
