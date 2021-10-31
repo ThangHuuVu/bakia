@@ -12,7 +12,6 @@ SwiperCore.use([Pagination]);
 const MAX_CATEGORY_COUNT = 6;
 
 interface SelectPanelProps {
-  categories: CategoryType[];
   /**
    * Mobile only
    */

@@ -7,7 +7,3 @@ export type CartItem = {
   discountCode?: string;
   quantity: number;
 };
-
-export type Cart = {
-  items?: CartItem[];
-};
