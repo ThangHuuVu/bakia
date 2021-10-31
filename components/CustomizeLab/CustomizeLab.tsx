@@ -2,13 +2,12 @@ import { format } from "@/lib/currency";
 import { useCustomizeLab } from "./context";
 import { SelectPanel } from "./SelectPanel";
 import DisplayModel from "./DisplayModel";
-import { CustomizeLabProps } from ".";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/router";
 import download from "@/lib/download";
+import useAddToCart from "./useAddToCart";
 
-export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
-  const { selectedVariants, currentVariant } = useCustomizeLab();
+export const CustomizeLab = () => {
+  const { selectedVariants, currentVariant, gene } = useCustomizeLab();
   const totalVariantPrice = useMemo(
     () => selectedVariants.map((variant) => variant.price).reduce((a, b) => a + b, 0),
     [selectedVariants]
@@ -18,15 +17,15 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [isMobileMoreShowing, setIsMobileMoreShowing] = useState<boolean>(false);
   const [mobileMoreVisible, setMobileMoreVisible] = useState<boolean>(false);
+  const { addToCart } = useAddToCart(selectedVariants, gene);
 
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const router = useRouter();
 
   const onTogglePanel = () => {
     setOverviewOpen(false);
     setIsMobilePanelOpen(!isMobilePanelOpen);
   };
+
   const onToggleOverview = useCallback(() => {
     setIsMobilePanelOpen(false);
     setIsMobileMoreShowing(false);
@@ -37,15 +36,14 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
   const onButtonClick = useCallback(() => {
     if (isOverviewOpen) {
       if (isConfirmed) {
-        // commit state
-        router.push("/checkout");
+        addToCart();
       } else {
         setIsConfirmed(true);
       }
     } else {
       onToggleOverview();
     }
-  }, [isOverviewOpen, isConfirmed, router, onToggleOverview]);
+  }, [isOverviewOpen, isConfirmed, onToggleOverview, addToCart]);
 
   const btnTitle = isOverviewOpen ? (isConfirmed ? "đặt hàng" : "xác nhận") : "hoàn thành";
 
@@ -252,11 +250,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
             </div>
           )}
         </div>
-        <SelectPanel
-          categories={categories}
-          isOpen={isMobilePanelOpen}
-          onTogglePanel={onTogglePanel}
-        />
+        <SelectPanel isOpen={isMobilePanelOpen} onTogglePanel={onTogglePanel} />
       </div>
       {/* Md screen */}
       <div className="hidden md:flex md:gap-[10.875rem]">
@@ -271,7 +265,7 @@ export const CustomizeLab = ({ categories, gene }: CustomizeLabProps) => {
           />
         </div>
         <div className="h-full w-[21.75rem] flex flex-col prose items-center relative">
-          <SelectPanel categories={categories} />
+          <SelectPanel />
           <div
             className={`absolute bottom-0 flex flex-col justify-between w-full z-30 bg-white ${
               isOverviewOpen ? "h-full max-h-full" : "max-h-20 h-20"

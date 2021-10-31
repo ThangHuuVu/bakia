@@ -23,8 +23,8 @@ interface SelectPanelProps {
   onTogglePanel?: () => void;
 }
 
-export const SelectPanel = ({ categories, isOpen, onTogglePanel }: SelectPanelProps) => {
-  const { currentCategory, onBackButtonClick, onCategoryClick } = useCustomizeLab();
+export const SelectPanel = ({ isOpen, onTogglePanel }: SelectPanelProps) => {
+  const { categories, currentCategory, onBackButtonClick, onCategoryClick } = useCustomizeLab();
   const topCategories = categories.filter((c) => c.parentId === null);
   const ref = useRef<HTMLDivElement>(null);
   useClickOutside(ref, () => {
