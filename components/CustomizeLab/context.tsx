@@ -1,7 +1,7 @@
 import { VariantColor } from ".prisma/client";
 import { Container } from "@/lib/types/common";
 import { CategoryType, GeneType, ProductType, VariantType } from "@/lib/types/custom";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import useAddToCart from "./useAddToCart";
 
 type State = {
@@ -9,6 +9,7 @@ type State = {
   gene: GeneType;
   currentCategory: CategoryType | null;
   currentProduct: ProductType | null;
+  allProducts: ProductType[];
   currentVariant: VariantType | null;
   selectedVariants: VariantType[];
   currentColor: VariantColor | null;
@@ -24,6 +25,7 @@ const initialState: State = {
   gene: null,
   currentCategory: null,
   currentProduct: null,
+  allProducts: [],
   currentVariant: null,
   selectedVariants: [],
   currentColor: null,
@@ -52,6 +54,10 @@ export function CustomizeLabProvider({ categories, gene, children }: CustomizeLa
   const [currentVariant, setCurrentVariant] = useState<VariantType | null>(null);
   const [currentColor, setCurrentColor] = useState<VariantColor | null>(null);
 
+  const allProducts = useMemo(
+    () => categories.flatMap((category) => category.products),
+    [categories]
+  );
   const onCategoryClick = useCallback(
     (id: number) => {
       const nextCategory = categories.find((category) => category.id === id);
@@ -141,6 +147,7 @@ export function CustomizeLabProvider({ categories, gene, children }: CustomizeLa
     currentCategory,
     currentProduct,
     currentVariant,
+    allProducts,
     selectedVariants,
     currentColor,
     onBackButtonClick,

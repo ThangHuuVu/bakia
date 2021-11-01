@@ -39,10 +39,10 @@ const useDisplayProducts = (products: ProductType[], selectedVariants: VariantTy
   useEffect(() => {
     const isProductsHaveBase = products.some((product) => product.baseId);
     if (isProductsHaveBase) {
-      const isBasedSelected = selectedVariants.some(
+      const isBaseSelected = selectedVariants.some(
         (variant) => variant.productId === products[0].baseId
       );
-      if (isBasedSelected) setDisplayProducts(products);
+      if (isBaseSelected) setDisplayProducts(products);
     } else {
       setDisplayProducts(products);
     }
