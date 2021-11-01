@@ -3,9 +3,6 @@ import SwiperCore, { Pagination } from "swiper";
 import { useCustomizeLab } from "./context";
 import { CategoryButton } from "./CategoryButton";
 import { SelectProductPanel } from "./SelectProductPanel";
-import { CategoryType } from "@/lib/types/custom";
-import { useRef } from "react";
-import useClickOutside from "@/lib/hooks/useClickOutside";
 
 SwiperCore.use([Pagination]);
 
@@ -25,17 +22,10 @@ interface SelectPanelProps {
 export const SelectPanel = ({ isOpen, onTogglePanel }: SelectPanelProps) => {
   const { categories, currentCategory, onBackButtonClick, onCategoryClick } = useCustomizeLab();
   const topCategories = categories.filter((c) => c.parentId === null);
-  const ref = useRef<HTMLDivElement>(null);
-  useClickOutside(ref, () => {
-    if (isOpen) {
-      onTogglePanel?.();
-    }
-  });
 
   return (
     <>
       <div
-        ref={ref}
         className={`w-full ${
           isOpen ? "h-[20rem] min-h-[21.25rem] translate-y-5" : "translate-y-5"
         } transition-transform px-2 z-30 md:hidden`}
