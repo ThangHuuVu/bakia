@@ -9,18 +9,27 @@ import {
 } from "../RadixDialogWrapper";
 
 const AddonDialog = () => {
-  const { allProducts, currentCategory, onBackButtonClick } = useCustomizeLab();
+  const { allProducts, currentCategory, onBackButtonClick, selectedVariants } = useCustomizeLab();
   const baseId = currentCategory?.products[0]?.baseId;
+  const products = currentCategory?.products;
   const [open, setOpen] = useState<boolean>(false);
   const [baseCategoryName, setBaseCategoryName] = useState<string | null>(null);
 
   useEffect(() => {
-    if (baseId) {
-      const baseProduct = allProducts.find((product) => product.id === baseId);
-      setBaseCategoryName(baseProduct?.category?.name);
-      setOpen(true);
+    if (baseId && products) {
+      const isProductsHaveBase = products.some((product) => product.baseId);
+      if (isProductsHaveBase) {
+        const isBaseSelected = selectedVariants.some(
+          (variant) => variant.productId === products[0].baseId
+        );
+        if (!isBaseSelected) {
+          const baseProduct = allProducts.find((product) => product.id === baseId);
+          setBaseCategoryName(baseProduct?.category?.name);
+          setOpen(true);
+        }
+      }
     }
-  }, [allProducts, baseId]);
+  }, [allProducts, baseId, products, selectedVariants]);
 
   return (
     <Dialog
