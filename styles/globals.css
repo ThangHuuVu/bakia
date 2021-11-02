@@ -23,6 +23,28 @@
     0px 2.76726px 2.21381px rgba(0, 0, 0, 0.0196802);
 }
 
-.mobile-button {
-  @apply text-xl italic font-bold leading-6 text-center uppercase;
+.button-txt {
+  @apply text-lg italic font-bold leading-[1.313rem] text-center uppercase;
+}
+.heading-2 {
+  @apply italic text-[1.625rem] leading-[1.875rem] font-black uppercase;
+}
+.heading-3 {
+  @apply text-base leading-[1.188rem] italic font-black uppercase;
+}
+.body-txt {
+  @apply font-body text-base leading-[1.375rem] text-altGrey;
+}
+.sub-txt {
+  @apply font-body text-[0.813rem] leading-4 text-altGrey;
+}
+
+.mobile-button-txt {
+  @apply text-xl italic font-bold leading-[1.438rem] text-center uppercase;
+}
+.mobile-heading-3 {
+  @apply text-xl leading-[1.438rem] italic font-black uppercase;
+}
+.mobile-body-txt {
+  @apply font-body text-base leading-5 tracking-[-0.3px] text-altGrey;
 }
