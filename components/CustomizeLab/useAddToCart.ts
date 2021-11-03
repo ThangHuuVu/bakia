@@ -16,6 +16,7 @@ const useAddToCart = (selectedVariants: VariantType[], gene: GeneType) => {
       newItem = {
         ...modifyingCartItem,
         selectedVariants,
+        updatedAt: new Date(),
       };
     } else {
       newItem = {
@@ -23,6 +24,8 @@ const useAddToCart = (selectedVariants: VariantType[], gene: GeneType) => {
         selectedVariants,
         gene,
         quantity: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
     }
     setCart([...cart.filter((item) => item.id !== newItem.id), newItem]);

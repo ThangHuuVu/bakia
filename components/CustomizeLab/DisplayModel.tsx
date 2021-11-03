@@ -1,6 +1,6 @@
 import { GeneType, VariantType } from "@/lib/types/custom";
-import Image from "next/image";
 import { useEffect, useState } from "react";
+import ModelImages from "../ModelImages";
 
 interface DisplayModelProps {
   gene: GeneType;
@@ -47,25 +47,13 @@ const DisplayModel = ({
   const displayVariants = useDisplayVariants(selectedVariants, currentVariant);
 
   return (
-    <>
-      {gene && (
-        <div className="absolute">
-          <Image src={gene.image} width={width} height={height} alt={gene.description} id="gene" />
-        </div>
-      )}
-      {Boolean(displayVariants?.length) &&
-        displayVariants.map((variant) => (
-          <div key={variant.id} className="absolute">
-            <Image
-              id={attachId && `variant_${variant.id.toString()}`}
-              src={variant.image}
-              width={width}
-              height={height}
-              alt={variant.name}
-            />
-          </div>
-        ))}
-    </>
+    <ModelImages
+      width={width}
+      height={height}
+      gene={gene}
+      displayVariants={displayVariants}
+      attachId={attachId}
+    />
   );
 };
 
