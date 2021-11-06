@@ -70,3 +70,9 @@ model VariantColor {
   code     String
   variants ProductVariant[]
 }
+
+model DiscountCode {
+  id    Int    @id @default(autoincrement())
+  code  String
+  limit Int
+}

@@ -89,3 +89,20 @@ export async function getAbout(preview: boolean) {
   );
   return data?.about;
 }
+
+export async function getDiscountCodeDescription(preview: boolean) {
+  const data = await fetchAPI(
+    `
+    {
+      discountCodeGene1 {
+        detail {
+          value
+        }
+        title
+      }
+    }
+  `,
+    { preview }
+  );
+  return data?.discountCodeGene1;
+}

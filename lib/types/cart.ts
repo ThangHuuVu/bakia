@@ -4,6 +4,9 @@ export type CartItem = {
   id: string;
   selectedVariants: VariantType[];
   gene: GeneType;
-  discountCode?: string;
   quantity: number;
+  discountCode?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  total?: number;
 };

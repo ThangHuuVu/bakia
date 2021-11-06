@@ -26,7 +26,7 @@ export default function Header() {
   const [searchActive, setSearchActive] = useState(false);
   const [cartActive, setCartActive] = useState(false);
 
-  const [cart, setCart] = useLocalStorage<CartItem[]>("cart", []);
+  const [cart] = useLocalStorage<CartItem[]>("cart", []);
   const isCartHasItem = cart.length > 0;
 
   const router = useRouter();

@@ -33,10 +33,10 @@
   @apply text-base leading-[1.188rem] italic font-black uppercase;
 }
 .body-txt {
-  @apply font-body text-base leading-[1.375rem] text-altGrey;
+  @apply font-body text-base leading-[1.375rem];
 }
 .sub-txt {
-  @apply font-body text-[0.813rem] leading-4 text-altGrey;
+  @apply font-body text-[0.813rem] leading-4;
 }
 
 .mobile-button-txt {
@@ -46,5 +46,14 @@
   @apply text-xl leading-[1.438rem] italic font-black uppercase;
 }
 .mobile-body-txt {
-  @apply font-body text-base leading-5 tracking-[-0.3px] text-altGrey;
+  @apply font-body text-base leading-5 tracking-[-0.3px];
+}
+
+.faded-bg {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.7) 31.77%,
+    #ffffff 74.48%
+  );
 }

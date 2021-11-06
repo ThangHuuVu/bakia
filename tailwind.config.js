@@ -14,6 +14,7 @@ module.exports = {
       },
       width: {
         content: "calc(100vw - 1rem)",
+        dialog: "calc(100vw - 1.125rem)",
       },
       maxWidth: {
         content: "69.375rem",
@@ -33,6 +34,7 @@ module.exports = {
         altGrey: "#768489",
         error: "#FF3C3C",
         grey3: "#E5E5E5",
+        grey: "#c4c4c4",
       },
       outline: (theme) => ({
         solidBlack: ["1px black solid", "2px"],
