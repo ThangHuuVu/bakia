@@ -57,7 +57,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.13.10":
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.13.10":
   version "7.16.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.0.tgz#e27b977f2e2088ba24748bf99b5e1dece64e4f0b"
   integrity sha512-Nht8L0O8YCktmsDV6FqFue7vQLRx3Hb0B37lS5y0jDRqRxlBG4wIJHnf9/bgSE2UyipKFA01YtS+npRdTWBUyw==
@@ -641,6 +641,11 @@ aria-query@^4.2.2:
     "@babel/runtime" "^7.10.2"
     "@babel/runtime-corejs3" "^7.10.2"
 
+array-flatten@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/array-flatten/-/array-flatten-3.0.0.tgz#6428ca2ee52c7b823192ec600fa3ed2f157cd541"
+  integrity sha512-zPMVc3ZYlGLNk4mpK1NzP2wg0ml9t7fUgDsayR5Y5rSzxQilzR9FGu/EH2jQOcKSAeAfWeylyW8juy3OkWRvNA==
+
 array-includes@^3.1.1, array-includes@^3.1.3, array-includes@^3.1.4:
   version "3.1.4"
   resolved "https://registry.npmjs.org/array-includes/-/array-includes-3.1.4.tgz"
@@ -1210,6 +1215,25 @@ data-uri-to-buffer@3.0.1:
   resolved "https://registry.npmjs.org/data-uri-to-buffer/-/data-uri-to-buffer-3.0.1.tgz"
   integrity sha512-WboRycPNsVw3B3TL559F7kuBUM4d8CgMEvk6xEJlOp7OBPjt6G7z8WMWlD2rOFZLk6OYfFIUGsCOWzcQH9K2og==
 
+datocms-listen@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/datocms-listen/-/datocms-listen-0.1.6.tgz#529b6f552815562695e32375ec82bd3af19b8558"
+  integrity sha512-B3lJqobSV4fzkY7CYgYMcK0k2Hvy7/8g+LLnxiQ9Fgm+ETsQbRjHvF2neEX6kDWXNiP6pn0Fq5lkxyeGFjXU7w==
+
+datocms-structured-text-generic-html-renderer@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/datocms-structured-text-generic-html-renderer/-/datocms-structured-text-generic-html-renderer-1.2.0.tgz#b1d1139b2fd6d7f3541aec497a8be35d91f85a3b"
+  integrity sha512-77w/bfO0GE43ck4ClhkeNs7vG3zmsgo1uyBLEomeALtfj0rlbCWS5jI33svMl3ek1BbBukTVdqLaliyrxCwpWg==
+  dependencies:
+    datocms-structured-text-utils "^1.2.0"
+
+datocms-structured-text-utils@^1.1.0, datocms-structured-text-utils@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/datocms-structured-text-utils/-/datocms-structured-text-utils-1.2.0.tgz#ccbeb06c97f9d0f282750093fc1be0f2e2b0269c"
+  integrity sha512-8qfpSWU/nVrMr8C0aT5n16WN0/KQbtYD2GJXd9WDf01bfr+WzJCi5szZF1dBLhD2zhs41A4gtO3aM4J1CQe4wA==
+  dependencies:
+    array-flatten "^3.0.0"
+
 debug@2, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz"
@@ -1252,6 +1276,11 @@ depd@~1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/depd/-/depd-1.1.2.tgz"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
+
+dequal@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.2.tgz#85ca22025e3a87e65ef75a7a437b35284a7e319d"
+  integrity sha512-q9K8BlJVxK7hQYqa6XISGmBZbtQQWVXSrRrWreHC94rMt1QL/Impruc+7p2CYSYuVIUr+YCt6hjrs1kkdJRTug==
 
 des.js@^1.0.0:
   version "1.0.1"
@@ -2101,6 +2130,11 @@ internal-slot@^1.0.3:
     get-intrinsic "^1.1.0"
     has "^1.0.3"
     side-channel "^1.0.4"
+
+intersection-observer@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/intersection-observer/-/intersection-observer-0.12.0.tgz#6c84628f67ce8698e5f9ccf857d97718745837aa"
+  integrity sha512-2Vkz8z46Dv401zTWudDGwO7KiGHNDkMv417T5ItcNYfmvHR/1qCTVBO9vwH8zZmQ0WkA/1ARwpysR9bsnop4NQ==
 
 invariant@^2.2.4:
   version "2.2.4"
@@ -3165,6 +3199,18 @@ raw-body@2.4.1:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
+react-datocms@^1.6.6:
+  version "1.6.6"
+  resolved "https://registry.yarnpkg.com/react-datocms/-/react-datocms-1.6.6.tgz#c3c4a14e8369ff4355612160325efc184299075f"
+  integrity sha512-7k8HziRVkTLGz5MM+MmdO815rSEUJb1xPv0dNRJoCJBh+UDkB3hRBCwDZgVPJMK5AH9DSshcu6bN1gAhLpHRtw==
+  dependencies:
+    datocms-listen "^0.1.6"
+    datocms-structured-text-generic-html-renderer "^1.1.0"
+    datocms-structured-text-utils "^1.1.0"
+    intersection-observer "^0.12.0"
+    react-intersection-observer "^8.31.1"
+    use-deep-compare-effect "^1.6.1"
+
 react-dom@^17.0.2:
   version "17.0.2"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-17.0.2.tgz"
@@ -3173,6 +3219,11 @@ react-dom@^17.0.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "^0.20.2"
+
+react-intersection-observer@^8.31.1:
+  version "8.32.2"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-8.32.2.tgz#527eeecf569309d64ed96330636d90aac336c957"
+  integrity sha512-QTcea+n28AvOHbTku+jErfQqknbc4Nuh7EUNik8p/JMN56W2Jhjs+qcYZzQhAoyLX8pZD0QXpYX0lW87faackQ==
 
 react-is@17.0.2:
   version "17.0.2"
@@ -3892,6 +3943,14 @@ use-callback-ref@^1.2.3:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/use-callback-ref/-/use-callback-ref-1.2.5.tgz#6115ed242cfbaed5915499c0a9842ca2912f38a5"
   integrity sha512-gN3vgMISAgacF7sqsLPByqoePooY3n2emTH59Ur5d/M8eg4WTWu1xp8i8DHjohftIyEx0S08RiYxbffr4j8Peg==
+
+use-deep-compare-effect@^1.6.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/use-deep-compare-effect/-/use-deep-compare-effect-1.8.1.tgz#ef0ce3b3271edb801da1ec23bf0754ef4189d0c6"
+  integrity sha512-kbeNVZ9Zkc0RFGpfMN3MNfaKNvcLNyxOAAd9O4CBZ+kCBXXscn9s/4I+8ytUER4RDpEYs5+O6Rs4PqiZ+rHr5Q==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    dequal "^2.0.2"
 
 use-sidecar@^1.0.1:
   version "1.0.5"

@@ -64,3 +64,14 @@ export const getGene = async () => {
     return null;
   }
 };
+
+export const getDiscountCode = async () => {
+  try {
+    const discountCode = await prisma.discountCode.findFirst();
+    return discountCode;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+
+}

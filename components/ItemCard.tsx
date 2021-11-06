@@ -1,22 +1,24 @@
 import { format } from "@/lib/currency";
 import { CartItem } from "@/lib/types/cart";
 import ModelImages from "./ModelImages";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 
 interface ItemCardProps {
   item: CartItem;
-  onChangeItem: (newItem: CartItem) => void;
+  discountCode: string;
+  onChangeQuantity: (quantity: number) => void;
+  onChangeDiscountCode: (discount: string) => void;
 }
-const Card = ({ item, onChangeItem }: ItemCardProps) => {
-  const { gene, selectedVariants } = item;
-  const [quantity, setQuantity] = useState<number>(item.quantity);
+const Card = ({ item, onChangeQuantity, onChangeDiscountCode, discountCode }: ItemCardProps) => {
+  const { gene, selectedVariants, quantity } = item;
   const [discountAmount] = useState<number>(0);
+
   const increaseQuantity = () => {
-    setQuantity(quantity + 1);
+    onChangeQuantity(quantity + 1);
   };
   const decreaseQuantity = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
+    if (quantity > 1) onChangeQuantity(quantity - 1);
   };
 
   const total = useMemo(() => {
@@ -80,7 +82,12 @@ const Card = ({ item, onChangeItem }: ItemCardProps) => {
           <div className="">{format(total, gene.currency.abbreviationSign)}</div>
         </div>
         <div className="max-w-[12.75rem] w-full grid place-content-center flex-none">
-          <input className="w-full h-[2.625rem] pl-5" placeholder="Nhập code ưu đãi" disabled />
+          <input
+            className="w-full h-[2.625rem] pl-5"
+            placeholder="Nhập code ưu đãi"
+            onChange={(e) => onChangeDiscountCode(e.target.value)}
+            value={discountCode}
+          />
         </div>
         <div className="">
           <div className="text-altGrey">Số lượng</div>
