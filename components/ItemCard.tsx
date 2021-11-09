@@ -1,7 +1,7 @@
 import { format } from "@/lib/currency";
 import { CartItem } from "@/lib/types/cart";
 import ModelImages from "./ModelImages";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 interface ItemCardProps {
@@ -12,7 +12,10 @@ interface ItemCardProps {
 }
 const Card = ({ item, onChangeQuantity, onChangeDiscountCode, discountCode }: ItemCardProps) => {
   const { gene, selectedVariants, quantity } = item;
-  const [discountAmount] = useState<number>(0);
+  const [discountAmount, setDiscountAmount] = useState<number>(0);
+  const [disablePlus, setDisablePlus] = useState<boolean>(false);
+  const [disableMinus, setDisableMinus] = useState<boolean>(quantity === 1);
+  const isCodeValid = item.discountCode === discountCode;
 
   const increaseQuantity = () => {
     onChangeQuantity(quantity + 1);
@@ -27,6 +30,19 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, discountCode }: It
       quantity
     );
   }, [gene, selectedVariants, quantity]);
+
+  useEffect(() => {
+    if (isCodeValid) {
+      // onChangeQuantity(1);
+      // setDiscountAmount(
+      //   selectedVariants
+      //     // exclude outfit
+      //     .filter((variant) => variant.product.category.id !== 2)
+      //     .map((variant) => variant.price)
+      //     .reduce((a, b) => a + b, 0)
+      // );
+    }
+  }, [isCodeValid, onChangeQuantity, selectedVariants]);
 
   return (
     <div className="flex flex-col mx-4 mt-[0.625rem]">
@@ -93,7 +109,7 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, discountCode }: It
           <div className="text-altGrey">Số lượng</div>
           <div className="flex items-center justify-between gap-5">
             <button
-              disabled={quantity === 1}
+              disabled={disableMinus}
               className="text-black disabled:text-altGrey disabled:cursor-not-allowed"
               onClick={decreaseQuantity}
             >
@@ -109,6 +125,7 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, discountCode }: It
             </button>
             {quantity}
             <button
+              disabled={disablePlus}
               onClick={increaseQuantity}
               className="text-black disabled:text-altGrey disabled:cursor-not-allowed"
             >
