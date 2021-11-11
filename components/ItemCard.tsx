@@ -6,17 +6,15 @@ import Link from "next/link";
 
 interface ItemCardProps {
   item: CartItem;
-  discountCode: string;
+  isDiscountValid: boolean;
   onChangeQuantity: (quantity: number) => void;
   onChangeDiscountCode: (discount: string) => void;
 }
-const Card = ({ item, onChangeQuantity, onChangeDiscountCode, discountCode }: ItemCardProps) => {
-  const { gene, selectedVariants, quantity } = item;
+const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid }: ItemCardProps) => {
+  const { gene, selectedVariants, quantity, discountCode: itemDiscountCode } = item;
   const [discountAmount, setDiscountAmount] = useState<number>(0);
   const [disablePlus, setDisablePlus] = useState<boolean>(false);
   const [disableMinus, setDisableMinus] = useState<boolean>(quantity === 1);
-  const isCodeValid = item.discountCode === discountCode;
-
   const increaseQuantity = () => {
     onChangeQuantity(quantity + 1);
   };
@@ -27,22 +25,24 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, discountCode }: It
   const total = useMemo(() => {
     return (
       (gene.price + selectedVariants.map((variant) => variant.price).reduce((a, b) => a + b, 0)) *
-      quantity
+        quantity -
+      discountAmount
     );
-  }, [gene, selectedVariants, quantity]);
+  }, [gene, selectedVariants, quantity, discountAmount]);
 
   useEffect(() => {
-    if (isCodeValid) {
-      // onChangeQuantity(1);
-      // setDiscountAmount(
-      //   selectedVariants
-      //     // exclude outfit
-      //     .filter((variant) => variant.product.category.id !== 2)
-      //     .map((variant) => variant.price)
-      //     .reduce((a, b) => a + b, 0)
-      // );
-    }
-  }, [isCodeValid, onChangeQuantity, selectedVariants]);
+    setDisablePlus(isDiscountValid);
+    setDisableMinus(isDiscountValid || quantity === 1);
+    setDiscountAmount(
+      isDiscountValid
+        ? selectedVariants
+            // exclude outfit
+            .filter((variant) => variant.product.category.id !== 11)
+            .map((variant) => variant.price)
+            .reduce((a, b) => a + b, 0)
+        : 0
+    );
+  }, [isDiscountValid, quantity, onChangeQuantity, selectedVariants]);
 
   return (
     <div className="flex flex-col mx-4 mt-[0.625rem]">
@@ -102,7 +102,7 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, discountCode }: It
             className="w-full h-[2.625rem] pl-5"
             placeholder="Nhập code ưu đãi"
             onChange={(e) => onChangeDiscountCode(e.target.value)}
-            value={discountCode}
+            value={itemDiscountCode}
           />
         </div>
         <div className="">

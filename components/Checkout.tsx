@@ -2,7 +2,7 @@ import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { CartItem } from "@/lib/types/cart";
 import ItemCard from "./ItemCard";
 import DiscountDialog from "./DiscountDialog";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Discount } from "@/lib/types/discount";
 import { useRouter } from "next/router";
 
@@ -29,9 +29,22 @@ const Checkout = ({ discount }: CheckoutProps) => {
   }, [cart, setCart, checkoutItem]);
 
   const router = useRouter();
+  const isDiscountValid = useMemo(
+    () =>
+      Boolean(
+        checkoutItem.discountCode && discount.code && checkoutItem.discountCode === discount.code
+      ),
+    [checkoutItem, discount]
+  );
   const onChangeDiscountCode = useCallback(
-    (discountCode) => setCheckoutItem({ ...checkoutItem, discountCode }),
-    [checkoutItem]
+    (discountCode) => {
+      setCheckoutItem({
+        ...checkoutItem,
+        discountCode,
+        quantity: discountCode === discount.code ? 1 : checkoutItem.quantity,
+      });
+    },
+    [checkoutItem, discount]
   );
   const onChangeQuantity = useCallback(
     (quantity) => setCheckoutItem({ ...checkoutItem, quantity }),
@@ -45,8 +58,8 @@ const Checkout = ({ discount }: CheckoutProps) => {
           <ItemCard
             onChangeDiscountCode={onChangeDiscountCode}
             onChangeQuantity={onChangeQuantity}
-            discountCode={checkoutItem.discountCode}
             item={checkoutItem}
+            isDiscountValid={isDiscountValid}
           />
         )}
         <div className="flex flex-col justify-between w-full px-[0.938rem] py-[0.813rem] bg-white">
