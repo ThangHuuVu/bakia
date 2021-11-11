@@ -20,7 +20,7 @@ const Layout = ({ children, title = "Bakia" }: Props) => (
       <title>{title}</title>
     </Head>
     <Header />
-    <div className="h-content md:h-md-content">{children}</div>
+    <div className="flex justify-center h-content md:h-md-content">{children}</div>
   </>
 );
 
