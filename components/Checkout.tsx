@@ -18,7 +18,9 @@ const Checkout = ({ discount }: CheckoutProps) => {
   };
 
   const [cart, setCart] = useLocalStorage<CartItem[]>("cart", []);
-  const latestCartItem = cart.sort((a, b) => a.updatedAt.getTime() - b.updatedAt.getTime())[0];
+  const latestCartItem = cart.sort(
+    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+  )[0];
   const [checkoutItem, setCheckoutItem] = useState<CartItem>(latestCartItem);
 
   useEffect(() => {
