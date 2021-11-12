@@ -51,7 +51,7 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid }:
         <p className="text-black heading-3">{item.gene.description}</p>
       </div>
       <div className="flex justify-between w-full mb-5 md:mb-0 md:w-max md:gap-[3.125rem]">
-        <div className="md:flex md:justify-end md:flex-col md:gap-8 md:max-w-[16rem] md:flex-none md:items-center md:justify-center">
+        <div className="md:flex md:flex-col md:gap-8 md:max-w-[16rem] md:flex-none md:items-center md:justify-center">
           <div className="relative w-[7.813rem] h-[12.5rem]">
             <ModelImages width={125} height={200} gene={gene} displayVariants={selectedVariants} />
           </div>
