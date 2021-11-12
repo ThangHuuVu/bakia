@@ -1,4 +1,4 @@
-import AboutLayout from "@/components/AboutLayout";
+import LayoutWithFooter from "@/components/LayoutWithFooter";
 import Generations from "@/components/Generations";
 import { getAbout } from "@/lib/cms/datocms";
 import { InferGetStaticPropsType } from "next";
@@ -17,7 +17,7 @@ export const getStaticProps = async ({ preview = false }) => {
 const AboutPage = ({
   about: { heading, subheading, intro, generations, images },
 }: InferGetStaticPropsType<typeof getStaticProps>) => (
-  <AboutLayout title="Bakia - About">
+  <LayoutWithFooter title="Bakia - About">
     <div className="relative flex flex-col items-center h-full">
       <div className="h-[21.438rem] w-full relative overflow-hidden md:h-[29.688rem] md:overflow-visible">
         <div className="absolute transform right-[-12.5rem] h-full md:hidden">
@@ -58,7 +58,7 @@ const AboutPage = ({
       </div>
       <Generations generations={generations} images={images.slice(1, images.length)} />
     </div>
-  </AboutLayout>
+  </LayoutWithFooter>
 );
 
 export default AboutPage;

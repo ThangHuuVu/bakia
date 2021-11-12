@@ -10,7 +10,7 @@ type Props = {
   title?: string;
 };
 
-const AboutLayout = ({ children, title = "Bakia" }: Props) => (
+const LayoutWithFooter = ({ children, title = "Bakia" }: Props) => (
   <>
     <Head>
       <meta charSet="utf-8" />
@@ -26,4 +26,4 @@ const AboutLayout = ({ children, title = "Bakia" }: Props) => (
   </>
 );
 
-export default AboutLayout;
+export default LayoutWithFooter;
