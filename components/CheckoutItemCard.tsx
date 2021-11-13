@@ -22,13 +22,17 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid }:
     if (quantity > 1) onChangeQuantity(quantity - 1);
   };
 
-  const total = useMemo(() => {
+  const price = useMemo(() => {
     return (
-      (gene.price + selectedVariants.map((variant) => variant.price).reduce((a, b) => a + b, 0)) *
-        quantity -
+      gene.price +
+      selectedVariants.map((variant) => variant.price).reduce((a, b) => a + b, 0) -
       discountAmount
     );
-  }, [gene, selectedVariants, quantity, discountAmount]);
+  }, [gene, selectedVariants, discountAmount]);
+
+  const total = useMemo(() => {
+    return price * quantity;
+  }, [price, quantity]);
 
   useEffect(() => {
     setDisablePlus(isDiscountValid);
@@ -100,10 +104,10 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid }:
       </div>
       <div className="flex flex-col justify-between md:gap-5 md:h-full">
         <h3 className="hidden text-right md:block heading-3">định giá</h3>
-        <div className="flex flex-wrap gap-[1.625rem] justify-between md:flex-nowrap md:flex-col w-full h-full md:justify-between md:border-t md:border-b py-4 md:gap-0">
+        <div className="flex flex-wrap gap-[1.625rem] justify-between md:flex-nowrap md:flex-col w-full h-full md:justify-between md:border-t md:border-b md:border-altGrey py-4 md:gap-0">
           <div className="flex-none">
             <div className="text-altGrey">Đơn giá</div>
-            <div className="">{format(total, gene.currency.abbreviationSign)}</div>
+            <div className="">{format(price, gene.currency.abbreviationSign)}</div>
           </div>
           <div className="max-w-[12.75rem] w-full grid place-content-center flex-none">
             <input
@@ -157,9 +161,13 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid }:
             <div className="">{format(discountAmount, gene.currency.abbreviationSign)}</div>
           </div>
         </div>
-        <div className="hidden text-right md:block">
-          <div className="text-altGrey">Tổng</div>
-          <div className="">{format(total, gene.currency.abbreviationSign)}</div>
+        <div className="pt-2 text-right border-t border-altGrey md:block md:border-none">
+          <div className="heading-3 md:text-mainGray md:body-txt md:capitalize md:not-italic md:font-normal">
+            Tổng
+          </div>
+          <div className="font-bold mobile-body-txt text-darkMint md:text-black md:font-normal">
+            {format(total, gene.currency.abbreviationSign)}
+          </div>
         </div>
       </div>
     </div>

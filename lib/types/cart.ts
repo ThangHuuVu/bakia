@@ -9,4 +9,5 @@ export type CartItem = {
   createdAt?: Date;
   updatedAt?: Date;
   total?: number;
+  selected?: boolean;
 };

@@ -1,6 +1,6 @@
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { CartItem } from "@/lib/types/cart";
-import ItemCard from "./ItemCard";
+import ItemCard from "./CheckoutItemCard";
 import DiscountDialog from "./DiscountDialog";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Discount } from "@/lib/types/discount";
