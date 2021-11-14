@@ -11,8 +11,17 @@ interface ItemCardProps {
   setSelected: (selected: boolean) => void;
   onChangeQuantity: (quantity: number) => void;
   onChangeDiscountCode: (discount: string) => void;
+  onRemoveCartItem: (id: string) => void;
 }
-const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid, selected, setSelected }: ItemCardProps) => {
+const Card = ({
+  item,
+  onChangeQuantity,
+  onChangeDiscountCode,
+  isDiscountValid,
+  selected,
+  setSelected,
+  onRemoveCartItem,
+}: ItemCardProps) => {
   const { gene, selectedVariants, quantity, discountCode: itemDiscountCode } = item;
   const [discountAmount, setDiscountAmount] = useState<number>(0);
   const [disablePlus, setDisablePlus] = useState<boolean>(false);
@@ -175,7 +184,7 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid, s
           <div className="flex gap-5">
             <button
               className="flex items-center gap-2 text-mainGray"
-              onClick={() => setSelected(false)}
+              onClick={() => onRemoveCartItem(item.id)}
             >
               <svg
                 width="16"
@@ -194,7 +203,7 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid, s
             </button>
             <button
               className="flex items-center gap-2 text-darkMint"
-              onClick={() => setSelected(true)}
+              onClick={() => setSelected(!selected)}
             >
               <svg
                 width="20"
