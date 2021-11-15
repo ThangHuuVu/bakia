@@ -24,6 +24,7 @@ const useAddToCart = (selectedVariants: VariantType[], gene: GeneType) => {
         selectedVariants,
         gene,
         quantity: 1,
+        discountCode: "",
         createdAt: new Date(),
         updatedAt: new Date(),
       };
