@@ -39,6 +39,7 @@ const Checkout = ({ discount }: CheckoutProps) => {
       ),
     [checkoutItem, discount]
   );
+
   const onChangeDiscountCode = useCallback(
     (discountCode) => {
       setCheckoutItem({
