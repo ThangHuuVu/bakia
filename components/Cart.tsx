@@ -9,11 +9,18 @@ interface CartProps {
   discount: Discount;
 }
 
-const Cart = ({ discount }: CartProps) => {
-  const [cart, setCart] = useLocalStorage<CartItemType[]>("cart", []);
-
+const useSelectAllItems = (cart: CartItemType[]) => {
   const isSelectAllInCart = cart.every((item) => item.selected);
   const [allItemSelected, setAllItemSelected] = useState<boolean>(isSelectAllInCart);
+  const onToggleSelectAllItem = () => {
+    setAllItemSelected(!allItemSelected);
+  };
+  return [allItemSelected, onToggleSelectAllItem] as const;
+};
+
+const Cart = ({ discount }: CartProps) => {
+  const [cart, setCart] = useLocalStorage<CartItemType[]>("cart", []);
+  const [allItemSelected, onToggleSelectAllItem] = useSelectAllItems(cart);
 
   const total = cart
     .filter((item) => item.selected)
@@ -22,9 +29,6 @@ const Cart = ({ discount }: CartProps) => {
     }, 0);
 
   const selectedItemCount = cart.filter((item) => item.selected).length;
-  const onToggleSelectAllItem = () => {
-    setAllItemSelected(!allItemSelected);
-  };
 
   useEffect(() => {
     setCart(cart.map((item) => ({ ...item, selected: allItemSelected })));
@@ -32,7 +36,7 @@ const Cart = ({ discount }: CartProps) => {
 
   return (
     <>
-      {cart.length && (
+      {Boolean(cart.length) && (
         <ul className="pb-10 space-y-6">
           {cart.map((cartItem) => (
             <li key={cartItem.id} className="">
@@ -40,14 +44,39 @@ const Cart = ({ discount }: CartProps) => {
                 item={cartItem}
                 isDiscountValid={discount.code === cartItem.discountCode}
                 selected={cartItem.selected}
-                onChangeDiscountCode={() => {}}
-                onChangeQuantity={() => {}}
-                setSelected={(selected) => {
+                onChangeDiscountCode={(discountCode) =>
                   setCart([
-                    ...cart.filter((item) => item.id !== cartItem.id),
-                    { ...cartItem, selected },
-                  ]);
-                }}
+                    ...cart.map<CartItemType>((item) => {
+                      if (item.id === cartItem.id) {
+                        item.discountCode = discountCode;
+                        if (discount.code === discountCode) {
+                          item.quantity = 1;
+                        }
+                      }
+                      return item;
+                    }),
+                  ])
+                }
+                onChangeQuantity={(quantity) =>
+                  setCart([
+                    ...cart.map<CartItemType>((item) => {
+                      if (item.id === cartItem.id) {
+                        item.quantity = quantity;
+                      }
+                      return item;
+                    }),
+                  ])
+                }
+                setSelected={(selected) =>
+                  setCart([
+                    ...cart.map<CartItemType>((item) => {
+                      if (item.id === cartItem.id) {
+                        item.selected = selected;
+                      }
+                      return item;
+                    }),
+                  ])
+                }
                 onRemoveCartItem={(id) => {
                   setCart([...cart.filter((item) => item.id !== id)]);
                 }}
@@ -72,7 +101,7 @@ const Cart = ({ discount }: CartProps) => {
             xmlns="http://www.w3.org/2000/svg"
           >
             <circle cx="10" cy="10" r="9" stroke="black" strokeWidth="2" />
-            {isSelectAllInCart && <circle cx="10" cy="10" r="6" fill="#3EFFA8" />}
+            {allItemSelected && <circle cx="10" cy="10" r="6" fill="#3EFFA8" />}
           </svg>
           Chọn thanh toán tất cả
         </button>
