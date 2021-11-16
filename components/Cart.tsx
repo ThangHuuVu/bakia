@@ -22,7 +22,7 @@ const useSelectAllItems = (cart: CartItemType[]) => {
 const Cart = ({ discount }: CartProps) => {
   const [cart, setCart] = useLocalStorage<CartItemType[]>("cart", []);
   const [allItemSelected, onToggleSelectAllItem] = useSelectAllItems(cart);
-  const [deleteDialogItemId, setDeleteDialogItemId] = useState<string>("123");
+  const [deleteDialogItemId, setDeleteDialogItemId] = useState<string>("");
   const onDeleteDialogConfirmClick = useCallback(() => {
     setCart([...cart.filter((item) => item.id !== deleteDialogItemId)]);
     setDeleteDialogItemId("");
@@ -142,7 +142,7 @@ const Cart = ({ discount }: CartProps) => {
             ))}
           </ul>
         )}
-        <div className="hidden md:block w-full px-4 py-6 text-center bg-white max-h-[20.5rem]">
+        <div className="hidden md:block w-full px-4 py-6 text-center bg-white max-h-[20.5rem] min-w-[17.875rem]">
           <h3 className="heading-3">thanh toán trước</h3>
           <div className="mt-8 text-left">
             <p>Chọn thanh toán trước</p>
