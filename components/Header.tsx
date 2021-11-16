@@ -71,7 +71,7 @@ export default function Header() {
   });
 
   return (
-    <>
+    <div ref={ref}>
       <header
         className={`sticky top-0 z-50 flex items-center justify-center ${
           isCart ? "bg-white" : isTop || menuActive || searchActive ? "bg-transparent" : "bg-white"
@@ -191,7 +191,6 @@ export default function Header() {
         </nav>
       </header>
       <div
-        ref={ref}
         onClick={onMenuToggle}
         className={`fixed w-full h-screen right-0 top-0 flex flex-col justify-between z-40 bg-white transition-opacity md:transform md:transition-transform ${
           menuActive
@@ -283,6 +282,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
