@@ -31,14 +31,15 @@ export default function Header() {
 
   const router = useRouter();
   const isTop = useIsScrollTop();
+  const isCart = router.pathname === "/cart";
 
   useEffect(() => {
     if (searchActive || menuActive) {
       setCartActive(false);
     } else {
-      setCartActive(router.pathname === "/cart");
+      setCartActive(isCart);
     }
-  }, [router, menuActive, searchActive]);
+  }, [isCart, menuActive, searchActive]);
 
   const onMenuToggle = () => {
     setMenuActive((status) => {
@@ -72,9 +73,8 @@ export default function Header() {
   return (
     <>
       <header
-        ref={ref}
         className={`sticky top-0 z-50 flex items-center justify-center ${
-          isTop || menuActive || searchActive ? "bg-transparent" : "bg-white"
+          isCart ? "bg-white" : isTop || menuActive || searchActive ? "bg-transparent" : "bg-white"
         }`}
       >
         <nav className="w-full h-14 flex items-center justify-between md:max-w-content md:h-[3.188rem]">
@@ -191,6 +191,7 @@ export default function Header() {
         </nav>
       </header>
       <div
+        ref={ref}
         onClick={onMenuToggle}
         className={`fixed w-full h-screen right-0 top-0 flex flex-col justify-between z-40 bg-white transition-opacity md:transform md:transition-transform ${
           menuActive
