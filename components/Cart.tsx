@@ -136,7 +136,7 @@ const Cart = ({ discount }: CartProps) => {
           ))}
         </ul>
       )}
-      <div className="w-full px-4 py-6 text-center bg-white max-h-[20.5rem]">
+      <div className="hidden md:block w-full px-4 py-6 text-center bg-white max-h-[20.5rem]">
         <h3 className="heading-3">thanh toán trước</h3>
         <div className="mt-8 text-left">
           <p>Chọn thanh toán trước</p>
