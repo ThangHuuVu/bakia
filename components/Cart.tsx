@@ -6,6 +6,7 @@ import { Discount } from "@/lib/types/discount";
 import ItemCard from "./CartItemCard";
 import DeleteCartItemDialog from "./DeleteCartItemDialog";
 import DiscountDialog from "./DiscountDialog";
+import Link from "next/link";
 
 interface CartProps {
   discount: Discount;
@@ -98,10 +99,10 @@ const Cart = ({ discount }: CartProps) => {
             </div>
           </div>
         </div>
-        {Boolean(cart.length) && (
-          <ul className="pb-10 space-y-6">
+        {Boolean(cart.length) ? (
+          <ul className="pb-10 space-y-6 min-w-[49.5rem]">
             {cart.map((cartItem) => (
-              <li key={cartItem.id} className="">
+              <li key={cartItem.id}>
                 <ItemCard
                   item={cartItem}
                   isDiscountValid={discount.code === cartItem.discountCode}
@@ -142,10 +143,29 @@ const Cart = ({ discount }: CartProps) => {
                   onRemoveCartItem={(id) => {
                     setDeleteDialogItemId(id);
                   }}
+                  onSetTotal={(total) =>
+                    setCart([
+                      ...cart.map<CartItemType>((item) => {
+                        if (item.id === cartItem.id) {
+                          item.total = total;
+                        }
+                        return item;
+                      }),
+                    ])
+                  }
                 />
               </li>
             ))}
           </ul>
+        ) : (
+          <div className="min-w-[49.5rem] grid place-items-center">
+            <p>
+              Giỏ hàng trống.{" "}
+              <Link href="/custom">
+                <a className="underline text-darkMint">Đến trang mua hàng</a>
+              </Link>
+            </p>
+          </div>
         )}
         <div className="hidden md:block w-full px-4 py-6 text-center bg-white max-h-[20.5rem] min-w-[17.875rem]">
           <h3 className="heading-3">thanh toán trước</h3>

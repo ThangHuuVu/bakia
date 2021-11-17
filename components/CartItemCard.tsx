@@ -12,6 +12,7 @@ interface ItemCardProps {
   onChangeQuantity: (quantity: number) => void;
   onChangeDiscountCode: (discount: string) => void;
   onRemoveCartItem: (id: string) => void;
+  onSetTotal: (total: number) => void;
 }
 const Card = ({
   item,
@@ -21,6 +22,7 @@ const Card = ({
   selected,
   setSelected,
   onRemoveCartItem,
+  onSetTotal,
 }: ItemCardProps) => {
   const { gene, selectedVariants, quantity, discountCode: itemDiscountCode } = item;
   const [discountAmount, setDiscountAmount] = useState<number>(0);
@@ -44,6 +46,10 @@ const Card = ({
   const total = useMemo(() => {
     return price * quantity;
   }, [price, quantity]);
+
+  useEffect(() => {
+    onSetTotal(total);
+  }, [total]);
 
   useEffect(() => {
     setDisablePlus(isDiscountValid);
@@ -174,7 +180,7 @@ const Card = ({
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-between md:gap-5 ">
+      <div className="flex flex-col justify-between md:gap-5 md:min-w-[7.375rem]">
         <h3 className="hidden text-right md:block heading-3">định giá</h3>
         <div className="flex flex-wrap gap-[1.625rem] justify-between md:flex-nowrap md:flex-col w-full h-full md:justify-between md:border-t md:border-b md:border-altGrey py-4 md:gap-0 md:hidden">
           <div className="flex-none md:hidden">
