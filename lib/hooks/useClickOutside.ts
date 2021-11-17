@@ -1,9 +1,9 @@
 import { MutableRefObject, useEffect } from "react";
 
-function useClickOutside(ref: MutableRefObject<any>, callback: () => void) {
+function useClickOutside(refs: MutableRefObject<any>[], callback: () => void) {
   useEffect(() => {
     function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
+      if (refs.every((ref) => ref.current && !ref.current.contains(event.target))) {
         callback?.();
       }
     }

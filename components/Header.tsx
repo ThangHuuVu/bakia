@@ -63,18 +63,26 @@ export default function Header() {
       document.body.style.overflow = "auto";
     }
   }, [menuActive, searchActive]);
-  const ref = useRef<HTMLDivElement>(null);
-  useClickOutside(ref, () => {
+  const menuRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  useClickOutside([menuRef, headerRef], () => {
     if (menuActive) {
       setMenuActive(false);
     }
   });
 
   return (
-    <div ref={ref}>
+    <>
       <header
+        ref={headerRef}
         className={`sticky top-0 z-50 flex items-center justify-center ${
-          isCart ? "bg-white" : isTop || menuActive || searchActive ? "bg-transparent" : "bg-white"
+          menuActive || searchActive
+            ? "bg-transparent"
+            : isCart
+            ? "bg-white"
+            : isTop
+            ? "bg-transparent"
+            : "bg-white"
         }`}
       >
         <nav className="w-full h-14 flex items-center justify-between md:max-w-content md:h-[3.188rem]">
@@ -191,7 +199,7 @@ export default function Header() {
         </nav>
       </header>
       <div
-        onClick={onMenuToggle}
+        ref={menuRef}
         className={`fixed w-full h-screen right-0 top-0 flex flex-col justify-between z-40 bg-white transition-opacity md:transform md:transition-transform ${
           menuActive
             ? "opacity-100 md:translate-y-0"
@@ -282,6 +290,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
