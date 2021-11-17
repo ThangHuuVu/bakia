@@ -5,6 +5,7 @@ import { CartItem as CartItemType } from "@/lib/types/cart";
 import { Discount } from "@/lib/types/discount";
 import ItemCard from "./CartItemCard";
 import DeleteCartItemDialog from "./DeleteCartItemDialog";
+import DiscountDialog from "./DiscountDialog";
 
 interface CartProps {
   discount: Discount;
@@ -23,6 +24,7 @@ const Cart = ({ discount }: CartProps) => {
   const [cart, setCart] = useLocalStorage<CartItemType[]>("cart", []);
   const [allItemSelected, onToggleSelectAllItem] = useSelectAllItems(cart);
   const [deleteDialogItemId, setDeleteDialogItemId] = useState<string>("");
+  const [isDiscountPopupShow, setDiscountPopupShow] = useState<boolean>(false);
   const onDeleteDialogConfirmClick = useCallback(() => {
     setCart([...cart.filter((item) => item.id !== deleteDialogItemId)]);
     setDeleteDialogItemId("");
@@ -77,7 +79,10 @@ const Cart = ({ discount }: CartProps) => {
           <div className="flex items-center justify-between w-full h-full max-w-content">
             <div className="flex gap-1 mb-2 md:mb-0">
               Bạn còn 01 code giảm giá chưa sử dụng. <br />
-              <button className="underline text-darkMint" onClick={() => {}}>
+              <button
+                className="underline text-darkMint"
+                onClick={() => setDiscountPopupShow(true)}
+              >
                 Xem code
               </button>
             </div>
@@ -177,6 +182,13 @@ const Cart = ({ discount }: CartProps) => {
         open={Boolean(deleteDialogItemId)}
         onClose={() => setDeleteDialogItemId("")}
         onDeleteClick={onDeleteDialogConfirmClick}
+      />
+      <DiscountDialog
+        content={discount}
+        open={isDiscountPopupShow}
+        onClose={() => {
+          setDiscountPopupShow(false);
+        }}
       />
     </>
   );

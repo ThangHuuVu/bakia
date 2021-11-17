@@ -113,6 +113,7 @@ const Checkout = ({ discount }: CheckoutProps) => {
         </div>
       </div>
       <DiscountDialog
+        showButton
         content={discount}
         open={isDiscountPopupShow}
         onButtonClick={() => {

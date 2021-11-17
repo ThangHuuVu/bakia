@@ -6,15 +6,29 @@ import {
   DialogClose,
 } from "./RadixDialogWrapper";
 import { StructuredText } from "react-datocms";
+import { Discount } from "@/lib/types/discount";
 
-const DiscountDialog = ({ content, open, onButtonClick, onClose }) => {
+interface DiscountDialogProps {
+  content: Discount;
+  open: boolean;
+  showButton?: boolean;
+  onButtonClick?: () => void;
+  onClose: () => void;
+}
+const DiscountDialog = ({
+  content,
+  open,
+  showButton,
+  onButtonClick,
+  onClose,
+}: DiscountDialogProps) => {
   return (
     <Dialog
       open={open}
       overlayProps={{ className: "fixed inset-0 transition-opacity bg-black opacity-60" }}
     >
-      <DialogContent className="fixed transform -translate-x-1/2 -translate-y-1/2 bg-white rounded w-dialog top-1/2 left-1/2 popup-shadow flex flex-col gap-[0.625rem]">
-        <div className="h-[6.438rem] bg-grey w-full rounded-t">
+      <DialogContent className="fixed transform -translate-x-1/2 -translate-y-1/2 bg-white rounded w-dialog top-1/2 left-1/2 popup-shadow flex flex-col gap-[0.625rem] md:max-w-[36.875rem] pb-4 md:pb-6">
+        <div className="h-[6.438rem] bg-grey w-full rounded-t md:h-[10.625rem]">
           <DialogClose className="absolute top-[0.625rem] right-[0.625rem]" onClick={onClose}>
             <svg
               width="14"
@@ -30,11 +44,9 @@ const DiscountDialog = ({ content, open, onButtonClick, onClose }) => {
             </svg>
           </DialogClose>
         </div>
-        <DialogTitle className="text-[1.375rem] leading-7 text-center font-body mt-[0.625rem]">
+        <DialogTitle className="text-[1.375rem] leading-7 text-center font-body mt-[0.625rem] flex flex-col items-center">
           {content.title}
-        </DialogTitle>
-        <div className="w-full p-3">
-          <div className="flex justify-between w-full divide-x  sub-txt tracking-[-0.2px]">
+          <div className="flex justify-between w-full divide-x  sub-txt tracking-[-0.2px] px-3 md:max-w-[27rem] md:mt-2">
             <div className="w-1/2 text-left">
               Mã giảm giá: <strong>{content.code}</strong>
             </div>
@@ -42,11 +54,14 @@ const DiscountDialog = ({ content, open, onButtonClick, onClose }) => {
               Số lượng còn lại: <strong>{content.limit}</strong>
             </div>
           </div>
-          <DialogDescription className="mt-4">
-            <StructuredText data={content.detail} />
+        </DialogTitle>
+        <div className="w-full p-3">
+          <DialogDescription className="mt-4 md:mx-5 text-mainGray">
+            <StructuredText data={content.detail as any} />
           </DialogDescription>
         </div>
-        <div className="flex items-center justify-center gap-2 text-altGrey">
+        <div className="flex items-center justify-center gap-2 text-altGrey md:justify-around sub-txt">
+          <div className="hidden md:block">Thông tin liên hệ</div>
           <div className="flex items-center gap-2">
             <svg
               width="12"
@@ -80,14 +95,16 @@ const DiscountDialog = ({ content, open, onButtonClick, onClose }) => {
             team.bakia@gmail.com
           </div>
         </div>
-        <div className="w-full p-4">
-          <button
-            className="mobile-button-txt h-[3.25rem] rounded-lg bg-main grid place-content-center w-full"
-            onClick={onButtonClick}
-          >
-            dùng ngay
-          </button>
-        </div>
+        {showButton && (
+          <div className="w-full px-4 pt-4">
+            <button
+              className="mobile-button-txt h-[3.25rem] rounded-lg bg-main grid place-content-center w-full"
+              onClick={onButtonClick}
+            >
+              dùng ngay
+            </button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
