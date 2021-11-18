@@ -100,7 +100,7 @@ const Cart = ({ discount }: CartProps) => {
           </div>
         </div>
         {Boolean(cart.length) ? (
-          <ul className="pb-10 space-y-6 min-w-[49.5rem]">
+          <ul className="pb-10 space-y-6 md:min-w-[49.5rem]">
             {cart.map((cartItem) => (
               <li key={cartItem.id}>
                 <ItemCard

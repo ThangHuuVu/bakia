@@ -81,7 +81,7 @@ const Card = ({
             <p className="text-black heading-3">{item.gene.description}</p>
           </div>
         </div>
-        <div className="flex flex-col w-full max-w-[12.75rem] max-h-[12.5rem] relative md:max-w-full md:w-[21.875rem] md:flex-none md:max-h-full">
+        <div className="flex flex-col w-full max-w-[12.75rem] max-h-[12.5rem] relative md:max-w-full md:w-[21.875rem] md:flex-none md:max-h-full h-full">
           <div className="flex justify-between mb-4 md:mb-2">
             <Link href={`/custom/?id=${item.id}`}>
               <a className="flex items-center gap-1 text-darkMint">

@@ -85,7 +85,7 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid }:
             </Link>
             <h3 className="heading-3">chi tiết</h3>
           </div>
-          <dl className="w-full flex flex-col gap-[0.875rem] bg-white px-5 py-3 overflow-y-auto rounded ">
+          <dl className="w-full flex flex-col gap-[0.875rem] bg-white px-5 py-3 overflow-y-auto rounded h-full">
             <div className="flex flex-col">
               <dt className="text-altGrey">Bakia model</dt>
               <dt>{gene.name}</dt>
@@ -98,8 +98,8 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid }:
                 <dd>{format(variant.price, gene.currency.abbreviationSign)}</dd>
               </div>
             ))}
+            <div className="absolute bottom-0 left-0 w-full h-10 rounded-b faded-bg md:hidden" />
           </dl>
-          <div className="absolute bottom-0 w-full h-10 rounded-b faded-bg md:hidden" />
         </div>
       </div>
       <div className="flex flex-col justify-between md:gap-5 md:h-full">
