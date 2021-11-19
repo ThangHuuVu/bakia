@@ -18,6 +18,9 @@ const useSelectAllItems = (cart: CartItemType[]) => {
   const onToggleSelectAllItem = () => {
     setAllItemSelected(!allItemSelected);
   };
+  useEffect(() => {
+    setAllItemSelected(isSelectAllInCart);
+  }, [isSelectAllInCart]);
   return [allItemSelected, onToggleSelectAllItem] as const;
 };
 
