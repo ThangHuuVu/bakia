@@ -246,9 +246,7 @@ export const CustomizeLab = () => {
                     strokeLinecap="round"
                   />
                 </svg>
-                <p className="">
-                  {isMobileMoreShowing ? "Ẩn bớt thông tin" : "Xem đầy đủ thông tin"}
-                </p>
+                <p>{isMobileMoreShowing ? "Ẩn bớt thông tin" : "Xem đầy đủ thông tin"}</p>
               </div>
             )}
           </div>
