@@ -7,6 +7,7 @@ import ItemCard from "./CartItemCard";
 import DeleteCartItemDialog from "./DeleteCartItemDialog";
 import DiscountDialog from "./DiscountDialog";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface CartProps {
   discount: Discount;
@@ -38,8 +39,12 @@ const Cart = ({ discount }: CartProps) => {
     .reduce((res, current) => {
       return res + current.total || 0;
     }, 0);
+  const router = useRouter();
 
   const selectedItemCount = cart.filter((item) => item.selected).length;
+  const onGoToPayment = useCallback(() => {
+    router.push("/payment");
+  }, [router]);
 
   useEffect(() => {
     setCart(cart.map((item) => ({ ...item, selected: allItemSelected })));
@@ -73,6 +78,7 @@ const Cart = ({ discount }: CartProps) => {
               className={`w-full h-[3.75rem] rounded-lg ${
                 selectedItemCount > 0 ? "bg-main text-black" : "bg-grey3 text-altGrey"
               }`}
+              onClick={onGoToPayment}
             >
               <div>Tổng cộng: {format(total, "VND")}</div>
               <div className="heading-3">thanh toán ngay</div>
@@ -96,6 +102,7 @@ const Cart = ({ discount }: CartProps) => {
                 className={`w-full min-w-[8.5rem] h-[2.625rem] rounded-lg ${
                   selectedItemCount > 0 ? "bg-main text-black" : "bg-grey3 text-altGrey"
                 }`}
+                onClick={onGoToPayment}
               >
                 <div className="heading-3">thanh toán</div>
               </button>
@@ -193,6 +200,7 @@ const Cart = ({ discount }: CartProps) => {
             className={`w-full h-[2.625rem] rounded-lg ${
               selectedItemCount > 0 ? "bg-main text-black" : "bg-grey3 text-altGrey"
             } mt-6`}
+            onClick={onGoToPayment}
           >
             <div className="heading-3">thanh toán trước</div>
           </button>
