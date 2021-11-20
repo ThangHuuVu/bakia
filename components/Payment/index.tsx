@@ -8,12 +8,17 @@ const Payment = () => {
   const [cart] = useLocalStorage<CartItem[]>("cart", []);
   const [step, setStep] = useState(1);
   const selectedCartItems = cart.filter((item) => item.selected);
+
   return (
     <>
       <div className="w-full px-[0.375rem]">
         <OrderSummary items={selectedCartItems} isHighlight={step > 1} />
-        <ProgressStepper step={step} onStepClick={(next) => setStep(next)} />
-        <div className="w-full"></div>
+        <ProgressStepper
+          step={step}
+          onGoToStep={(next) => setStep(next)}
+          onSubmitShippingInfo={() => {}}
+          onSubmitPaymentInfo={() => {}}
+        />
       </div>
     </>
   );
