@@ -9,9 +9,15 @@ enum AreaEnum {
   mid = "mid",
 }
 
-enum ShippingMethodEnum {
+export enum ShippingMethodEnum {
   standard = "standard",
   fast = "fast",
+}
+
+export enum PaymentMethodEnum {
+  bank = "bank",
+  eWallet = "eWallet",
+  none = "none",
 }
 
 export type ShippingInfo = {
@@ -25,4 +31,34 @@ export type ShippingInfo = {
   note: string;
 };
 
-export type PaymentInfo = {};
+type Source = {
+  accountNumber: string;
+  accountName: string;
+};
+
+export type PaymentInfo = {
+  agreedTerm: boolean;
+  source: Source;
+};
+
+interface PaymentMethod {
+  accountHolderName: string;
+  accountNumber: string;
+  name: string;
+  image: {
+    url: string;
+    blurUpThumb: string;
+  };
+}
+
+export interface BankAccount extends PaymentMethod {
+  branch: string;
+}
+
+export interface EWallet extends PaymentMethod {}
+
+export type PaymentContent = {
+  term: any;
+  banks: BankAccount[];
+  eWallets: EWallet[];
+};

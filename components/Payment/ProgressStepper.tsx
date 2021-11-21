@@ -1,142 +1,41 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
 import { PaymentInfo, ShippingInfo } from "@/lib/types/payment";
-
+import ShippingInfoForm from "./ShippingInfoForm";
+import PaymentInfoForm from "./PaymentInfoForm";
 interface ProgressStepperProps {
   step: number;
+  total: number;
+  paymentContent: any;
   onGoToStep: (step: number) => void;
   onSubmitShippingInfo: (shippingInfo: ShippingInfo) => void;
   onSubmitPaymentInfo: (paymentInfo: PaymentInfo) => void;
 }
 
-interface ShippingInfoFormProps {
-  onSubmitShippingInfo: (shippingInfo: ShippingInfo) => void;
-  onGoNext: () => void;
-}
-
-const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormProps) => {
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ShippingInfo>();
-
-  return (
-    <>
-      <form
-        onSubmit={handleSubmit((data) => {
-          onSubmitShippingInfo(data);
-          onGoNext();
-        })}
-        className="flex flex-col gap-5 mt-[3.125rem] mx-[0.625rem] relative"
-      >
-        {Object.keys(errors).length > 0 && (
-          <span className="absolute -top-8 text-error">
-            Vui lòng đáp ứng thông tin trong các mục (*)
-          </span>
-        )}
-        <input
-          className={`h-[2.75rem] px-4 rounded ${
-            errors.fullName ? "border border-error placeholder-error" : "border-none"
-          }`}
-          placeholder="Họ tên *"
-          {...register("fullName", { required: true })}
-        />
-        <div className="flex items-center justify-center w-full gap-10">
-          <div>
-            <input {...register("gender")} type="radio" value="male" className="mr-[0.875rem]" />
-            <label htmlFor="male">Anh</label>
-          </div>
-          <div>
-            <input {...register("gender")} type="radio" value="female" className="mr-[0.875rem]" />
-            <label htmlFor="female">Chị</label>
-          </div>
-        </div>
-        <input
-          className={`h-[2.75rem] px-4 rounded ${
-            errors.email ? "border border-error placeholder-error" : "border-none"
-          }`}
-          placeholder="Email *"
-          {...register("email", {
-            required: true,
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: "Entered value does not match email format",
-            },
-          })}
-        />
-        <input
-          className={`h-[2.75rem] px-4 rounded ${
-            errors.phoneNumber ? "border border-error placeholder-error" : "border-none"
-          }`}
-          placeholder="Số điện thoại *"
-          {...register("phoneNumber", { required: true })}
-        />
-        <div>Khu vực</div>
-        <div className="flex items-center justify-center w-full gap-10">
-          <div>
-            <input {...register("area")} type="radio" value="north" className="mr-[0.875rem]" />
-            <label htmlFor="male">Bắc</label>
-          </div>
-          <div>
-            <input {...register("area")} type="radio" value="mid" className="mr-[0.875rem]" />
-            <label htmlFor="female">Trung</label>
-          </div>
-          <div>
-            <input {...register("area")} type="radio" value="south" className="mr-[0.875rem]" />
-            <label htmlFor="female">Nam</label>
-          </div>
-        </div>
-        <input
-          className={`h-[2.75rem] px-4 rounded ${
-            errors.address ? "border border-error placeholder-error" : "border-none"
-          }`}
-          placeholder="Địa chỉ *"
-          {...register("address", { required: true })}
-        />
-        <div>Chọn hình thức giao hàng</div>
-        <div>
-          <input {...register("shippingMethod")} type="radio" value="fast" className="hidden" />
-        </div>
-        <textarea
-          className="h-[5.25rem] px-4 py-3"
-          placeholder="Bạn có ghi chú gì về địa chỉ nhận hàng không? ( chung cư, nhà riêng, ngày giờ có thể nhận hàng ... )"
-          {...register("note")}
-        />
-        <div className="w-full px-4 py-5 rounded">
-          <input
-            type="submit"
-            className="w-full h-[3.25rem] rounded-lg bg-main button-txt"
-            value="
-              tiếp tục"
-          />
-        </div>
-      </form>
-    </>
-  );
-};
-
 const ProgressStepper = ({
   step,
   onGoToStep,
+  total,
+  paymentContent,
   onSubmitShippingInfo,
   onSubmitPaymentInfo,
 }: ProgressStepperProps) => {
   const firstTabRef = useRef(null);
+  const secondTabRef = useRef(null);
+  const thirdTabRef = useRef(null);
   useEffect(() => {
-    firstTabRef.current?.focus();
-  }, []);
+    if (step === 1) firstTabRef.current?.focus();
+    else if (step === 2) secondTabRef.current?.focus();
+    else thirdTabRef.current?.focus();
+  }, [step]);
 
   return (
-    <Tabs.Root className="mt-5">
+    <Tabs.Root className="flex flex-col flex-1 h-full mt-5">
       <Tabs.List className="grid grid-cols-3 px-6">
         <Tabs.Trigger
           ref={firstTabRef}
-          onClick={() => onGoToStep(1)}
           value="step1"
-          className="relative flex flex-col items-start cursor-pointer"
+          className="relative flex flex-col items-start"
         >
           <div className={`max-w-[6rem] mb-[0.625rem] ${step === 1 ? "opacity-100" : "opacity-0"}`}>
             Thông tin giao hàng
@@ -150,9 +49,10 @@ const ProgressStepper = ({
           </div>
         </Tabs.Trigger>
         <Tabs.Trigger
-          onClick={() => onGoToStep(2)}
+          ref={secondTabRef}
+          disabled={step !== 2}
           value="step2"
-          className="relative flex flex-col items-center cursor-pointer"
+          className="relative flex flex-col items-center"
         >
           <div
             className={`max-w-[6rem] mb-[0.625rem] text-center ${
@@ -170,9 +70,10 @@ const ProgressStepper = ({
           </div>
         </Tabs.Trigger>
         <Tabs.Trigger
-          onClick={() => onGoToStep(3)}
+          disabled={step !== 3}
+          ref={thirdTabRef}
           value="step3"
-          className="relative flex flex-col items-end cursor-pointer"
+          className="relative flex flex-col items-end"
         >
           <div
             className={`max-w-[6rem] mb-[0.625rem] text-right ${
@@ -197,20 +98,40 @@ const ProgressStepper = ({
         />
       </Tabs.Content>
       <Tabs.Content value="step2">
-        <div className="w-full px-4 py-5">
-          <button
-            className="w-full h-[3.25rem] rounded-lg bg-main button-txt"
-            onClick={() => onGoToStep(3)}
-          >
-            tiếp tục
-          </button>
-        </div>
+        <PaymentInfoForm
+          total={total}
+          paymentContent={paymentContent}
+          onSubmit={onSubmitPaymentInfo}
+          onGoNext={() => onGoToStep(3)}
+          onGoPrev={() => onGoToStep(1)}
+        />
       </Tabs.Content>
-      <Tabs.Content value="step3">
+      <Tabs.Content value="step3" className="flex flex-col justify-between flex-1 w-full h-full">
+        <div className="mx-4 mt-5 space-y-5">
+          <button className="flex items-center gap-2" onClick={() => onGoToStep(2)}>
+            <svg
+              width="24"
+              height="15"
+              viewBox="0 0 24 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M22.6364 6.16071H4.63636L8.59091 2.27679C9.13636 1.74107 9.13636 0.9375 8.59091 0.401786C8.04545 -0.133929 7.22727 -0.133929 6.68182 0.401786L0.409091 6.5625C-0.136364 7.09821 -0.136364 7.90179 0.409091 8.4375L6.68182 14.5982C7.22727 15.1339 8.04545 15.1339 8.59091 14.5982C9.13636 14.0625 9.13636 13.2589 8.59091 12.7232L4.63636 8.83929H22.6364C23.3182 8.83929 24 8.30357 24 7.5C24 6.69643 23.3182 6.16071 22.6364 6.16071Z"
+                fill="black"
+              />
+            </svg>
+            Quay lại Thanh toán Pre-order
+          </button>
+          <p className="mx-4">
+            Khi đã hoàn tất kiểm tra chỉnh sửa chính xác{" "}
+            <button className="font-bold underline text-darkMint">thông tin giao hàng</button> và{" "}
+            <button className="font-bold underline text-darkMint">thông tin pre-order</button>, hãy
+            xác nhận để đơn hàng của bạn được gửi đi.
+          </p>
+        </div>
         <div className="w-full px-4 py-5">
-          <input type="submit" className="w-full h-[3.25rem] rounded-lg bg-main button-txt">
-            xác nhận
-          </input>
+          <button className="w-full h-[3.25rem] rounded-lg bg-main button-txt">xác nhận</button>
         </div>
       </Tabs.Content>
     </Tabs.Root>

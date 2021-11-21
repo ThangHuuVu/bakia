@@ -106,3 +106,38 @@ export async function getDiscountCodeDescription(preview: boolean) {
   );
   return data?.discountCodeGene1;
 }
+
+export async function getPaymentContent(preview: boolean) {
+  const data = await fetchAPI(
+    `
+    {
+      paymentContent {
+        term {
+          value
+        }
+        banks {
+          accountNumber
+          accountHolderName
+          bankImage {
+            blurUpThumb
+            url
+          }
+          bankName
+          branch
+        }
+        eWallets {
+          name
+          image {
+            url
+            blurUpThumb
+          }
+          accountHolderName
+          accountNumber
+        }
+      }
+    }
+  `,
+    { preview }
+  );
+  return data?.paymentContent;
+}
