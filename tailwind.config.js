@@ -12,6 +12,9 @@ module.exports = {
         content: "calc(100vh - 3.5rem)",
         "md-content": "calc(100vh - 3.25rem)",
       },
+      minHeight: {
+        content: "calc(100vh - 3.5rem)",
+      },
       width: {
         content: "calc(100vw - 1rem)",
         dialog: "calc(100vw - 1.125rem)",
