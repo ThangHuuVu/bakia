@@ -118,7 +118,7 @@ export async function getPaymentContent(preview: boolean) {
         banks {
           accountNumber
           accountHolderName
-          bankImage {
+          image {
             blurUpThumb
             url
           }
