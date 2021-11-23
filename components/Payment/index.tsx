@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { CartItem } from "@/lib/types/cart";
 import OrderSummary from "./OrderSummary";
@@ -14,6 +14,11 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
   const total = selectedCartItems.reduce((res, current) => {
     return res + current.total || 0;
   }, 0);
+  const onSubmitOrder = useCallback(() => {
+    console.log("submit order");
+    console.log(shippingInfo);
+    console.log(paymentInfo);
+  }, [shippingInfo, paymentInfo]);
 
   return (
     <>
@@ -26,6 +31,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
           paymentContent={paymentContent}
           onSubmitShippingInfo={(val) => setShippingInfo(val)}
           onSubmitPaymentInfo={(val) => setPaymentInfo(val)}
+          onSubmitOrder={onSubmitOrder}
         />
       </div>
     </>

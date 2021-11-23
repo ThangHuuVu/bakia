@@ -13,6 +13,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
 interface PaymentInfoFormProps {
   total: number;
@@ -54,17 +56,21 @@ const BankPayment = ({ onGoBack, register, errors, bankAccounts }: BankPaymentPr
       <div className="flex flex-col w-full gap-5 mt-8">
         <input
           className={`h-[2.75rem] px-4 rounded ${
-            errors.source?.accountNumber ? "border border-error placeholder-error" : "border-none"
+            errors.paymentSource?.accountNumber
+              ? "border border-error placeholder-error"
+              : "border-none"
           }`}
           placeholder="Số tài khoản*"
-          {...register("source.accountNumber", { required: true })}
+          {...register("paymentSource.accountNumber")}
         />
         <input
           className={`h-[2.75rem] px-4 rounded ${
-            errors.source?.accountName ? "border border-error placeholder-error" : "border-none"
+            errors.paymentSource?.accountName
+              ? "border border-error placeholder-error"
+              : "border-none"
           }`}
           placeholder="Tên chủ tài khoản*"
-          {...register("source.accountName", { required: true })}
+          {...register("paymentSource.accountName")}
         />
       </div>
       <p className="my-5 ml-4">Thông tin tài khoản nhận thanh toán</p>
@@ -143,17 +149,21 @@ const EWalletPayment = ({ onGoBack, register, errors, eWallets }: EWalletPayment
       <div className="flex flex-col w-full gap-5 mt-8">
         <input
           className={`h-[2.75rem] px-4 rounded ${
-            errors.source?.accountNumber ? "border border-error placeholder-error" : "border-none"
+            errors.paymentSource?.accountNumber
+              ? "border border-error placeholder-error"
+              : "border-none"
           }`}
           placeholder="Số tài khoản*"
-          {...register("source.accountNumber", { required: true })}
+          {...register("paymentSource.accountNumber", { required: true })}
         />
         <input
           className={`h-[2.75rem] px-4 rounded ${
-            errors.source?.accountName ? "border border-error placeholder-error" : "border-none"
+            errors.paymentSource?.accountName
+              ? "border border-error placeholder-error"
+              : "border-none"
           }`}
           placeholder="Tên chủ tài khoản*"
-          {...register("source.accountName", { required: true })}
+          {...register("paymentSource.accountName", { required: true })}
         />
       </div>
       <p className="my-5 ml-4">Thông tin tài khoản nhận thanh toán</p>
@@ -203,11 +213,20 @@ const PaymentInfoForm = ({
   onGoPrev,
   total,
 }: PaymentInfoFormProps) => {
+  const paymentSchema = Yup.object().shape({
+    agreedTerm: Yup.boolean().oneOf([true], "Bạn cần đồng ý trước khi thanh toán"),
+    paymentSource: Yup.object().shape({
+      accountNumber: Yup.string().required("Vui lòng nhập số tài khoản"),
+      accountName: Yup.string().required("Vui lòng nhập tên chủ tài khoản"),
+    }),
+  });
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<PaymentInfo>();
+  } = useForm<PaymentInfo>({
+    resolver: yupResolver(paymentSchema),
+  });
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodEnum>(PaymentMethodEnum.none);
   return (
     <form
@@ -219,7 +238,7 @@ const PaymentInfoForm = ({
     >
       {paymentMethod === PaymentMethodEnum.none && (
         <>
-          <button className="flex items-center gap-2" onClick={onGoPrev}>
+          <div className="flex items-center gap-2 cursor-pointer" onClick={onGoPrev}>
             <svg
               width="24"
               height="15"
@@ -233,7 +252,7 @@ const PaymentInfoForm = ({
               />
             </svg>
             Quay lại Thông tin giao hàng
-          </button>
+          </div>
           <div className="mx-4">
             <p>
               Số tiền cần thanh toán cho pre-order của bạn là{" "}
@@ -275,8 +294,8 @@ const PaymentInfoForm = ({
               />
             </div>
             <div className="flex items-center justify-center gap-[0.875rem]">
-              <input id="agreeTerm" {...register("agreedTerm")} type="checkbox" />
-              <label htmlFor="agreeTerm">Tôi đồng ý với quy định thanh toán</label>
+              <input id="agreedTerm" {...register("agreedTerm")} type="checkbox" />
+              <label htmlFor="agreedTerm">Tôi đồng ý với quy định thanh toán</label>
             </div>
           </div>
         </>

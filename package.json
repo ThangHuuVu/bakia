@@ -9,6 +9,7 @@
     "seed": "npx prisma db seed"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.8.3",
     "@prisma/client": "3.1.1",
     "@radix-ui/react-dialog": "^0.1.1",
     "@radix-ui/react-tabs": "^0.1.1",
@@ -19,7 +20,8 @@
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.19.5",
     "swiper": "^7.0.9",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.0.1",
