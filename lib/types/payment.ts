@@ -31,14 +31,14 @@ export type ShippingInfo = {
   note: string;
 };
 
-type Source = {
+type PaymentSource = {
   accountNumber: string;
   accountName: string;
 };
 
 export type PaymentInfo = {
   agreedTerm: boolean;
-  source: Source;
+  paymentSource: PaymentSource;
 };
 
 interface PaymentMethod {

@@ -1,5 +1,3 @@
-import * as Tabs from "@radix-ui/react-tabs";
-import { useEffect, useRef } from "react";
 import { PaymentInfo, ShippingInfo } from "@/lib/types/payment";
 import ShippingInfoForm from "./ShippingInfoForm";
 import PaymentInfoForm from "./PaymentInfoForm";
@@ -10,6 +8,7 @@ interface ProgressStepperProps {
   onGoToStep: (step: number) => void;
   onSubmitShippingInfo: (shippingInfo: ShippingInfo) => void;
   onSubmitPaymentInfo: (paymentInfo: PaymentInfo) => void;
+  onSubmitOrder: () => void;
 }
 
 const ProgressStepper = ({
@@ -19,24 +18,12 @@ const ProgressStepper = ({
   paymentContent,
   onSubmitShippingInfo,
   onSubmitPaymentInfo,
+  onSubmitOrder,
 }: ProgressStepperProps) => {
-  const firstTabRef = useRef(null);
-  const secondTabRef = useRef(null);
-  const thirdTabRef = useRef(null);
-  useEffect(() => {
-    if (step === 1) firstTabRef.current?.focus();
-    else if (step === 2) secondTabRef.current?.focus();
-    else thirdTabRef.current?.focus();
-  }, [step]);
-
   return (
-    <Tabs.Root className="flex flex-col flex-1 h-full mt-5">
-      <Tabs.List className="grid grid-cols-3 px-6">
-        <Tabs.Trigger
-          ref={firstTabRef}
-          value="step1"
-          className="relative flex flex-col items-start"
-        >
+    <div className="flex flex-col flex-1 h-full mt-5">
+      <div className="grid grid-cols-3 px-6">
+        <div className="relative flex flex-col items-start">
           <div className={`max-w-[6rem] mb-[0.625rem] ${step === 1 ? "opacity-100" : "opacity-0"}`}>
             Thông tin giao hàng
           </div>
@@ -47,13 +34,8 @@ const ProgressStepper = ({
           >
             1
           </div>
-        </Tabs.Trigger>
-        <Tabs.Trigger
-          ref={secondTabRef}
-          disabled={step !== 2}
-          value="step2"
-          className="relative flex flex-col items-center"
-        >
+        </div>
+        <div className="relative flex flex-col items-center">
           <div
             className={`max-w-[6rem] mb-[0.625rem] text-center ${
               step === 2 ? "opacity-100" : "opacity-0"
@@ -68,13 +50,8 @@ const ProgressStepper = ({
           >
             2
           </div>
-        </Tabs.Trigger>
-        <Tabs.Trigger
-          disabled={step !== 3}
-          ref={thirdTabRef}
-          value="step3"
-          className="relative flex flex-col items-end"
-        >
+        </div>
+        <div className="relative flex flex-col items-end">
           <div
             className={`max-w-[6rem] mb-[0.625rem] text-right ${
               step === 3 ? "opacity-100" : "opacity-0"
@@ -89,15 +66,15 @@ const ProgressStepper = ({
           >
             3
           </div>
-        </Tabs.Trigger>
-      </Tabs.List>
-      <Tabs.Content value="step1">
+        </div>
+      </div>
+      <div className={step === 1 ? "block" : "hidden"}>
         <ShippingInfoForm
           onGoNext={() => onGoToStep(2)}
           onSubmitShippingInfo={onSubmitShippingInfo}
         />
-      </Tabs.Content>
-      <Tabs.Content value="step2">
+      </div>
+      <div className={step === 2 ? "block" : "hidden"}>
         <PaymentInfoForm
           total={total}
           paymentContent={paymentContent}
@@ -105,10 +82,14 @@ const ProgressStepper = ({
           onGoNext={() => onGoToStep(3)}
           onGoPrev={() => onGoToStep(1)}
         />
-      </Tabs.Content>
-      <Tabs.Content value="step3" className="flex flex-col justify-between flex-1 w-full h-full">
-        <div className="mx-4 mt-5 space-y-5">
-          <button className="flex items-center gap-2" onClick={() => onGoToStep(2)}>
+      </div>
+      <div
+        className={`flex flex-col justify-between flex-1 w-full h-full ${
+          step === 3 ? "block" : "hidden"
+        }`}
+      >
+        <div className="h-full mx-4 mt-5 space-y-5 ">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => onGoToStep(2)}>
             <svg
               width="24"
               height="15"
@@ -122,19 +103,29 @@ const ProgressStepper = ({
               />
             </svg>
             Quay lại Thanh toán Pre-order
-          </button>
+          </div>
           <p className="mx-4">
             Khi đã hoàn tất kiểm tra chỉnh sửa chính xác{" "}
-            <button className="font-bold underline text-darkMint">thông tin giao hàng</button> và{" "}
-            <button className="font-bold underline text-darkMint">thông tin pre-order</button>, hãy
-            xác nhận để đơn hàng của bạn được gửi đi.
+            <button onClick={() => onGoToStep(1)} className="font-bold underline text-darkMint">
+              thông tin giao hàng
+            </button>{" "}
+            và{" "}
+            <button onClick={() => onGoToStep(2)} className="font-bold underline text-darkMint">
+              thông tin pre-order
+            </button>
+            , hãy xác nhận để đơn hàng của bạn được gửi đi.
           </p>
         </div>
         <div className="w-full px-4 py-5">
-          <button className="w-full h-[3.25rem] rounded-lg bg-main button-txt">xác nhận</button>
+          <button
+            className="w-full h-[3.25rem] rounded-lg bg-main button-txt"
+            onClick={onSubmitOrder}
+          >
+            xác nhận
+          </button>
         </div>
-      </Tabs.Content>
-    </Tabs.Root>
+      </div>
+    </div>
   );
 };
 
