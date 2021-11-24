@@ -27,7 +27,6 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
     <form
       onSubmit={handleSubmit((data) => {
         onSubmitShippingInfo({ ...data, shippingMethod });
-        console.log(data);
         onGoNext();
       })}
       className="flex flex-col gap-5 mt-[3.125rem] mx-[0.625rem] relative"
