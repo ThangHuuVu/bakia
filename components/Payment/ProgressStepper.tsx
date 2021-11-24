@@ -24,13 +24,15 @@ const ProgressStepper = ({
     <div className="flex flex-col flex-1 h-full mt-5">
       <div className="grid grid-cols-3 px-6">
         <div className="relative flex flex-col items-start">
-          <div className={`max-w-[6rem] mb-[0.625rem] ${step === 1 ? "opacity-100" : "opacity-0"}`}>
+          <div className={`max-w-[6rem] mb-[0.625rem] ${step === 1 ? "visible" : "invisible"}`}>
             Thông tin giao hàng
           </div>
           <div
             className={`border rounded-full w-[2.375rem] h-[2.375rem] grid place-items-center ${
               step === 1 ? "bg-main border-none" : " bg-background border-black"
-            } before:absolute before:-left-5 before:border-0.5 before:border-black before:w-5 after:absolute after:left-0 after:border-0.5 after:border-black after:w-full after:z-[-1]`}
+            } before:absolute before:-left-5 before:border-0.5 before:border-black before:w-5 after:absolute after:left-0 after:border-0.5 ${
+              step > 1 ? "after:border-black" : "after:border-altGrey"
+            } after:w-full after:z-[-1]`}
           >
             1
           </div>
@@ -38,15 +40,21 @@ const ProgressStepper = ({
         <div className="relative flex flex-col items-center">
           <div
             className={`max-w-[6rem] mb-[0.625rem] text-center ${
-              step === 2 ? "opacity-100" : "opacity-0"
+              step === 2 ? "visible" : "invisible"
             }`}
           >
             Thanh toán Pre-order
           </div>
           <div
             className={`border rounded-full w-[2.375rem] h-[2.375rem] grid place-items-center ${
-              step === 2 ? "bg-main border-none" : " bg-background border-black"
-            } after:absolute after:right-0 after:border-0.5 after:border-black after:w-1/2 after:z-[-1] before:absolute before:border-0.5 before:border-current before:z-[-1] before:w-1/2 before:left-0`}
+              step === 2 ? "bg-main" : " bg-background"
+            } ${
+              step === 2 ? "border-none" : step > 2 ? "border-black" : "border-altGrey"
+            } after:absolute after:right-0 after:border-0.5 ${
+              step > 2 ? "after:border-black" : "after:border-altGrey"
+            } after:w-1/2 after:z-[-1] before:absolute before:border-0.5 ${
+              step > 1 ? "before:border-black" : "before:border-altGrey"
+            } before:z-[-1] before:w-1/2 before:left-0`}
           >
             2
           </div>
@@ -54,15 +62,21 @@ const ProgressStepper = ({
         <div className="relative flex flex-col items-end">
           <div
             className={`max-w-[6rem] mb-[0.625rem] text-right ${
-              step === 3 ? "opacity-100" : "opacity-0"
+              step === 3 ? "visible" : "invisible"
             }`}
           >
             Hoàn tất đơn đặt hàng
           </div>
           <div
-            className={`border border-black rounded-full w-[2.375rem] h-[2.375rem] grid place-items-center ${
+            className={`border rounded-full w-[2.375rem] h-[2.375rem] grid place-items-center ${
               step === 3 ? "bg-main border-none" : " bg-background"
-            } before:absolute before:-right-5 before:border-0.5 before:border-black before:w-5  after:absolute after:left-0 after:border-0.5 after:border-current after:w-full after:z-[-1]`}
+            } ${
+              step === 3 ? "border-none" : step > 3 ? "border-black" : "border-altGrey"
+            } after:absolute after:-right-5 after:border-0.5 ${
+              step === 3 ? "before:border-black" : "before:border-altGrey"
+            } ${
+              step === 3 ? "after:border-black" : "after:border-altGrey"
+            } after:w-5 before:absolute before:left-0 before:border-0.5 before:border-current before:w-full before:z-[-1]`}
           >
             3
           </div>
