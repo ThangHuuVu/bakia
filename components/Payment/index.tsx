@@ -33,7 +33,12 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
   return (
     <>
       <div className="w-full px-[0.375rem] min-h-content flex flex-col">
-        <OrderSummary items={selectedCartItems} isHighlight={step > 1} />
+        <OrderSummary
+          items={selectedCartItems}
+          total={total}
+          shippingInfo={shippingInfo}
+          paymentInfo={paymentInfo}
+        />
         <div className="flex flex-col flex-1 h-full mt-5">
           <div className="grid grid-cols-3 px-6">
             <div className="relative flex flex-col items-start">
