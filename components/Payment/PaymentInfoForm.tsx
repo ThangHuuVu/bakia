@@ -232,7 +232,7 @@ const PaymentInfoForm = ({
     <form
       className="mx-4 mt-5 space-y-5 mb-[2.625rem]"
       onSubmit={handleSubmit((data) => {
-        onSubmit(data);
+        onSubmit({ ...data, paymentSource: { ...data.paymentSource, type: paymentMethod } });
         onGoNext();
       })}
     >

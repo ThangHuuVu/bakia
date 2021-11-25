@@ -14,11 +14,29 @@ export enum ShippingMethodEnum {
   fast = "fast",
 }
 
+export const ShippingDetail = {
+  fast: {
+    price: 45000,
+    days: 2,
+    time: "24 - 48 giờ",
+  },
+  standard: {
+    price: 25000,
+    days: 4,
+    time: "3 - 4 ngày",
+  },
+};
+
 export enum PaymentMethodEnum {
   bank = "bank",
   eWallet = "eWallet",
   none = "none",
 }
+
+export const PaymentMethodDetail = {
+  bank: "Ngân hàng",
+  eWallet: "Ví điện tử",
+};
 
 export type ShippingInfo = {
   fullName: string;
@@ -34,6 +52,7 @@ export type ShippingInfo = {
 type PaymentSource = {
   accountNumber: string;
   accountName: string;
+  type: PaymentMethodEnum;
 };
 
 export type PaymentInfo = {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ShippingInfo, ShippingMethodEnum } from "@/lib/types/payment";
+import { ShippingDetail, ShippingInfo, ShippingMethodEnum } from "@/lib/types/payment";
 import { format } from "@/lib/currency";
 
 interface ShippingInfoFormProps {
@@ -152,8 +152,8 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
           }}
         >
           <h3 className="heading-3-black">ship nhanh</h3>
-          <p>{format(45000, "VND")}</p>
-          <p className="text-altGrey">Thời gian giao hàng trong 24 - 48 giờ</p>
+          <p>{format(ShippingDetail["fast"].price, "VND")}</p>
+          <p className="text-altGrey">Thời gian giao hàng trong {ShippingDetail["fast"].time}</p>
         </div>
         <div
           className={`cursor-pointer bg-white h-[6.5rem] flex flex-col items-center pt-3 ${
@@ -164,8 +164,10 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
           }}
         >
           <h3 className="heading-3-black">ship tiêu chuẩn</h3>
-          <p>{format(25000, "VND")}</p>
-          <p className="text-altGrey">Thời gian giao hàng trong 3 - 4 ngày</p>
+          <p>{format(ShippingDetail["standard"].price, "VND")}</p>
+          <p className="text-altGrey">
+            Thời gian giao hàng trong {ShippingDetail["standard"].time}
+          </p>
         </div>
       </div>
       <textarea
