@@ -11,13 +11,14 @@ datasource db {
 }
 
 model Gene {
-  id          Int      @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   image       String
   name        String
   description String
   price       Int
-  currency    Currency @relation(fields: [currencyId], references: [id])
+  currency    Currency    @relation(fields: [currencyId], references: [id])
   currencyId  Int
+  OrderItem   OrderItem[]
 }
 
 model Product {
@@ -40,17 +41,19 @@ model Currency {
 }
 
 model ProductVariant {
-  id         Int           @id @default(autoincrement())
-  thumbnail  String
-  image      String
-  name       String
-  price      Int
-  currency   Currency      @relation(fields: [currencyId], references: [id])
-  product    Product       @relation(fields: [productId], references: [id])
-  productId  Int
-  color      VariantColor? @relation(fields: [colorId], references: [id])
-  colorId    Int?
-  currencyId Int
+  id          Int           @id @default(autoincrement())
+  thumbnail   String
+  image       String
+  name        String
+  price       Int
+  currency    Currency      @relation(fields: [currencyId], references: [id])
+  product     Product       @relation(fields: [productId], references: [id])
+  productId   Int
+  color       VariantColor? @relation(fields: [colorId], references: [id])
+  colorId     Int?
+  currencyId  Int
+  OrderItem   OrderItem?    @relation(fields: [orderItemId], references: [id])
+  orderItemId Int?
 }
 
 model Category {
@@ -72,7 +75,66 @@ model VariantColor {
 }
 
 model DiscountCode {
-  id    Int    @id @default(autoincrement())
-  code  String
-  limit Int
+  id         Int         @id @default(autoincrement())
+  code       String
+  limit      Int
+  orderItems OrderItem[]
+}
+
+enum Gender {
+  MAlE
+  FEMALE
+}
+
+enum ShippingMethod {
+  FAST
+  STANDARD
+}
+
+enum PaymentMethod {
+  BANK
+  EWALLET
+}
+
+model User {
+  id             Int            @id @default(autoincrement())
+  fullName       String
+  email          String
+  phoneNumber    String
+  gender         Gender
+  area           String
+  address        String
+  shippingMethod ShippingMethod
+  note           String
+  orders         Order[]
+}
+
+model OrderItem {
+  id              Int              @id @default(autoincrement())
+  discountCode    DiscountCode     @relation(fields: [discountCodeId], references: [id])
+  discountCodeId  Int
+  total           Int
+  productVariants ProductVariant[]
+  gene            Gene             @relation(fields: [geneId], references: [id])
+  geneId          Int
+  Order           Order?           @relation(fields: [orderId], references: [id])
+  orderId         String?
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  ERROR
+}
+
+model Order {
+  id                String        @id
+  user              User          @relation(fields: [userId], references: [id])
+  userId            Int
+  paymentMethod     PaymentMethod
+  accountHolderName String
+  accountNumber     String
+  items             OrderItem[]
+  total             Int
+  status            OrderStatus
 }
