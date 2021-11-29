@@ -53,7 +53,7 @@ model ProductVariant {
   colorId     Int?
   currencyId  Int
   OrderItem   OrderItem?    @relation(fields: [orderItemId], references: [id])
-  orderItemId Int?
+  orderItemId String?
 }
 
 model Category {
@@ -110,7 +110,7 @@ model User {
 }
 
 model OrderItem {
-  id              Int              @id @default(autoincrement())
+  id              String           @id
   discountCode    DiscountCode     @relation(fields: [discountCodeId], references: [id])
   discountCodeId  Int
   total           Int
