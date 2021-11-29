@@ -48,7 +48,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
               <div
                 className={`border rounded-full w-[2.375rem] h-[2.375rem] grid place-items-center ${
                   step === 1 ? "bg-main border-none" : " bg-background border-black"
-                } before:absolute before:-left-5 before:border-0.5 before:border-black before:w-5 after:absolute after:left-0 after:border-0.5 ${
+                } before:absolute before:bottom-[1.188rem] after:bottom-[1.188rem] before:-left-5 before:border-0.5 before:border-black before:w-5 after:absolute after:left-0 after:border-0.5 ${
                   step > 1 ? "after:border-black" : "after:border-altGrey"
                 } after:w-full after:z-[-1]`}
               >
@@ -74,7 +74,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                     : "border-altGrey text-altGrey"
                 } after:absolute after:right-0 after:border-0.5 ${
                   step > 2 ? "after:border-black" : "after:border-altGrey"
-                } after:w-1/2 after:z-[-1] before:absolute before:border-0.5 ${
+                } after:w-1/2 after:z-[-1] before:absolute before:border-0.5 before:bottom-[1.188rem] after:bottom-[1.188rem] ${
                   step > 1 ? "before:border-black" : "before:border-altGrey"
                 } before:z-[-1] before:w-1/2 before:left-0`}
               >
@@ -102,7 +102,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                   step === 3 ? "before:border-black" : "before:border-altGrey"
                 } ${
                   step === 3 ? "after:border-black" : "after:border-altGrey"
-                } after:w-5 before:absolute before:left-0 before:border-0.5 before:border-current before:w-full before:z-[-1]`}
+                } after:w-5 before:absolute before:left-0 before:bottom-[1.188rem] after:bottom-[1.188rem] before:border-0.5 before:border-current before:w-full before:z-[-1]`}
               >
                 3
               </div>
