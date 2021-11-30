@@ -19,12 +19,6 @@ export const ShippingDetail = {
   },
 };
 
-export enum PaymentMethodEnum {
-  bank = "bank",
-  eWallet = "eWallet",
-  none = "none",
-}
-
 export const PaymentMethodDetail = {
   bank: "Ngân hàng",
   eWallet: "Ví điện tử",

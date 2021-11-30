@@ -1,10 +1,4 @@
-import {
-  BankAccount,
-  EWallet,
-  PaymentContent,
-  PaymentInfo,
-  PaymentMethodEnum,
-} from "@/lib/types/payment";
+import { BankAccount, EWallet, PaymentContent, PaymentInfo } from "@/lib/types/payment";
 import { FieldErrors, useForm, UseFormRegister } from "react-hook-form";
 import { format } from "@/lib/currency";
 import { renderRule, StructuredText } from "react-datocms";
@@ -15,6 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { PaymentMethod } from "@prisma/client";
 
 interface PaymentInfoFormProps {
   total: number;
@@ -227,7 +222,7 @@ const PaymentInfoForm = ({
   } = useForm<PaymentInfo>({
     resolver: yupResolver(paymentSchema),
   });
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodEnum>(PaymentMethodEnum.none);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
   return (
     <form
       className="mx-4 mt-5 space-y-5 mb-[2.625rem]"
@@ -236,7 +231,7 @@ const PaymentInfoForm = ({
         onGoNext();
       })}
     >
-      {paymentMethod === PaymentMethodEnum.none && (
+      {paymentMethod === null && (
         <>
           <div className="flex items-center gap-2 cursor-pointer" onClick={onGoPrev}>
             <svg
@@ -264,13 +259,13 @@ const PaymentInfoForm = ({
           <div className="grid w-full space-y-5">
             <button
               className={`bg-white h-[3.125rem] flex flex-col items-center pt-3`}
-              onClick={() => setPaymentMethod(PaymentMethodEnum.bank)}
+              onClick={() => setPaymentMethod(PaymentMethod.BANK)}
             >
               <p>Thanh toán qua ngân hàng</p>
             </button>
             <button
               className={`bg-white h-[3.125rem] flex flex-col items-center pt-3`}
-              onClick={() => setPaymentMethod(PaymentMethodEnum.eWallet)}
+              onClick={() => setPaymentMethod(PaymentMethod.EWALLET)}
             >
               <p>Thanh toán qua MOMO</p>
             </button>
@@ -300,17 +295,17 @@ const PaymentInfoForm = ({
           </div>
         </>
       )}
-      {paymentMethod === PaymentMethodEnum.bank && (
+      {paymentMethod === PaymentMethod.BANK && (
         <BankPayment
-          onGoBack={() => setPaymentMethod(PaymentMethodEnum.none)}
+          onGoBack={() => setPaymentMethod(null)}
           register={register}
           errors={errors}
           bankAccounts={banks}
         />
       )}
-      {paymentMethod === PaymentMethodEnum.eWallet && (
+      {paymentMethod === PaymentMethod.EWALLET && (
         <EWalletPayment
-          onGoBack={() => setPaymentMethod(PaymentMethodEnum.none)}
+          onGoBack={() => setPaymentMethod(null)}
           register={register}
           errors={errors}
           eWallets={eWallets}

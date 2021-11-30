@@ -111,6 +111,7 @@ export const createOrder = async (
         },
         items: {
           create: items.map((item) => ({
+            id: item.id,
             total: item.total,
             discountCode: {
               connect: { id: item.discountCodeId },
