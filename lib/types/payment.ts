@@ -1,17 +1,9 @@
-enum GenderEnum {
-  female = "female",
-  male = "male",
-}
+import { Gender, PaymentMethod, ShippingMethod } from ".prisma/client";
 
 enum AreaEnum {
   south = "south",
   north = "north",
   mid = "mid",
-}
-
-export enum ShippingMethodEnum {
-  standard = "standard",
-  fast = "fast",
 }
 
 export const ShippingDetail = {
@@ -27,12 +19,6 @@ export const ShippingDetail = {
   },
 };
 
-export enum PaymentMethodEnum {
-  bank = "bank",
-  eWallet = "eWallet",
-  none = "none",
-}
-
 export const PaymentMethodDetail = {
   bank: "Ngân hàng",
   eWallet: "Ví điện tử",
@@ -40,19 +26,19 @@ export const PaymentMethodDetail = {
 
 export type ShippingInfo = {
   fullName: string;
-  gender: GenderEnum;
+  gender: Gender;
   email: string;
   phoneNumber: string;
   area: AreaEnum;
   address: string;
-  shippingMethod: ShippingMethodEnum;
+  shippingMethod: ShippingMethod;
   note: string;
 };
 
 type PaymentSource = {
   accountNumber: string;
   accountName: string;
-  type: PaymentMethodEnum;
+  type: PaymentMethod;
 };
 
 export type PaymentInfo = {
@@ -60,7 +46,7 @@ export type PaymentInfo = {
   paymentSource: PaymentSource;
 };
 
-interface PaymentMethod {
+interface Payment {
   accountHolderName: string;
   accountNumber: string;
   name: string;
@@ -70,11 +56,11 @@ interface PaymentMethod {
   };
 }
 
-export interface BankAccount extends PaymentMethod {
+export interface BankAccount extends Payment {
   branch: string;
 }
 
-export interface EWallet extends PaymentMethod {}
+export interface EWallet extends Payment {}
 
 export type PaymentContent = {
   term: any;

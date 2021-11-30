@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ShippingDetail, ShippingInfo, ShippingMethodEnum } from "@/lib/types/payment";
+import { ShippingDetail, ShippingInfo } from "@/lib/types/payment";
 import { format } from "@/lib/currency";
+import { ShippingMethod } from "@prisma/client";
 
 interface ShippingInfoFormProps {
   onSubmitShippingInfo: (shippingInfo: ShippingInfo) => void;
@@ -9,9 +10,7 @@ interface ShippingInfoFormProps {
 }
 
 const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormProps) => {
-  const [shippingMethod, setShippingMethod] = useState<ShippingMethodEnum>(
-    ShippingMethodEnum.standard
-  );
+  const [shippingMethod, setShippingMethod] = useState<ShippingMethod>(ShippingMethod.STANDARD);
   const {
     register,
     handleSubmit,
@@ -145,10 +144,10 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
       <div className="grid w-full space-y-5">
         <div
           className={`cursor-pointer bg-white h-[6.5rem] flex flex-col items-center pt-3 ${
-            shippingMethod === ShippingMethodEnum.fast ? "border border-main" : "border-none"
+            shippingMethod === ShippingMethod.FAST ? "border border-main" : "border-none"
           }`}
           onClick={() => {
-            setShippingMethod(ShippingMethodEnum.fast);
+            setShippingMethod(ShippingMethod.FAST);
           }}
         >
           <h3 className="heading-3-black">ship nhanh</h3>
@@ -157,10 +156,10 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
         </div>
         <div
           className={`cursor-pointer bg-white h-[6.5rem] flex flex-col items-center pt-3 ${
-            shippingMethod === ShippingMethodEnum.standard ? "border border-main" : "border-none"
+            shippingMethod === ShippingMethod.STANDARD ? "border border-main" : "border-none"
           }`}
           onClick={() => {
-            setShippingMethod(ShippingMethodEnum.standard);
+            setShippingMethod(ShippingMethod.STANDARD);
           }}
         >
           <h3 className="heading-3-black">ship tiêu chuẩn</h3>

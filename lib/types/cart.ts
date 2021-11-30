@@ -6,6 +6,7 @@ export type CartItem = {
   gene: GeneType;
   quantity: number;
   discountCode?: string;
+  discountCodeId?: number;
   createdAt?: Date;
   updatedAt?: Date;
   total?: number;
