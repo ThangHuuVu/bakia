@@ -52,7 +52,7 @@ const Cart = ({ discount }: CartProps) => {
 
   return (
     <>
-      <div className="md:w-full md:flex md:mt-[8.5rem]">
+      <div className="h-full md:w-full md:flex md:mt-[8.5rem]">
         <div className="fixed bottom-0 z-20 w-full px-4 py-2 bg-white footer-shadow md:hidden">
           <p className="text-altGrey">
             {selectedItemCount === 0
@@ -168,7 +168,7 @@ const Cart = ({ discount }: CartProps) => {
             ))}
           </ul>
         ) : (
-          <div className="min-w-[49.5rem] grid place-items-center">
+          <div className="h-full min-h-content md:min-w-[49.5rem] grid place-items-center">
             <p>
               Giỏ hàng trống.{" "}
               <Link href="/custom">
