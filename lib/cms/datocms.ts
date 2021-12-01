@@ -134,6 +134,9 @@ export async function getPaymentContent(preview: boolean) {
           accountHolderName
           accountNumber
         }
+        successMessage {
+          value
+        }
       }
     }
   `,
