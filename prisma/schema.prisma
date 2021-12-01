@@ -111,8 +111,8 @@ model User {
 
 model OrderItem {
   id              String           @id
-  discountCode    DiscountCode     @relation(fields: [discountCodeId], references: [id])
-  discountCodeId  Int
+  discountCode    DiscountCode?    @relation(fields: [discountCodeId], references: [id])
+  discountCodeId  Int?
   total           Int
   productVariants ProductVariant[]
   gene            Gene             @relation(fields: [geneId], references: [id])

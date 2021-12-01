@@ -5,21 +5,39 @@ import OrderSummary from "./OrderSummary";
 import ShippingInfoForm from "./ShippingInfoForm";
 import PaymentInfoForm from "./PaymentInfoForm";
 import { PaymentContent, PaymentInfo, ShippingInfo } from "@/lib/types/payment";
+import { renderRule, StructuredText } from "react-datocms";
+import { isLink } from "datocms-structured-text-utils";
+import Link from "next/link";
 
 const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
   const [cart] = useLocalStorage<CartItem[]>("cart", []);
   const [step, setStep] = useState(1);
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>();
+  const [orderId, setOrderId] = useState<string>();
   const selectedCartItems = cart.filter((item) => item.selected);
   const total = selectedCartItems.reduce((res, current) => {
     return res + current.total || 0;
   }, 0);
-  const onSubmitOrder = useCallback(() => {
-    console.log("submit order");
-    console.log(shippingInfo);
-    console.log(paymentInfo);
-  }, [shippingInfo, paymentInfo]);
+  const onSubmitOrder = useCallback(async () => {
+    const res = await fetch("/api/order", {
+      method: "POST",
+      body: JSON.stringify({
+        shippingInfo,
+        paymentInfo,
+        items: selectedCartItems,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const { error, orderId: returnedId } = await res.json();
+    if (error) {
+      console.log(error);
+      return;
+    }
+    setOrderId(returnedId);
+  }, [shippingInfo, paymentInfo, selectedCartItems]);
   const onGoToStep = useCallback((step: number) => {
     setStep(step);
   }, []);
@@ -128,42 +146,90 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
               step === 3 ? "block" : "hidden"
             }`}
           >
-            <div className="h-full mx-4 mt-5 space-y-5 ">
-              <div className="flex items-center gap-2 cursor-pointer" onClick={() => onGoToStep(2)}>
-                <svg
-                  width="24"
-                  height="15"
-                  viewBox="0 0 24 15"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M22.6364 6.16071H4.63636L8.59091 2.27679C9.13636 1.74107 9.13636 0.9375 8.59091 0.401786C8.04545 -0.133929 7.22727 -0.133929 6.68182 0.401786L0.409091 6.5625C-0.136364 7.09821 -0.136364 7.90179 0.409091 8.4375L6.68182 14.5982C7.22727 15.1339 8.04545 15.1339 8.59091 14.5982C9.13636 14.0625 9.13636 13.2589 8.59091 12.7232L4.63636 8.83929H22.6364C23.3182 8.83929 24 8.30357 24 7.5C24 6.69643 23.3182 6.16071 22.6364 6.16071Z"
-                    fill="black"
+            {orderId ? (
+              <>
+                <div className="h-full mx-4 mt-5 space-y-5 ">
+                  <p className="font-bold mobile-body-txt">
+                    Chúc mừng, BAKIA team đã nhận được đơn đặt hàng của bạn! :-)
+                  </p>
+                  <p className="mobile-body-txt">
+                    Bạn đã đặt {selectedCartItems.length} Bakia GENE1: Van Lang Heritage với mã đặt
+                    hàng là {orderId}
+                  </p>
+                  <StructuredText
+                    data={paymentContent.successMessage}
+                    customRules={[
+                      renderRule(isLink, ({ node }) => (
+                        <Link href={node.url}>
+                          <a className="underline text-darkMint">
+                            {node.children.map((child) => {
+                              return <child.type key={child.value}>{child.value}</child.type>;
+                            })}
+                          </a>
+                        </Link>
+                      )),
+                    ]}
                   />
-                </svg>
-                Quay lại Thanh toán Pre-order
-              </div>
-              <p className="mx-4">
-                Khi đã hoàn tất kiểm tra chỉnh sửa chính xác{" "}
-                <button onClick={() => onGoToStep(1)} className="font-bold underline text-darkMint">
-                  thông tin giao hàng
-                </button>{" "}
-                và{" "}
-                <button onClick={() => onGoToStep(2)} className="font-bold underline text-darkMint">
-                  thông tin pre-order
-                </button>
-                , hãy xác nhận để đơn hàng của bạn được gửi đi.
-              </p>
-            </div>
-            <div className="w-full px-4 py-5">
-              <button
-                className="w-full h-[3.25rem] rounded-lg bg-main button-txt"
-                onClick={onSubmitOrder}
-              >
-                xác nhận
-              </button>
-            </div>
+                </div>
+                <div className="w-full px-4 py-5">
+                  <Link href="/">
+                    <a>
+                      <div className="w-full h-[3.25rem] rounded-lg bg-main button-txt flex items-center justify-center">
+                        hoàn tất
+                      </div>
+                    </a>
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="h-full mx-4 mt-5 space-y-5 ">
+                  <div
+                    className="flex items-center gap-2 cursor-pointer"
+                    onClick={() => onGoToStep(2)}
+                  >
+                    <svg
+                      width="24"
+                      height="15"
+                      viewBox="0 0 24 15"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M22.6364 6.16071H4.63636L8.59091 2.27679C9.13636 1.74107 9.13636 0.9375 8.59091 0.401786C8.04545 -0.133929 7.22727 -0.133929 6.68182 0.401786L0.409091 6.5625C-0.136364 7.09821 -0.136364 7.90179 0.409091 8.4375L6.68182 14.5982C7.22727 15.1339 8.04545 15.1339 8.59091 14.5982C9.13636 14.0625 9.13636 13.2589 8.59091 12.7232L4.63636 8.83929H22.6364C23.3182 8.83929 24 8.30357 24 7.5C24 6.69643 23.3182 6.16071 22.6364 6.16071Z"
+                        fill="black"
+                      />
+                    </svg>
+                    Quay lại Thanh toán Pre-order
+                  </div>
+                  <p className="mx-4">
+                    Khi đã hoàn tất kiểm tra chỉnh sửa chính xác{" "}
+                    <button
+                      onClick={() => onGoToStep(1)}
+                      className="font-bold underline text-darkMint"
+                    >
+                      thông tin giao hàng
+                    </button>{" "}
+                    và{" "}
+                    <button
+                      onClick={() => onGoToStep(2)}
+                      className="font-bold underline text-darkMint"
+                    >
+                      thông tin pre-order
+                    </button>
+                    , hãy xác nhận để đơn hàng của bạn được gửi đi.
+                  </p>
+                </div>
+                <div className="w-full px-4 py-5">
+                  <button
+                    className="w-full h-[3.25rem] rounded-lg bg-main button-txt"
+                    onClick={onSubmitOrder}
+                  >
+                    xác nhận
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

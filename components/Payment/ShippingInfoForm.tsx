@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { ShippingDetail, ShippingInfo } from "@/lib/types/payment";
 import { format } from "@/lib/currency";
 import { ShippingMethod } from "@prisma/client";
+import { Gender } from ".prisma/client";
 
 interface ShippingInfoFormProps {
   onSubmitShippingInfo: (shippingInfo: ShippingInfo) => void;
@@ -56,21 +57,21 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
           <input
             {...register("gender", { required: true })}
             type="radio"
-            id="male"
-            value="male"
+            id={Gender.MAlE}
+            value={Gender.MAlE}
             className="mr-[0.875rem]"
           />
-          <label htmlFor="male">Anh</label>
+          <label htmlFor={Gender.MAlE}>Anh</label>
         </div>
         <div>
           <input
             {...register("gender", { required: true })}
             type="radio"
-            id="female"
-            value="female"
+            id={Gender.FEMALE}
+            value={Gender.FEMALE}
             className="mr-[0.875rem]"
           />
-          <label htmlFor="female">Chị</label>
+          <label htmlFor={Gender.FEMALE}>Chị</label>
         </div>
       </div>
       <input

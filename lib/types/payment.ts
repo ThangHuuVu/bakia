@@ -66,4 +66,5 @@ export type PaymentContent = {
   term: any;
   banks: BankAccount[];
   eWallets: EWallet[];
+  successMessage: any;
 };

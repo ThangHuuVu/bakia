@@ -113,9 +113,11 @@ export const createOrder = async (
           create: items.map((item) => ({
             id: item.id,
             total: item.total,
-            discountCode: {
-              connect: { id: item.discountCodeId },
-            },
+            discountCode: item.discountCodeId
+              ? {
+                  connect: { id: item.discountCodeId },
+                }
+              : undefined,
             gene: {
               connect: { id: item.gene.id },
             },
@@ -124,6 +126,24 @@ export const createOrder = async (
             },
           })),
         },
+      },
+    });
+    return order;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
+export const getOrder = async (id: string) => {
+  try {
+    const order = await prisma.order.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        items: true,
+        user: true,
       },
     });
     return order;
