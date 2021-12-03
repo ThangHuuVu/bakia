@@ -113,6 +113,7 @@ model OrderItem {
   id              String           @id
   discountCode    DiscountCode?    @relation(fields: [discountCodeId], references: [id])
   discountCodeId  Int?
+  quantity        Int
   total           Int
   productVariants ProductVariant[]
   gene            Gene             @relation(fields: [geneId], references: [id])
