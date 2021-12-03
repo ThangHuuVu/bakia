@@ -113,6 +113,7 @@ export const createOrder = async (
           create: items.map((item) => ({
             id: item.id,
             total: item.total,
+            quantity: item.quantity,
             discountCode: item.discountCodeId
               ? {
                   connect: { id: item.discountCodeId },
@@ -142,7 +143,25 @@ export const getOrder = async (id: string) => {
         id,
       },
       include: {
-        items: true,
+        items: {
+          include: {
+            gene: {
+              include: {
+                currency: true,
+              },
+            },
+            productVariants: {
+              include: {
+                color: true,
+                product: {
+                  include: {
+                    category: true,
+                  },
+                },
+              },
+            },
+          },
+        },
         user: true,
       },
     });

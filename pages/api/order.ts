@@ -12,8 +12,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } else if (req.method === "GET") {
     const orderId = req.query.orderId as string;
-    const order = await getOrder(orderId);
-    return res.status(200).json({ order });
+    if (orderId) {
+      const order = await getOrder(orderId);
+      return res.status(200).json({ order });
+    }
+    return res.status(400);
   }
 
   return res.send("Method not allowed.");

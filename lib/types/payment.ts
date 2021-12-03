@@ -1,4 +1,6 @@
 import { Gender, PaymentMethod, ShippingMethod } from ".prisma/client";
+import { getOrder } from "../db";
+import { Awaited } from "./common";
 
 enum AreaEnum {
   south = "south",
@@ -7,12 +9,12 @@ enum AreaEnum {
 }
 
 export const ShippingDetail = {
-  fast: {
+  FAST: {
     price: 45000,
     days: 2,
     time: "24 - 48 giờ",
   },
-  standard: {
+  STANDARD: {
     price: 25000,
     days: 4,
     time: "3 - 4 ngày",
@@ -68,3 +70,5 @@ export type PaymentContent = {
   eWallets: EWallet[];
   successMessage: any;
 };
+
+export type OrderType = Awaited<ReturnType<typeof getOrder>>;

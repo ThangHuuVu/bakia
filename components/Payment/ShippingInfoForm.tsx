@@ -152,8 +152,8 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
           }}
         >
           <h3 className="heading-3-black">ship nhanh</h3>
-          <p>{format(ShippingDetail["fast"].price, "VND")}</p>
-          <p className="text-altGrey">Thời gian giao hàng trong {ShippingDetail["fast"].time}</p>
+          <p>{format(ShippingDetail["FAST"].price, "VND")}</p>
+          <p className="text-altGrey">Thời gian giao hàng trong {ShippingDetail["FAST"].time}</p>
         </div>
         <div
           className={`cursor-pointer bg-white h-[6.5rem] flex flex-col items-center pt-3 ${
@@ -164,9 +164,9 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
           }}
         >
           <h3 className="heading-3-black">ship tiêu chuẩn</h3>
-          <p>{format(ShippingDetail["standard"].price, "VND")}</p>
+          <p>{format(ShippingDetail["STANDARD"].price, "VND")}</p>
           <p className="text-altGrey">
-            Thời gian giao hàng trong {ShippingDetail["standard"].time}
+            Thời gian giao hàng trong {ShippingDetail["STANDARD"].time}
           </p>
         </div>
       </div>

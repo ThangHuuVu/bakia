@@ -1,24 +1,46 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { CartItem } from "@/lib/types/cart";
 import OrderSummary from "./OrderSummary";
 import ShippingInfoForm from "./ShippingInfoForm";
 import PaymentInfoForm from "./PaymentInfoForm";
-import { PaymentContent, PaymentInfo, ShippingInfo } from "@/lib/types/payment";
+import { OrderType, PaymentContent, PaymentInfo, ShippingInfo } from "@/lib/types/payment";
 import { renderRule, StructuredText } from "react-datocms";
 import { isLink } from "datocms-structured-text-utils";
 import Link from "next/link";
+import useSWR, { mutate } from "swr";
+import fetcher from "@/lib/fetcher";
 
 const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
-  const [cart] = useLocalStorage<CartItem[]>("cart", []);
+  const [cart, setCart] = useLocalStorage<CartItem[]>("cart", []);
   const [step, setStep] = useState(1);
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>();
-  const [orderId, setOrderId] = useState<string>();
+  const [orderId, setOrderId] = useState<string>("");
+
   const selectedCartItems = cart.filter((item) => item.selected);
-  const total = selectedCartItems.reduce((res, current) => {
+  const [displayItems, setDisplayItems] = useState<CartItem[]>(selectedCartItems);
+  const { data: returnedOrder } = useSWR<OrderType>(
+    orderId ? `/api/order/?orderId=${orderId}` : null,
+    fetcher
+  );
+
+  useEffect(() => {
+    if (returnedOrder) {
+      const returnedItems = returnedOrder.items.map<CartItem>((item) => ({
+        id: item.id,
+        gene: item.gene,
+        quantity: item.quantity,
+        selectedVariants: item.productVariants,
+      }));
+      setDisplayItems(returnedItems);
+    }
+  }, [returnedOrder]);
+
+  const total = displayItems.reduce((res, current) => {
     return res + current.total || 0;
   }, 0);
+
   const onSubmitOrder = useCallback(async () => {
     const res = await fetch("/api/order", {
       method: "POST",
@@ -33,17 +55,22 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
     });
     const { error, orderId: returnedId } = await res.json();
     if (error) {
-      console.log(error);
+      console.error(error);
       return;
     }
     setOrderId(returnedId);
-  }, [shippingInfo, paymentInfo, selectedCartItems]);
+    mutate(`/api/order/?orderId=${returnedId}`, returnedOrder, false);
+    setCart(cart.filter((item) => !item.selected));
+  }, [shippingInfo, paymentInfo, selectedCartItems, setCart, cart, returnedOrder]);
+
   const onGoToStep = useCallback((step: number) => {
     setStep(step);
   }, []);
+
   const onSubmitShippingInfo = useCallback((shippingInfo: ShippingInfo) => {
     setShippingInfo(shippingInfo);
   }, []);
+
   const onSubmitPaymentInfo = useCallback((paymentInfo: PaymentInfo) => {
     setPaymentInfo(paymentInfo);
   }, []);
@@ -52,7 +79,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
     <>
       <div className="w-full px-[0.375rem] min-h-content flex flex-col">
         <OrderSummary
-          items={selectedCartItems}
+          items={displayItems}
           total={total}
           shippingInfo={shippingInfo}
           paymentInfo={paymentInfo}
@@ -153,8 +180,8 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                     Chúc mừng, BAKIA team đã nhận được đơn đặt hàng của bạn! :-)
                   </p>
                   <p className="mobile-body-txt">
-                    Bạn đã đặt {selectedCartItems.length} Bakia GENE1: Van Lang Heritage với mã đặt
-                    hàng là {orderId}
+                    Bạn đã đặt {displayItems.length} Bakia GENE1: Van Lang Heritage với mã đặt hàng
+                    là {orderId}
                   </p>
                   <StructuredText
                     data={paymentContent.successMessage}
