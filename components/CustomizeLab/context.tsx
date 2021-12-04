@@ -1,4 +1,4 @@
-import { VariantColor } from ".prisma/client";
+import { VariantColor } from "@prisma/client";
 import { Container } from "@/lib/types/common";
 import { CategoryType, GeneType, ProductType, VariantType } from "@/lib/types/custom";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";

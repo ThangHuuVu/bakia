@@ -1,4 +1,4 @@
-import { BankAccount, EWallet, PaymentContent, PaymentInfo } from "@/lib/types/payment";
+import { BankAccount, EWallet, Payment, PaymentContent, PaymentInfo } from "@/lib/types/payment";
 import { FieldErrors, useForm, UseFormRegister } from "react-hook-form";
 import { format } from "@/lib/currency";
 import { renderRule, StructuredText } from "react-datocms";
@@ -10,6 +10,7 @@ import Image from "next/image";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { PaymentMethod } from "@prisma/client";
+import * as Tabs from "@radix-ui/react-tabs";
 
 interface PaymentInfoFormProps {
   total: number;
@@ -18,6 +19,56 @@ interface PaymentInfoFormProps {
   onGoNext: () => void;
   onGoPrev: () => void;
 }
+
+const PaymentAccounts = ({ accounts }: { accounts: BankAccount[] | EWallet[] }) => {
+  return (
+    <Tabs.Root
+      defaultValue={accounts[0].id}
+      className="hidden w-full bg-white md:block h-[14.125rem]"
+    >
+      <Tabs.List className="flex items-center justify-between w-full">
+        {accounts.map((account) => {
+          return (
+            <Tabs.Trigger
+              style={{ width: `${100 / accounts.length}%` }}
+              className={`grid h-14 place-content-center cursor-pointer payment-tab`}
+              key={account.id}
+              value={account.id}
+            >
+              <Image
+                height={32}
+                width={100}
+                src={account.image.url}
+                alt={account.name}
+                blurDataURL={account.image.blurUpThumb}
+              />
+            </Tabs.Trigger>
+          );
+        })}
+      </Tabs.List>
+      {accounts.map((account) => {
+        return (
+          <Tabs.Content key={account.id} value={account.id} className="px-4 py-5">
+            <p>{account.name}</p>
+            <div>
+              <span className="text-altGrey">Số tài khoản:</span>{" "}
+              <span>{account.accountNumber}</span>
+            </div>
+            <div>
+              <span className="text-altGrey">Chủ tài khoản:</span>{" "}
+              <span className="uppercase">{account.accountHolderName}</span>
+            </div>
+            {account.branch && (
+              <div>
+                <span className="text-altGrey">Chi nhánh:</span> <span>{account.branch}</span>
+              </div>
+            )}
+          </Tabs.Content>
+        );
+      })}
+    </Tabs.Root>
+  );
+};
 
 interface BankPaymentProps {
   onGoBack: () => void;
@@ -28,8 +79,11 @@ interface BankPaymentProps {
 
 const BankPayment = ({ onGoBack, register, errors, bankAccounts }: BankPaymentProps) => {
   return (
-    <div className="relative">
-      <button className="flex items-center gap-2" onClick={onGoBack}>
+    <div className="md:relative md:mt-[8.75rem]">
+      <button
+        className="absolute flex items-center gap-2 cursor-pointer top-5 md:-top-20"
+        onClick={onGoBack}
+      >
         <svg
           width="24"
           height="15"
@@ -44,32 +98,34 @@ const BankPayment = ({ onGoBack, register, errors, bankAccounts }: BankPaymentPr
         </svg>
         Chọn hình thức thanh toán khác
       </button>
-      {Object.keys(errors).length > 0 && (
-        <span className="absolute text-error">Vui lòng đáp ứng thông tin trong các mục (*)</span>
-      )}
-      <p className="mt-[2.375rem]">Thông tin tài khoản nguồn</p>
-      <div className="flex flex-col w-full gap-5 mt-8">
+      <p className="">Thông tin tài khoản nguồn</p>
+      <div className="relative flex flex-col w-full gap-5 mt-5 md:flex-row md:mt-[0.625rem]">
+        {Object.keys(errors).length > 0 && (
+          <span className="absolute text-error -top-20">
+            Vui lòng đáp ứng thông tin trong các mục (*)
+          </span>
+        )}
         <input
-          className={`h-[2.75rem] px-4 rounded ${
+          className={`h-[2.75rem] md:h-[2.625rem] px-4 rounded ${
             errors.paymentSource?.accountNumber
               ? "border border-error placeholder-error"
               : "border-none"
-          }`}
+          } md:w-full`}
           placeholder="Số tài khoản*"
           {...register("paymentSource.accountNumber")}
         />
         <input
-          className={`h-[2.75rem] px-4 rounded ${
+          className={`h-[2.75rem] md:h-[2.625rem] px-4 rounded ${
             errors.paymentSource?.accountName
               ? "border border-error placeholder-error"
               : "border-none"
-          }`}
+          } md:w-full`}
           placeholder="Tên chủ tài khoản*"
           {...register("paymentSource.accountName")}
         />
       </div>
-      <p className="my-5 ml-4">Thông tin tài khoản nhận thanh toán</p>
-      <Swiper className="payment-swiper">
+      <p className="my-5 ml-4 md:my-4">Thông tin tài khoản nhận thanh toán</p>
+      <Swiper className="md:hidden payment-swiper">
         {bankAccounts.length > 0 &&
           bankAccounts.map((bank) => (
             <SwiperSlide key={bank.accountNumber} className="payment-swiper-slide">
@@ -100,7 +156,8 @@ const BankPayment = ({ onGoBack, register, errors, bankAccounts }: BankPaymentPr
             </SwiperSlide>
           ))}
       </Swiper>
-      <div className="w-full px-4 py-5 rounded">
+      <PaymentAccounts accounts={bankAccounts} />
+      <div className="w-full px-4 py-5 rounded md:hidden">
         <input
           type="submit"
           className="w-full h-[3.25rem] rounded-lg bg-main button-txt"
@@ -121,8 +178,11 @@ interface EWalletPaymentProps {
 
 const EWalletPayment = ({ onGoBack, register, errors, eWallets }: EWalletPaymentProps) => {
   return (
-    <div className="relative">
-      <button className="flex items-center gap-2" onClick={onGoBack}>
+    <div className="md:relative">
+      <button
+        className="absolute flex items-center gap-2 cursor-pointer top-5 md:top-8"
+        onClick={onGoBack}
+      >
         <svg
           width="24"
           height="15"
@@ -137,13 +197,15 @@ const EWalletPayment = ({ onGoBack, register, errors, eWallets }: EWalletPayment
         </svg>
         Chọn hình thức thanh toán khác
       </button>
-      {Object.keys(errors).length > 0 && (
-        <span className="absolute text-error">Vui lòng đáp ứng thông tin trong các mục (*)</span>
-      )}
-      <p className="mt-[2.375rem]">Thông tin tài khoản nguồn</p>
-      <div className="flex flex-col w-full gap-5 mt-8">
+      <p className="mt-[5.75rem]">Thông tin tài khoản nguồn</p>
+      <div className="relative flex flex-col w-full gap-5 mt-5">
+        {Object.keys(errors).length > 0 && (
+          <span className="absolute text-error -top-20">
+            Vui lòng đáp ứng thông tin trong các mục (*)
+          </span>
+        )}
         <input
-          className={`h-[2.75rem] px-4 rounded ${
+          className={`h-[2.75rem] md:h-[2.625 md:h-[2.625]] px-4 rounded ${
             errors.paymentSource?.accountNumber
               ? "border border-error placeholder-error"
               : "border-none"
@@ -152,7 +214,7 @@ const EWalletPayment = ({ onGoBack, register, errors, eWallets }: EWalletPayment
           {...register("paymentSource.accountNumber", { required: true })}
         />
         <input
-          className={`h-[2.75rem] px-4 rounded ${
+          className={`h-[2.75rem] md:h-[2.625 md:h-[2.625]] px-4 rounded ${
             errors.paymentSource?.accountName
               ? "border border-error placeholder-error"
               : "border-none"
@@ -162,10 +224,10 @@ const EWalletPayment = ({ onGoBack, register, errors, eWallets }: EWalletPayment
         />
       </div>
       <p className="my-5 ml-4">Thông tin tài khoản nhận thanh toán</p>
-      <Swiper className="payment-swiper">
+      <Swiper className="md:hidden payment-swiper">
         {eWallets.length > 0 &&
           eWallets.map((eWallet) => (
-            <SwiperSlide key={eWallet.accountNumber} className="payment-swiper-slide">
+            <SwiperSlide key={eWallet.name} className="payment-swiper-slide">
               <div className="flex flex-col bg-white gap-[0.625rem] pt-3 pb-9 px-4 w-full">
                 <div className="flex items-center justify-center w-full">
                   <Image
@@ -189,10 +251,11 @@ const EWalletPayment = ({ onGoBack, register, errors, eWallets }: EWalletPayment
             </SwiperSlide>
           ))}
       </Swiper>
+      <PaymentAccounts accounts={eWallets} />
       <div className="w-full px-4 py-5 rounded">
         <input
           type="submit"
-          className="w-full h-[3.25rem] rounded-lg bg-main button-txt"
+          className="w-full h-[3.25rem] rounded-lg bg-main button-txt md:hidden"
           value="
               tiếp tục"
         />
@@ -224,94 +287,127 @@ const PaymentInfoForm = ({
   });
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
   return (
-    <form
-      className="mx-4 mt-5 space-y-5 mb-[2.625rem]"
-      onSubmit={handleSubmit((data) => {
-        onSubmit({ ...data, paymentSource: { ...data.paymentSource, type: paymentMethod } });
-        onGoNext();
-      })}
-    >
-      {paymentMethod === null && (
-        <>
-          <div className="flex items-center gap-2 cursor-pointer" onClick={onGoPrev}>
-            <svg
-              width="24"
-              height="15"
-              viewBox="0 0 24 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+    <>
+      <div
+        className="absolute items-center hidden gap-2 cursor-pointer md:flex top-5 md:-top-10"
+        onClick={onGoPrev}
+      >
+        <svg
+          width="24"
+          height="15"
+          viewBox="0 0 24 15"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M22.6364 6.16071H4.63636L8.59091 2.27679C9.13636 1.74107 9.13636 0.9375 8.59091 0.401786C8.04545 -0.133929 7.22727 -0.133929 6.68182 0.401786L0.409091 6.5625C-0.136364 7.09821 -0.136364 7.90179 0.409091 8.4375L6.68182 14.5982C7.22727 15.1339 8.04545 15.1339 8.59091 14.5982C9.13636 14.0625 9.13636 13.2589 8.59091 12.7232L4.63636 8.83929H22.6364C23.3182 8.83929 24 8.30357 24 7.5C24 6.69643 23.3182 6.16071 22.6364 6.16071Z"
+            fill="black"
+          />
+        </svg>
+        Quay lại Thông tin giao hàng
+      </div>
+      <form
+        className="mx-4 mt-[4.625rem] mb-[2.625rem] md:my-0 md:mx-0"
+        onSubmit={handleSubmit((data) => {
+          onSubmit({ ...data, paymentSource: { ...data.paymentSource, type: paymentMethod } });
+          onGoNext();
+        })}
+      >
+        {paymentMethod === null && (
+          <>
+            <div
+              className="absolute flex items-center gap-2 cursor-pointer md:hidden top-5 md:top-8"
+              onClick={onGoPrev}
             >
-              <path
-                d="M22.6364 6.16071H4.63636L8.59091 2.27679C9.13636 1.74107 9.13636 0.9375 8.59091 0.401786C8.04545 -0.133929 7.22727 -0.133929 6.68182 0.401786L0.409091 6.5625C-0.136364 7.09821 -0.136364 7.90179 0.409091 8.4375L6.68182 14.5982C7.22727 15.1339 8.04545 15.1339 8.59091 14.5982C9.13636 14.0625 9.13636 13.2589 8.59091 12.7232L4.63636 8.83929H22.6364C23.3182 8.83929 24 8.30357 24 7.5C24 6.69643 23.3182 6.16071 22.6364 6.16071Z"
-                fill="black"
-              />
-            </svg>
-            Quay lại Thông tin giao hàng
-          </div>
-          <div className="mx-4">
-            <p>
-              Số tiền cần thanh toán cho pre-order của bạn là{" "}
-              <strong className="text-darkMint">{format(total, "VND")}</strong>
-            </p>
+              <svg
+                width="24"
+                height="15"
+                viewBox="0 0 24 15"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M22.6364 6.16071H4.63636L8.59091 2.27679C9.13636 1.74107 9.13636 0.9375 8.59091 0.401786C8.04545 -0.133929 7.22727 -0.133929 6.68182 0.401786L0.409091 6.5625C-0.136364 7.09821 -0.136364 7.90179 0.409091 8.4375L6.68182 14.5982C7.22727 15.1339 8.04545 15.1339 8.59091 14.5982C9.13636 14.0625 9.13636 13.2589 8.59091 12.7232L4.63636 8.83929H22.6364C23.3182 8.83929 24 8.30357 24 7.5C24 6.69643 23.3182 6.16071 22.6364 6.16071Z"
+                  fill="black"
+                />
+              </svg>
+              Quay lại Thông tin giao hàng
+            </div>
+            <div className="mx-4">
+              <p>
+                Số tiền cần thanh toán cho pre-order của bạn là{" "}
+                <strong className="text-darkMint">{format(total, "VND")}</strong>
+              </p>
 
-            <p className="mt-9">Chọn hình thức thanh toán</p>
-          </div>
-          <div className="grid w-full space-y-5">
-            <button
-              className={`bg-white h-[3.125rem] flex flex-col items-center pt-3`}
-              onClick={() => setPaymentMethod(PaymentMethod.BANK)}
-            >
-              <p>Thanh toán qua ngân hàng</p>
-            </button>
-            <button
-              className={`bg-white h-[3.125rem] flex flex-col items-center pt-3`}
-              onClick={() => setPaymentMethod(PaymentMethod.EWALLET)}
-            >
-              <p>Thanh toán qua MOMO</p>
-            </button>
-          </div>
-          <p className="ml-4 text-error">Bạn cần đồng ý trước khi thanh toán</p>
-          <div className="relative flex flex-col gap-5">
-            <div className="pl-4">
-              <StructuredText
-                data={term}
-                customRules={[
-                  renderRule(isLink, ({ node }) => (
-                    <Link href={node.url}>
-                      <a className="underline text-darkMint">
-                        {node.children.map((child) => {
-                          return <child.type key={child.value}>{child.value}</child.type>;
-                        })}
-                      </a>
-                    </Link>
-                  )),
-                ]}
-              />
+              <p className="mb-5 mt-9 md:mb-5 md:mt-5">Chọn hình thức thanh toán</p>
             </div>
-            <div className="flex items-center justify-center gap-[0.875rem]">
-              <input id="agreedTerm" {...register("agreedTerm")} type="checkbox" />
-              <label htmlFor="agreedTerm">Tôi đồng ý với quy định thanh toán</label>
+            <div className="flex flex-col w-full gap-5 md:flex-row md:gap-[1.875rem]">
+              <button
+                className={`bg-white h-[3.125rem] flex flex-col items-center pt-3 md:w-full`}
+                onClick={() => setPaymentMethod(PaymentMethod.BANK)}
+              >
+                <p>Thanh toán qua ngân hàng</p>
+              </button>
+              <button
+                className={`bg-white h-[3.125rem] flex flex-col items-center pt-3 md:w-full`}
+                onClick={() => setPaymentMethod(PaymentMethod.EWALLET)}
+              >
+                <p>Thanh toán qua MOMO</p>
+              </button>
             </div>
-          </div>
-        </>
-      )}
-      {paymentMethod === PaymentMethod.BANK && (
-        <BankPayment
-          onGoBack={() => setPaymentMethod(null)}
-          register={register}
-          errors={errors}
-          bankAccounts={banks}
-        />
-      )}
-      {paymentMethod === PaymentMethod.EWALLET && (
-        <EWalletPayment
-          onGoBack={() => setPaymentMethod(null)}
-          register={register}
-          errors={errors}
-          eWallets={eWallets}
-        />
-      )}
-    </form>
+            <div className="relative flex flex-col gap-5 mt-10">
+              {errors.agreedTerm && (
+                <p className="absolute -top-8 text-error">Bạn cần đồng ý trước khi thanh toán</p>
+              )}
+              <div className="pl-4">
+                <StructuredText
+                  data={term}
+                  customRules={[
+                    renderRule(isLink, ({ node }) => (
+                      <Link href={node.url}>
+                        <a className="underline text-darkMint">
+                          {node.children.map((child) => {
+                            return <child.type key={child.value}>{child.value}</child.type>;
+                          })}
+                        </a>
+                      </Link>
+                    )),
+                  ]}
+                />
+              </div>
+              <div className="flex items-center justify-center gap-[0.875rem]">
+                <input id="agreedTerm" {...register("agreedTerm")} type="checkbox" />
+                <label htmlFor="agreedTerm">Tôi đồng ý với quy định thanh toán</label>
+              </div>
+            </div>
+          </>
+        )}
+        {paymentMethod === PaymentMethod.BANK && (
+          <BankPayment
+            onGoBack={() => setPaymentMethod(null)}
+            register={register}
+            errors={errors}
+            bankAccounts={banks}
+          />
+        )}
+        {paymentMethod === PaymentMethod.EWALLET && (
+          <EWalletPayment
+            onGoBack={() => setPaymentMethod(null)}
+            register={register}
+            errors={errors}
+            eWallets={eWallets}
+          />
+        )}
+        <div className="hidden w-full px-4 py-5 rounded md:justify-end md:px-0 md:pt-12 md:pb-0 md:flex">
+          <input
+            type="submit"
+            className="cursor-pointer w-full h-[3.25rem] md:w-[8.5rem] rounded-lg bg-main button-txt"
+            value="
+              tiếp tục"
+          />
+        </div>
+      </form>
+    </>
   );
 };
 

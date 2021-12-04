@@ -1,7 +1,7 @@
 import ToggleButton from "../ToggleButton";
 import ModelImages from "../ModelImages";
 import { format } from "@/lib/currency";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CartItem } from "@/lib/types/cart";
 import {
   PaymentInfo,
@@ -10,6 +10,7 @@ import {
   ShippingInfo,
 } from "@/lib/types/payment";
 import { add, format as formatDate } from "date-fns";
+import { useWidth } from "@/lib/hooks/useWidth";
 
 interface OrderSummaryProps {
   items: CartItem[];
@@ -34,12 +35,20 @@ const OrderSummary = ({ items, total, shippingInfo, paymentInfo }: OrderSummaryP
     }
   };
   const isHighlight = !isSummaryOpen && Boolean(shippingInfo || paymentInfo);
+  const width = useWidth();
+
+  useEffect(() => {
+    const isMd = width >= 768;
+    setSummaryOpen(isMd);
+  }, [width]);
 
   return (
     <div
       className={`w-full bg-white relative px-5 py-3 flex justify-between flex-col ${
         isHighlight ? "outline-main" : "outline-none"
-      } ${isSummaryOpen ? "h-auto border-none" : "h-[6.5rem]"} `}
+      } ${
+        isSummaryOpen ? "h-auto border-none" : "h-[6.5rem]"
+      } md:max-w-[21.875rem] md:h-[49.375rem]`}
       style={{
         transition: "max-height 200ms ease-in-out",
       }}

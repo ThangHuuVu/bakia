@@ -27,9 +27,15 @@ const Checkout = ({ discount }: CheckoutProps) => {
     setCheckoutItem(latestCartItem);
   }, [latestCartItem]);
 
-  const saveItem = useCallback(() => {
-    setCart([...cart.filter((item) => item.id !== checkoutItem.id), checkoutItem]);
-  }, [cart, setCart, checkoutItem]);
+  const saveItem = useCallback(
+    (selected = false) => {
+      setCart([
+        ...cart.filter((item) => item.id !== checkoutItem.id),
+        { ...checkoutItem, selected },
+      ]);
+    },
+    [cart, setCart, checkoutItem]
+  );
 
   const router = useRouter();
   const isDiscountValid = useMemo(
@@ -91,24 +97,30 @@ const Checkout = ({ discount }: CheckoutProps) => {
             </button>
           </div>
           <div className="flex items-center justify-between w-full md:w-auto md:gap-4">
-            <div
-              className="mobile-button-txt w-[10.25rem] h-[3.25rem] rounded-lg border border-solid border-black grid place-content-center cursor-pointer md:button-txt md:h-[2.625rem] md:w-40"
-              onClick={() => {
-                saveItem();
-                router.push("/cart");
-              }}
-            >
-              <span>xem giỏ hàng</span>
-            </div>
-            <a
-              className="mobile-button-txt w-[10.25rem] h-[3.25rem] rounded-lg bg-main grid place-content-center  md:button-txt md:h-[2.625rem] md:w-40"
-              onClick={() => {
-                saveItem();
-                router.push("/payment");
-              }}
-            >
-              <span>thanh toán</span>
-            </a>
+            <Link href="/cart">
+              <a
+                className="mobile-button-txt w-[10.25rem] h-[3.25rem] rounded-lg border border-solid border-black grid place-content-center cursor-pointer md:button-txt md:h-[2.625rem] md:w-40"
+                onClick={(e) => {
+                  e.preventDefault();
+                  saveItem();
+                  router.push("/cart");
+                }}
+              >
+                <span>xem giỏ hàng</span>
+              </a>
+            </Link>
+            <Link href="/payment">
+              <a
+                className="mobile-button-txt w-[10.25rem] h-[3.25rem] rounded-lg bg-main grid place-content-center  md:button-txt md:h-[2.625rem] md:w-40"
+                onClick={(e) => {
+                  e.preventDefault();
+                  saveItem(true);
+                  router.push("/payment");
+                }}
+              >
+                <span>thanh toán</span>
+              </a>
+            </Link>
           </div>
         </div>
       </div>

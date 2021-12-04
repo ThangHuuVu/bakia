@@ -116,16 +116,18 @@ export async function getPaymentContent(preview: boolean) {
           value
         }
         banks {
+          id
           accountNumber
           accountHolderName
           image {
             blurUpThumb
             url
           }
-          bankName
+          name
           branch
         }
         eWallets {
+          id
           name
           image {
             url
