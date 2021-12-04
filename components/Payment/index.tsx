@@ -13,7 +13,7 @@ import fetcher from "@/lib/fetcher";
 
 const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
   const [cart, setCart] = useLocalStorage<CartItem[]>("cart", []);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(3);
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>();
   const [orderId, setOrderId] = useState<string>("");
@@ -168,8 +168,10 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
           </div>
           <div
             className={`${
-              step === 2 ? "block" : "hidden"
-            } relative md:h-[41.5rem] md:mt-[4.75rem] md:flex md:flex-col md:justify-between`}
+              step === 2
+                ? "block relative md:h-[41.5rem] md:mt-[4.75rem] md:flex md:flex-col md:justify-between"
+                : "hidden"
+            }`}
           >
             <h2 className="hidden md:block heading-2 gradient-footer">thanh toán pre-order</h2>
             <PaymentInfoForm
@@ -181,8 +183,8 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
             />
           </div>
           <div
-            className={`flex flex-col justify-between flex-1 w-full h-full ${
-              step === 3 ? "block" : "hidden"
+            className={`${
+              step === 3 ? "flex flex-col justify-between flex-1 w-full h-full " : "hidden"
             }`}
           >
             {orderId ? (
@@ -262,7 +264,9 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                     </svg>
                     Quay lại Thanh toán Pre-order
                   </div>
-                  <h2 className="heading-2 mt-[4.75rem] gradient-footer">hoàn tất đơn đặt hàng</h2>
+                  <h2 className="heading-2 mt-[4.75rem] gradient-footer hidden md:block">
+                    hoàn tất đơn đặt hàng
+                  </h2>
                   <p className="mx-4">
                     Khi đã hoàn tất kiểm tra chỉnh sửa chính xác{" "}
                     <button
