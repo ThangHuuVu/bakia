@@ -1,4 +1,4 @@
-import { Gender, PaymentMethod, ShippingMethod } from ".prisma/client";
+import { Gender, PaymentMethod, ShippingMethod } from "@prisma/client";
 import { getOrder } from "../db";
 import { Awaited } from "./common";
 
@@ -48,7 +48,8 @@ export type PaymentInfo = {
   paymentSource: PaymentSource;
 };
 
-interface Payment {
+export interface Payment {
+  id: string;
   accountHolderName: string;
   accountNumber: string;
   name: string;

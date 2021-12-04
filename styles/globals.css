@@ -73,3 +73,13 @@
   display: flex;
   gap: 1rem;
 }
+
+.gradient-footer {
+  @apply relative after:absolute after:bottom-[-0.375rem] after:w-64 after:left-0 after:bg-gradient-to-l after:from-main after:to-white after:h-1;
+}
+
+.payment-tab[data-state="active"] {
+  border-bottom: black;
+  border-style: solid;
+  border-bottom-width: 0.5px;
+}

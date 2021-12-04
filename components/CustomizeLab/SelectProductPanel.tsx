@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
-import { VariantColor } from ".prisma/client";
+import { VariantColor } from "@prisma/client";
 import { ProductType, VariantType } from "@/lib/types/custom";
 import { useCustomizeLab } from "./context";
 
