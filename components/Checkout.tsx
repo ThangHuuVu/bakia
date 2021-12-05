@@ -99,7 +99,7 @@ const Checkout = ({ discount }: CheckoutProps) => {
           <div className="flex items-center justify-between w-full md:w-auto md:gap-4">
             <Link href="/cart">
               <a
-                className="mobile-button-txt w-[10.25rem] h-[3.25rem] rounded-lg border border-solid border-black grid place-content-center cursor-pointer md:button-txt md:h-[2.625rem] md:w-40"
+                className="button-txt w-[10.25rem] h-[3.25rem] rounded-lg border border-solid border-black grid place-content-center cursor-pointer md:button-txt md:h-[2.625rem] md:w-40"
                 onClick={(e) => {
                   e.preventDefault();
                   saveItem();
@@ -111,7 +111,7 @@ const Checkout = ({ discount }: CheckoutProps) => {
             </Link>
             <Link href="/payment">
               <a
-                className="mobile-button-txt w-[10.25rem] h-[3.25rem] rounded-lg bg-main grid place-content-center  md:button-txt md:h-[2.625rem] md:w-40"
+                className="button-txt w-[10.25rem] h-[3.25rem] rounded-lg bg-main grid place-content-center  md:button-txt md:h-[2.625rem] md:w-40"
                 onClick={(e) => {
                   e.preventDefault();
                   saveItem(true);

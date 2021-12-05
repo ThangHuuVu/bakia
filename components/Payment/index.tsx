@@ -83,6 +83,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
           total={total}
           shippingInfo={shippingInfo}
           paymentInfo={paymentInfo}
+          orderId={orderId}
         />
         <div className="flex flex-col flex-1 h-full mt-5 md:mt-2 md:h-[48.875rem] ">
           <div className="grid grid-cols-3 px-6 md:max-h-[4.75rem]">
@@ -212,10 +213,10 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                     hoàn tất đơn đặt hàng
                   </h2>
                   <div className="h-full mx-4 mt-5 space-y-5">
-                    <p className="font-bold mobile-body-txt">
+                    <p className="font-bold body-txt">
                       Chúc mừng, BAKIA team đã nhận được đơn đặt hàng của bạn! :-)
                     </p>
-                    <p className="mobile-body-txt">
+                    <p className="body-txt">
                       Bạn đã đặt {displayItems.length} Bakia GENE1: Van Lang Heritage với mã đặt
                       hàng là {orderId}
                     </p>

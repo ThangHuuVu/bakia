@@ -1,16 +1,14 @@
-import { BankAccount, EWallet, Payment, PaymentContent, PaymentInfo } from "@/lib/types/payment";
-import { FieldErrors, useForm, UseFormRegister } from "react-hook-form";
+import { PaymentContent, PaymentInfo } from "@/lib/types/payment";
+import { useForm } from "react-hook-form";
 import { format } from "@/lib/currency";
 import { renderRule, StructuredText } from "react-datocms";
 import { isLink } from "datocms-structured-text-utils";
 import Link from "next/link";
 import { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import Image from "next/image";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { PaymentMethod } from "@prisma/client";
-import * as Tabs from "@radix-ui/react-tabs";
+import PaymentPage from "./PaymentPage";
 
 interface PaymentInfoFormProps {
   total: number;
@@ -19,250 +17,6 @@ interface PaymentInfoFormProps {
   onGoNext: () => void;
   onGoPrev: () => void;
 }
-
-const PaymentAccounts = ({ accounts }: { accounts: BankAccount[] | EWallet[] }) => {
-  return (
-    <Tabs.Root
-      defaultValue={accounts[0].id}
-      className="hidden w-full bg-white md:block h-[14.125rem]"
-    >
-      <Tabs.List className="flex items-center justify-between w-full">
-        {accounts.map((account) => {
-          return (
-            <Tabs.Trigger
-              style={{ width: `${100 / accounts.length}%` }}
-              className={`grid h-14 place-content-center cursor-pointer payment-tab`}
-              key={account.id}
-              value={account.id}
-            >
-              <Image
-                height={32}
-                width={100}
-                src={account.image.url}
-                alt={account.name}
-                blurDataURL={account.image.blurUpThumb}
-              />
-            </Tabs.Trigger>
-          );
-        })}
-      </Tabs.List>
-      {accounts.map((account) => {
-        return (
-          <Tabs.Content key={account.id} value={account.id} className="px-4 py-5">
-            <p>{account.name}</p>
-            <div>
-              <span className="text-altGrey">Số tài khoản:</span>{" "}
-              <span>{account.accountNumber}</span>
-            </div>
-            <div>
-              <span className="text-altGrey">Chủ tài khoản:</span>{" "}
-              <span className="uppercase">{account.accountHolderName}</span>
-            </div>
-            {account.branch && (
-              <div>
-                <span className="text-altGrey">Chi nhánh:</span> <span>{account.branch}</span>
-              </div>
-            )}
-          </Tabs.Content>
-        );
-      })}
-    </Tabs.Root>
-  );
-};
-
-interface BankPaymentProps {
-  onGoBack: () => void;
-  register: UseFormRegister<PaymentInfo>;
-  errors: FieldErrors<PaymentInfo>;
-  bankAccounts: BankAccount[];
-}
-
-const BankPayment = ({ onGoBack, register, errors, bankAccounts }: BankPaymentProps) => {
-  return (
-    <div className="md:relative md:mt-[8.75rem]">
-      <button
-        className="absolute flex items-center gap-2 cursor-pointer top-5 md:-top-20"
-        onClick={onGoBack}
-      >
-        <svg
-          width="24"
-          height="15"
-          viewBox="0 0 24 15"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M22.6364 6.16071H4.63636L8.59091 2.27679C9.13636 1.74107 9.13636 0.9375 8.59091 0.401786C8.04545 -0.133929 7.22727 -0.133929 6.68182 0.401786L0.409091 6.5625C-0.136364 7.09821 -0.136364 7.90179 0.409091 8.4375L6.68182 14.5982C7.22727 15.1339 8.04545 15.1339 8.59091 14.5982C9.13636 14.0625 9.13636 13.2589 8.59091 12.7232L4.63636 8.83929H22.6364C23.3182 8.83929 24 8.30357 24 7.5C24 6.69643 23.3182 6.16071 22.6364 6.16071Z"
-            fill="black"
-          />
-        </svg>
-        Chọn hình thức thanh toán khác
-      </button>
-      <p className="">Thông tin tài khoản nguồn</p>
-      <div className="relative flex flex-col w-full gap-5 mt-5 md:flex-row md:mt-[0.625rem]">
-        {Object.keys(errors).length > 0 && (
-          <span className="absolute text-error -top-20">
-            Vui lòng đáp ứng thông tin trong các mục (*)
-          </span>
-        )}
-        <input
-          className={`h-[2.75rem] md:h-[2.625rem] px-4 rounded ${
-            errors.paymentSource?.accountNumber
-              ? "border border-error placeholder-error"
-              : "border-none"
-          } md:w-full`}
-          placeholder="Số tài khoản*"
-          {...register("paymentSource.accountNumber")}
-        />
-        <input
-          className={`h-[2.75rem] md:h-[2.625rem] px-4 rounded ${
-            errors.paymentSource?.accountName
-              ? "border border-error placeholder-error"
-              : "border-none"
-          } md:w-full`}
-          placeholder="Tên chủ tài khoản*"
-          {...register("paymentSource.accountName")}
-        />
-      </div>
-      <p className="my-5 ml-4 md:my-4">Thông tin tài khoản nhận thanh toán</p>
-      <Swiper className="md:hidden payment-swiper">
-        {bankAccounts.length > 0 &&
-          bankAccounts.map((bank) => (
-            <SwiperSlide key={bank.accountNumber} className="payment-swiper-slide">
-              <div className="flex flex-col bg-white gap-[0.625rem] pt-3 pb-9 px-4 w-full">
-                <div className="flex items-center justify-center w-full">
-                  <Image
-                    height={32}
-                    width={100}
-                    src={bank.image.url}
-                    alt={bank.name}
-                    blurDataURL={bank.image.blurUpThumb}
-                  />
-                </div>
-                <p>{bank.name}</p>
-                <div>
-                  <p className="text-altGrey">Số tài khoản:</p>
-                  <p>{bank.accountNumber}</p>
-                </div>
-                <div>
-                  <p className="text-altGrey">Chủ tài khoản:</p>
-                  <p className="uppercase">{bank.accountHolderName}</p>
-                </div>
-                <div>
-                  <p className="text-altGrey">Chi nhánh:</p>
-                  <p>{bank.branch}</p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-      </Swiper>
-      <PaymentAccounts accounts={bankAccounts} />
-      <div className="w-full px-4 py-5 rounded md:hidden">
-        <input
-          type="submit"
-          className="w-full h-[3.25rem] rounded-lg bg-main button-txt"
-          value="
-              tiếp tục"
-        />
-      </div>
-    </div>
-  );
-};
-
-interface EWalletPaymentProps {
-  onGoBack: () => void;
-  register: UseFormRegister<PaymentInfo>;
-  errors: FieldErrors<PaymentInfo>;
-  eWallets: EWallet[];
-}
-
-const EWalletPayment = ({ onGoBack, register, errors, eWallets }: EWalletPaymentProps) => {
-  return (
-    <div className="md:relative">
-      <button
-        className="absolute flex items-center gap-2 cursor-pointer top-5 md:top-8"
-        onClick={onGoBack}
-      >
-        <svg
-          width="24"
-          height="15"
-          viewBox="0 0 24 15"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M22.6364 6.16071H4.63636L8.59091 2.27679C9.13636 1.74107 9.13636 0.9375 8.59091 0.401786C8.04545 -0.133929 7.22727 -0.133929 6.68182 0.401786L0.409091 6.5625C-0.136364 7.09821 -0.136364 7.90179 0.409091 8.4375L6.68182 14.5982C7.22727 15.1339 8.04545 15.1339 8.59091 14.5982C9.13636 14.0625 9.13636 13.2589 8.59091 12.7232L4.63636 8.83929H22.6364C23.3182 8.83929 24 8.30357 24 7.5C24 6.69643 23.3182 6.16071 22.6364 6.16071Z"
-            fill="black"
-          />
-        </svg>
-        Chọn hình thức thanh toán khác
-      </button>
-      <p className="mt-[5.75rem]">Thông tin tài khoản nguồn</p>
-      <div className="relative flex flex-col w-full gap-5 mt-5">
-        {Object.keys(errors).length > 0 && (
-          <span className="absolute text-error -top-20">
-            Vui lòng đáp ứng thông tin trong các mục (*)
-          </span>
-        )}
-        <input
-          className={`h-[2.75rem] md:h-[2.625 md:h-[2.625]] px-4 rounded ${
-            errors.paymentSource?.accountNumber
-              ? "border border-error placeholder-error"
-              : "border-none"
-          }`}
-          placeholder="Số tài khoản*"
-          {...register("paymentSource.accountNumber", { required: true })}
-        />
-        <input
-          className={`h-[2.75rem] md:h-[2.625 md:h-[2.625]] px-4 rounded ${
-            errors.paymentSource?.accountName
-              ? "border border-error placeholder-error"
-              : "border-none"
-          }`}
-          placeholder="Tên chủ tài khoản*"
-          {...register("paymentSource.accountName", { required: true })}
-        />
-      </div>
-      <p className="my-5 ml-4">Thông tin tài khoản nhận thanh toán</p>
-      <Swiper className="md:hidden payment-swiper">
-        {eWallets.length > 0 &&
-          eWallets.map((eWallet) => (
-            <SwiperSlide key={eWallet.name} className="payment-swiper-slide">
-              <div className="flex flex-col bg-white gap-[0.625rem] pt-3 pb-9 px-4 w-full">
-                <div className="flex items-center justify-center w-full">
-                  <Image
-                    height={32}
-                    width={100}
-                    src={eWallet.image.url}
-                    alt={eWallet.name}
-                    blurDataURL={eWallet.image.blurUpThumb}
-                  />
-                </div>
-                <p>{eWallet.name}</p>
-                <div>
-                  <p className="text-altGrey">Số điện thoại:</p>
-                  <p>{eWallet.accountNumber}</p>
-                </div>
-                <div>
-                  <p className="text-altGrey">Tên người nhận:</p>
-                  <p className="uppercase">{eWallet.accountHolderName}</p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-      </Swiper>
-      <PaymentAccounts accounts={eWallets} />
-      <div className="w-full px-4 py-5 rounded">
-        <input
-          type="submit"
-          className="w-full h-[3.25rem] rounded-lg bg-main button-txt md:hidden"
-          value="
-              tiếp tục"
-        />
-      </div>
-    </div>
-  );
-};
 
 const PaymentInfoForm = ({
   onSubmit,
@@ -383,19 +137,19 @@ const PaymentInfoForm = ({
           </>
         )}
         {paymentMethod === PaymentMethod.BANK && (
-          <BankPayment
+          <PaymentPage
             onGoBack={() => setPaymentMethod(null)}
             register={register}
             errors={errors}
-            bankAccounts={banks}
+            accounts={banks}
           />
         )}
         {paymentMethod === PaymentMethod.EWALLET && (
-          <EWalletPayment
+          <PaymentPage
             onGoBack={() => setPaymentMethod(null)}
             register={register}
             errors={errors}
-            eWallets={eWallets}
+            accounts={eWallets}
           />
         )}
         <div className="hidden w-full px-4 py-5 rounded md:justify-end md:px-0 md:pt-12 md:pb-0 md:flex">

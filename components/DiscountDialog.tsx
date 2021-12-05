@@ -98,7 +98,7 @@ const DiscountDialog = ({
         {showButton && (
           <div className="w-full px-4 pt-4">
             <button
-              className="mobile-button-txt h-[3.25rem] rounded-lg bg-main grid place-content-center w-full"
+              className="button-txt h-[3.25rem] rounded-lg bg-main grid place-content-center w-full"
               onClick={onButtonClick}
             >
               dùng ngay
