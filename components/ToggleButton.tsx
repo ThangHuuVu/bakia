@@ -1,7 +1,7 @@
 const ToggleButton = ({ isOpen, onToggle }: { isOpen: boolean; onToggle: () => void }) => {
   return (
     <div
-      className="flex items-center justify-center w-full text-center cursor-pointer text-darkMint gap-[0.375rem]"
+      className="flex md:hidden items-center justify-center w-full text-center cursor-pointer text-darkMint gap-[0.375rem]"
       onClick={onToggle}
     >
       <svg

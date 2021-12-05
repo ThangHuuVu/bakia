@@ -17,8 +17,9 @@ interface OrderSummaryProps {
   total: number;
   shippingInfo: ShippingInfo;
   paymentInfo: PaymentInfo;
+  orderId?: string;
 }
-const OrderSummary = ({ items, total, shippingInfo, paymentInfo }: OrderSummaryProps) => {
+const OrderSummary = ({ items, total, shippingInfo, paymentInfo, orderId }: OrderSummaryProps) => {
   const [isSummaryOpen, setSummaryOpen] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [isInfoOpen, setInfoOpen] = useState(false);
@@ -48,23 +49,28 @@ const OrderSummary = ({ items, total, shippingInfo, paymentInfo }: OrderSummaryP
         isHighlight ? "outline-main" : "outline-none"
       } ${
         isSummaryOpen ? "h-auto border-none" : "h-[6.5rem]"
-      } md:max-w-[21.875rem] md:h-[49.375rem]`}
+      } md:max-w-[21.875rem] md:max-h-[49.375rem] md:justify-start md:overflow-auto`}
       style={{
         transition: "max-height 200ms ease-in-out",
       }}
     >
       <div>Tổng số Bakia của bạn: {items.length}</div>
+      {orderId && (
+        <div>
+          Order ID: <span className="heading-3-black">{orderId}</span>
+        </div>
+      )}
       <div
         className={`flex flex-col items-center ${
           isSummaryOpen ? "block" : "hidden"
         } mt-[0.375rem] gap-2`}
       >
         <div>
-          <span className="mobile-heading-3">{currentIdx + 1}</span> /{" "}
-          <span className="mobile-body-txt">{items.length}</span>
+          <span className="heading-3-black">{currentIdx + 1}</span> /{" "}
+          <span className="body-txt">{items.length}</span>
         </div>
         <div className="flex flex-col-reverse w-full">
-          <p className="mobile-body-txt">{currentItem.gene.name}</p>
+          <p className="body-txt">{currentItem.gene.name}</p>
           <p className="text-black heading-3">{currentItem.gene.description}</p>
         </div>
         <div className="flex items-center justify-between w-full px-10">

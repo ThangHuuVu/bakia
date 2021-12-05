@@ -13,7 +13,7 @@ import fetcher from "@/lib/fetcher";
 
 const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
   const [cart, setCart] = useLocalStorage<CartItem[]>("cart", []);
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>();
   const [orderId, setOrderId] = useState<string>("");
@@ -83,6 +83,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
           total={total}
           shippingInfo={shippingInfo}
           paymentInfo={paymentInfo}
+          orderId={orderId}
         />
         <div className="flex flex-col flex-1 h-full mt-5 md:mt-2 md:h-[48.875rem] ">
           <div className="grid grid-cols-3 px-6 md:max-h-[4.75rem]">
@@ -184,68 +185,70 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
           </div>
           <div
             className={`${
-              step === 3 ? "flex flex-col justify-between flex-1 w-full h-full " : "hidden"
+              step === 3 ? "flex flex-col justify-between flex-1 w-full max-h-full" : "hidden"
             }`}
           >
             {orderId ? (
-              <div className="h-full mx-4 mt-5">
-                <div
-                  className="flex items-center gap-2 cursor-pointer"
-                  onClick={() => onGoToStep(2)}
-                >
-                  <svg
-                    width="24"
-                    height="15"
-                    viewBox="0 0 24 15"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+              <>
+                <div className="mx-4 mt-5">
+                  <div
+                    className="flex items-center gap-2 cursor-pointer"
+                    onClick={() => onGoToStep(2)}
                   >
-                    <path
-                      d="M22.6364 6.16071H4.63636L8.59091 2.27679C9.13636 1.74107 9.13636 0.9375 8.59091 0.401786C8.04545 -0.133929 7.22727 -0.133929 6.68182 0.401786L0.409091 6.5625C-0.136364 7.09821 -0.136364 7.90179 0.409091 8.4375L6.68182 14.5982C7.22727 15.1339 8.04545 15.1339 8.59091 14.5982C9.13636 14.0625 9.13636 13.2589 8.59091 12.7232L4.63636 8.83929H22.6364C23.3182 8.83929 24 8.30357 24 7.5C24 6.69643 23.3182 6.16071 22.6364 6.16071Z"
-                      fill="black"
+                    <svg
+                      width="24"
+                      height="15"
+                      viewBox="0 0 24 15"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M22.6364 6.16071H4.63636L8.59091 2.27679C9.13636 1.74107 9.13636 0.9375 8.59091 0.401786C8.04545 -0.133929 7.22727 -0.133929 6.68182 0.401786L0.409091 6.5625C-0.136364 7.09821 -0.136364 7.90179 0.409091 8.4375L6.68182 14.5982C7.22727 15.1339 8.04545 15.1339 8.59091 14.5982C9.13636 14.0625 9.13636 13.2589 8.59091 12.7232L4.63636 8.83929H22.6364C23.3182 8.83929 24 8.30357 24 7.5C24 6.69643 23.3182 6.16071 22.6364 6.16071Z"
+                        fill="black"
+                      />
+                    </svg>
+                    Quay lại Thanh toán Pre-order
+                  </div>
+                  <h2 className="heading-2 mt-[4.75rem] gradient-footer hidden md:block">
+                    hoàn tất đơn đặt hàng
+                  </h2>
+                  <div className="h-full mx-4 mt-5 space-y-5">
+                    <p className="font-bold body-txt">
+                      Chúc mừng, BAKIA team đã nhận được đơn đặt hàng của bạn! :-)
+                    </p>
+                    <p className="body-txt">
+                      Bạn đã đặt {displayItems.length} Bakia GENE1: Van Lang Heritage với mã đặt
+                      hàng là {orderId}
+                    </p>
+                    <StructuredText
+                      data={paymentContent.successMessage}
+                      customRules={[
+                        renderRule(isLink, ({ node }) => (
+                          <Link href={node.url}>
+                            <a className="underline text-darkMint">
+                              {node.children.map((child) => {
+                                return <child.type key={child.value}>{child.value}</child.type>;
+                              })}
+                            </a>
+                          </Link>
+                        )),
+                      ]}
                     />
-                  </svg>
-                  Quay lại Thanh toán Pre-order
+                  </div>
                 </div>
-                <h2 className="heading-2 mt-[4.75rem] gradient-footer hidden md:block">
-                  hoàn tất đơn đặt hàng
-                </h2>
-                <div className="h-full mx-4 mt-5 space-y-5">
-                  <p className="font-bold mobile-body-txt">
-                    Chúc mừng, BAKIA team đã nhận được đơn đặt hàng của bạn! :-)
-                  </p>
-                  <p className="mobile-body-txt">
-                    Bạn đã đặt {displayItems.length} Bakia GENE1: Van Lang Heritage với mã đặt hàng
-                    là {orderId}
-                  </p>
-                  <StructuredText
-                    data={paymentContent.successMessage}
-                    customRules={[
-                      renderRule(isLink, ({ node }) => (
-                        <Link href={node.url}>
-                          <a className="underline text-darkMint">
-                            {node.children.map((child) => {
-                              return <child.type key={child.value}>{child.value}</child.type>;
-                            })}
-                          </a>
-                        </Link>
-                      )),
-                    ]}
-                  />
-                </div>
-                <div className="w-full px-4 py-5">
+                <div className="w-full px-4 py-5 md:flex md:justify-end md:px-0 md:pt-8 md:pb-0">
                   <Link href="/">
                     <a>
-                      <div className="w-full h-[3.25rem] rounded-lg bg-main button-txt flex items-center justify-center">
+                      <div className="w-full h-[3.25rem] md:w-[8.5rem] rounded-lg bg-main button-txt flex items-center justify-center">
                         hoàn tất
                       </div>
                     </a>
                   </Link>
                 </div>
-              </div>
+              </>
             ) : (
               <>
-                <div className="h-full mx-4 mt-5 space-y-5">
+                <div className="mx-4 mt-5 space-y-5">
                   <div
                     className="flex items-center gap-2 cursor-pointer"
                     onClick={() => onGoToStep(2)}
@@ -285,9 +288,9 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                     , hãy xác nhận để đơn hàng của bạn được gửi đi.
                   </p>
                 </div>
-                <div className="w-full px-4 py-5">
+                <div className="w-full px-4 py-5 md:flex md:justify-end md:px-0 md:pt-9 md:pb-0">
                   <button
-                    className="w-full h-[3.25rem] rounded-lg bg-main button-txt"
+                    className="w-full h-[3.25rem] md:w-[8.5rem] rounded-lg bg-main button-txt"
                     onClick={onSubmitOrder}
                   >
                     xác nhận

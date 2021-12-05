@@ -68,7 +68,7 @@ const Card = ({
   return (
     <div className="flex flex-col mx-4 mt-[0.625rem] md:flex-row md:gap-14 md:max-h-[24.75rem] md:h-full md:border-b md:border-b-altGrey md:pb-8">
       <div className="flex flex-col-reverse mb-6 md:hidden">
-        <p className="mobile-body-txt">{item.gene.name}</p>
+        <p className="body-txt">{item.gene.name}</p>
         <p className="text-black heading-3">{item.gene.description}</p>
       </div>
       <div className="flex justify-between w-full mb-5 md:mb-0 md:w-max md:gap-[3.125rem]">
@@ -77,7 +77,7 @@ const Card = ({
             <ModelImages width={125} height={200} gene={gene} displayVariants={selectedVariants} />
           </div>
           <div className="flex-col-reverse hidden mb-6 md:flex md:mb-0">
-            <p className="mobile-body-txt">{item.gene.name}</p>
+            <p className="body-txt">{item.gene.name}</p>
             <p className="text-black heading-3">{item.gene.description}</p>
           </div>
         </div>
@@ -244,7 +244,7 @@ const Card = ({
             <div className="heading-3 md:text-mainGray md:body-txt md:not-italic md:font-normal md:uppercase">
               Tổng
             </div>
-            <div className="font-bold mobile-body-txt text-darkMint md:text-black md:font-normal">
+            <div className="font-bold body-txt text-darkMint md:text-black md:font-normal">
               {format(total, gene.currency.abbreviationSign)}
             </div>
           </div>
