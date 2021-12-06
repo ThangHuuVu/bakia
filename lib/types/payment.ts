@@ -2,7 +2,7 @@ import { Gender, PaymentMethod, ShippingMethod } from "@prisma/client";
 import { getOrder } from "../db";
 import { Awaited } from "./common";
 
-enum AreaEnum {
+export enum AreaEnum {
   south = "south",
   north = "north",
   mid = "mid",

@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const orderId = req.query.orderId as string;
     if (orderId) {
       const order = await getOrder(orderId);
-      return res.status(200).json({ order });
+      return res.status(200).json(order);
     }
     return res.status(400);
   }
