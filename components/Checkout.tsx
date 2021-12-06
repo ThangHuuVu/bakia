@@ -60,6 +60,10 @@ const Checkout = ({ discount }: CheckoutProps) => {
     (quantity) => setCheckoutItem({ ...checkoutItem, quantity }),
     [checkoutItem]
   );
+  const onSetTotal = useCallback(
+    (total: number) => setCheckoutItem({ ...checkoutItem, total }),
+    [checkoutItem]
+  );
 
   return (
     <>
@@ -87,6 +91,7 @@ const Checkout = ({ discount }: CheckoutProps) => {
             onChangeQuantity={onChangeQuantity}
             item={checkoutItem}
             isDiscountValid={isDiscountValid}
+            onSetTotal={onSetTotal}
           />
         )}
         <div className="flex flex-col justify-between w-full px-[0.938rem] py-[0.813rem] bg-white md:bg-transparent md:flex-row md:items-center md:justify-end md:gap-4">

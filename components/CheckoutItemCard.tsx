@@ -8,9 +8,16 @@ interface ItemCardProps {
   item: CartItem;
   isDiscountValid: boolean;
   onChangeQuantity: (quantity: number) => void;
+  onSetTotal: (quantity: number) => void;
   onChangeDiscountCode: (discount: string) => void;
 }
-const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid }: ItemCardProps) => {
+const Card = ({
+  item,
+  onChangeQuantity,
+  onChangeDiscountCode,
+  isDiscountValid,
+  onSetTotal,
+}: ItemCardProps) => {
   const { gene, selectedVariants, quantity, discountCode: itemDiscountCode } = item;
   const [discountAmount, setDiscountAmount] = useState<number>(0);
   const [disablePlus, setDisablePlus] = useState<boolean>(false);
@@ -33,6 +40,10 @@ const Card = ({ item, onChangeQuantity, onChangeDiscountCode, isDiscountValid }:
   const total = useMemo(() => {
     return price * quantity;
   }, [price, quantity]);
+
+  useEffect(() => {
+    onSetTotal(total);
+  }, [total]);
 
   useEffect(() => {
     setDisablePlus(isDiscountValid);
