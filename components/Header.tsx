@@ -326,7 +326,7 @@ export default function Header() {
         </div>
       </div>
       <div
-        className={`fixed w-full h-screen right-0 top-0 flex flex-col items-center z-40 bg-white transition-opacity md:transform md:transition-transform ${
+        className={`fixed w-full h-screen right-0 top-0 flex flex-col items-center justify-center z-40 bg-white transition-opacity md:transform md:transition-transform ${
           searchActive
             ? "opacity-100 md:translate-y-0"
             : "pointer-events-none opacity-0 -translate-y-full"
