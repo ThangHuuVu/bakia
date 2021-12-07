@@ -165,7 +165,17 @@ export const getOrder = async (id: string) => {
         user: true,
       },
     });
-    return order;
+    return {
+      ...order,
+      items: order.items.map((item) => ({
+        ...item,
+        productVariants: item.productVariants.map((variant) => ({
+          ...variant,
+          thumbnail: `${process.env.IMG_URL}/${variant.thumbnail}`,
+          image: `${process.env.IMG_URL}/${variant.image}`,
+        })),
+      })),
+    };
   } catch (e) {
     console.error(e);
     return null;

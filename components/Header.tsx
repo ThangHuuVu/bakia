@@ -1,9 +1,14 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useClickOutside from "@/lib/hooks/useClickOutside";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { CartItem } from "@/lib/types/cart";
+import _ from "lodash";
+import useSWR from "swr";
+import fetcher from "@/lib/fetcher";
+import { AreaEnum, OrderType } from "@/lib/types/payment";
+import OrderSummary from "./OrderSummary";
 
 function useIsScrollTop() {
   const [isTop, setIsTop] = useState(true);
@@ -21,18 +26,48 @@ function useIsScrollTop() {
   return isTop;
 }
 
+const ORDER_ID_REGEX = /BAKIA-[0-9]+$/;
+
 export default function Header() {
+  const router = useRouter();
+  const { orderId } = router.query;
+
   const [menuActive, setMenuActive] = useState(false);
   const [searchActive, setSearchActive] = useState(false);
   const [cartActive, setCartActive] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchError, setSearchError] = useState(false);
 
   const [cart] = useLocalStorage<CartItem[]>("cart", []);
   const isCartHasItem = cart.length > 0;
 
-  const router = useRouter();
   const isTop = useIsScrollTop();
   const isCart = router.pathname === "/cart";
-
+  useEffect(() => {
+    if (orderId) {
+      setSearchActive(true);
+      setSearchQuery(orderId as string);
+    }
+  }, [orderId]);
+  const { data: order, error } = useSWR<OrderType>(
+    orderId ? `/api/order/?orderId=${orderId}` : null,
+    fetcher
+  );
+  const onClearSearchQuery = () => {
+    setSearchQuery("");
+  };
+  useEffect(() => {
+    if (searchQuery && !orderId) {
+      const debouncedSearch = _.debounce(() => {
+        if (ORDER_ID_REGEX.test(searchQuery)) {
+          router.push(`/?orderId=${searchQuery}`);
+        } else {
+          setSearchError(true);
+        }
+      }, 500);
+      debouncedSearch();
+    }
+  }, [searchQuery, router, orderId]);
   useEffect(() => {
     if (searchActive || menuActive) {
       setCartActive(false);
@@ -77,7 +112,7 @@ export default function Header() {
         ref={headerRef}
         className={`sticky top-0 z-50 flex items-center justify-center ${
           menuActive || searchActive
-            ? "bg-transparent"
+            ? "bg-white"
             : isCart
             ? "bg-white"
             : isTop
@@ -288,6 +323,71 @@ export default function Header() {
               team.bakia@gmail.com
             </div>
           </div>
+        </div>
+      </div>
+      <div
+        className={`fixed w-full h-screen right-0 top-0 flex flex-col items-center justify-center z-40 bg-white transition-opacity md:transform md:transition-transform ${
+          searchActive
+            ? "opacity-100 md:translate-y-0"
+            : "pointer-events-none opacity-0 -translate-y-full"
+        } backdrop-filter bg-opacity-24 backdrop-saturate-150 backdrop-blur-lg firefox:bg-opacity-100 md:opacity-100 md:h-[21.875rem] overflow-auto`}
+      >
+        <div className="pt-14 md:pt-[3.188rem] flex flex-col items-center gap-5">
+          <p className="text-center body-txt">Tìm kiếm đơn đặt hàng của bạn</p>
+          <div className="flex items-center gap-4">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.1429 15.0857H16.0457L15.6343 14.6743C17.0057 13.1657 17.8286 11.1086 17.8286 8.91429C17.8286 3.97714 13.8514 0 8.91429 0C3.97714 0 0 3.97714 0 8.91429C0 13.8514 3.97714 17.8286 8.91429 17.8286C11.1086 17.8286 13.1657 17.0057 14.6743 15.6343L15.0857 16.0457V17.1429L21.9429 24L24 21.9429L17.1429 15.0857ZM8.91429 15.0857C5.48571 15.0857 2.74286 12.3429 2.74286 8.91429C2.74286 5.48571 5.48571 2.74286 8.91429 2.74286C12.3429 2.74286 15.0857 5.48571 15.0857 8.91429C15.0857 12.3429 12.3429 15.0857 8.91429 15.0857Z"
+                fill="#768489"
+              />
+            </svg>
+            <input
+              type="text"
+              value={searchQuery}
+              placeholder="Nhập mã đơn hàng"
+              className="text-[1.625rem] leading-[1.875rem] font-light text-altGrey max-w-[13.625rem]"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                onClick={onClearSearchQuery}
+              >
+                <path
+                  d="M17.5909 0.409091C17.0455 -0.136364 16.2273 -0.136364 15.6818 0.409091L9 7.09091L2.31818 0.409091C1.77273 -0.136364 0.954545 -0.136364 0.409091 0.409091C-0.136364 0.954545 -0.136364 1.77273 0.409091 2.31818L7.09091 9L0.409091 15.6818C-0.136364 16.2273 -0.136364 17.0455 0.409091 17.5909C0.954545 18.1364 1.77273 18.1364 2.31818 17.5909L9 10.9091L15.6818 17.5909C16.2273 18.1364 17.0455 18.1364 17.5909 17.5909C18.1364 17.0455 18.1364 16.2273 17.5909 15.6818L10.9091 9L17.5909 2.31818C18.1364 1.77273 18.1364 0.954545 17.5909 0.409091Z"
+                  fill="black"
+                />
+              </svg>
+            )}
+          </div>
+          {order && (
+            <OrderSummary
+              items={order.items.map((item) => ({
+                ...item,
+                selectedVariants: item.productVariants,
+              }))}
+              total={order.total}
+              shippingInfo={{ ...order.user, area: order.user.area as AreaEnum }}
+              paymentInfo={{
+                agreedTerm: true,
+                paymentSource: {
+                  type: order.paymentMethod,
+                  accountNumber: order.accountNumber,
+                  accountName: order.accountHolderName,
+                },
+              }}
+            />
+          )}
         </div>
       </div>
     </>
