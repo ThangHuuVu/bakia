@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useClickOutside from "@/lib/hooks/useClickOutside";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { CartItem } from "@/lib/types/cart";
@@ -38,44 +38,29 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchError, setSearchError] = useState(false);
 
-  const [cart] = useLocalStorage<CartItem[]>("cart", []);
-  const isCartHasItem = cart.length > 0;
-
   const isTop = useIsScrollTop();
+  const [cart] = useLocalStorage<CartItem[]>("cart", []);
+
+  const isCartHasItem = cart.length > 0;
   const isCart = router.pathname === "/cart";
-  useEffect(() => {
-    if (orderId) {
-      setSearchActive(true);
-      setSearchQuery(orderId as string);
-    }
-  }, [orderId]);
-  const { data: order, error } = useSWR<OrderType>(
+
+  const { data: order, error: orderError } = useSWR<OrderType>(
     orderId ? `/api/order/?orderId=${orderId}` : null,
     fetcher
   );
+  const menuRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  useClickOutside([menuRef, headerRef], () => {
+    if (menuActive) {
+      setMenuActive(false);
+    }
+  });
+
   const onClearSearchQuery = () => {
     setSearchQuery("");
+    router.push(window.location.origin);
+    setSearchError(false);
   };
-  useEffect(() => {
-    if (searchQuery && !orderId) {
-      const debouncedSearch = _.debounce(() => {
-        if (ORDER_ID_REGEX.test(searchQuery)) {
-          router.push(`/?orderId=${searchQuery}`);
-        } else {
-          setSearchError(true);
-        }
-      }, 500);
-      debouncedSearch();
-    }
-  }, [searchQuery, router, orderId]);
-  useEffect(() => {
-    if (searchActive || menuActive) {
-      setCartActive(false);
-    } else {
-      setCartActive(isCart);
-    }
-  }, [isCart, menuActive, searchActive]);
-
   const onMenuToggle = () => {
     setMenuActive((status) => {
       setSearchActive(false);
@@ -91,6 +76,44 @@ export default function Header() {
   const onGoToCart = () => {
     router.push("/cart");
   };
+
+  useEffect(() => {
+    if (orderId) {
+      setSearchActive(true);
+      setSearchQuery(orderId as string);
+    }
+  }, [orderId]);
+  useEffect(() => {
+    if (orderError) {
+      setSearchError(true);
+    }
+  }, [orderError]);
+  useEffect(() => {
+    if (!searchQuery) {
+      setSearchError(false);
+    }
+  }, [searchQuery]);
+  useEffect(() => {
+    if (searchQuery && !orderId) {
+      const debouncedSearch = _.debounce(() => {
+        if (ORDER_ID_REGEX.test(searchQuery)) {
+          router.push(`/?orderId=${searchQuery}`);
+          setSearchError(false);
+        } else {
+          setSearchError(true);
+        }
+      }, 1000);
+      debouncedSearch();
+    }
+  }, [searchQuery, router, orderId]);
+  useEffect(() => {
+    if (searchActive || menuActive) {
+      setCartActive(false);
+    } else {
+      setCartActive(isCart);
+    }
+  }, [isCart, menuActive, searchActive]);
+
   useEffect(() => {
     if (menuActive || searchActive) {
       document.body.style.overflow = "hidden";
@@ -98,13 +121,6 @@ export default function Header() {
       document.body.style.overflow = "auto";
     }
   }, [menuActive, searchActive]);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  useClickOutside([menuRef, headerRef], () => {
-    if (menuActive) {
-      setMenuActive(false);
-    }
-  });
 
   return (
     <>
@@ -326,14 +342,27 @@ export default function Header() {
         </div>
       </div>
       <div
-        className={`fixed w-full h-screen right-0 top-0 flex flex-col items-center justify-center z-40 bg-white transition-opacity md:transform md:transition-transform ${
+        className={`fixed w-full h-screen right-0 top-0 flex flex-col items-center ${
+          order ? "justify-start" : "justify-center"
+        } z-40 bg-white transition-opacity md:transform md:transition-transform ${
           searchActive
             ? "opacity-100 md:translate-y-0"
             : "pointer-events-none opacity-0 -translate-y-full"
         } backdrop-filter bg-opacity-24 backdrop-saturate-150 backdrop-blur-lg firefox:bg-opacity-100 md:opacity-100 md:h-[21.875rem] overflow-auto`}
       >
         <div className="pt-14 md:pt-[3.188rem] flex flex-col items-center gap-5">
-          <p className="text-center body-txt">Tìm kiếm đơn đặt hàng của bạn</p>
+          {searchError ? (
+            <p className="text-center px-9">
+              Đơn đặt hàng không tồn tại, vui lòng thử lại hoặc liên hệ{" "}
+              <Link href="tel:+84969505423">
+                <a className="font-bold underline text-base leading-[1.188rem] text-darkMint">
+                  (+84) 969 505 423
+                </a>
+              </Link>
+            </p>
+          ) : (
+            <p className="text-center body-txt">Tìm kiếm đơn đặt hàng của bạn</p>
+          )}
           <div className="flex items-center gap-4">
             <svg
               width="24"
@@ -351,7 +380,9 @@ export default function Header() {
               type="text"
               value={searchQuery}
               placeholder="Nhập mã đơn hàng"
-              className="text-[1.625rem] leading-[1.875rem] font-light text-altGrey max-w-[13.625rem]"
+              className={`text-[1.625rem] leading-[1.875rem] font-light ${
+                searchError ? "text-error" : "text-altGrey"
+              } max-w-[13.625rem]`}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             {searchQuery && (
