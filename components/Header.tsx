@@ -9,6 +9,7 @@ import useSWR from "swr";
 import fetcher from "@/lib/fetcher";
 import { AreaEnum, OrderType } from "@/lib/types/payment";
 import OrderSummary from "./OrderSummary";
+import { useWidth } from "@/lib/hooks/useWidth";
 
 function useIsScrollTop() {
   const [isTop, setIsTop] = useState(true);
@@ -343,14 +344,14 @@ export default function Header() {
       </div>
       <div
         className={`fixed w-full h-screen right-0 top-0 flex flex-col items-center ${
-          order ? "justify-start" : "justify-center"
+          order ? "justify-start md:h-screen" : "justify-center md:h-[21.875rem]"
         } z-40 bg-white transition-opacity md:transform md:transition-transform ${
           searchActive
             ? "opacity-100 md:translate-y-0"
             : "pointer-events-none opacity-0 -translate-y-full"
         } backdrop-filter bg-opacity-24 backdrop-saturate-150 backdrop-blur-lg firefox:bg-opacity-100 md:opacity-100 md:h-[21.875rem] overflow-auto`}
       >
-        <div className="pt-14 md:pt-[3.188rem] flex flex-col items-center gap-5">
+        <div className="pt-14 md:pt-[3.188rem] flex flex-col items-center gap-5 md:w-full">
           {searchError ? (
             <p className="text-center px-9">
               Đơn đặt hàng không tồn tại, vui lòng thử lại hoặc liên hệ{" "}
@@ -417,6 +418,8 @@ export default function Header() {
                   accountName: order.accountHolderName,
                 },
               }}
+              orderId={order.id}
+              isSearch
             />
           )}
         </div>
