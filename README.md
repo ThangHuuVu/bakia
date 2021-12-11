@@ -1,1 +1,2 @@
-# www.bakia.vercel.app
+- www.bakia.vercel.app
+- www.bakia.vn
