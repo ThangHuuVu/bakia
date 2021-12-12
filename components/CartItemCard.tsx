@@ -24,7 +24,7 @@ const Card = ({
   onRemoveCartItem,
   onSetTotal,
 }: ItemCardProps) => {
-  const { gene, selectedVariants, quantity, discountCode: itemDiscountCode } = item;
+  const { gene, selectedVariants, quantity, discountCodeString } = item;
   const [discountAmount, setDiscountAmount] = useState<number>(0);
   const [disablePlus, setDisablePlus] = useState<boolean>(false);
   const [disableMinus, setDisableMinus] = useState<boolean>(quantity === 1);
@@ -169,7 +169,7 @@ const Card = ({
                   className="w-full h-[2.625rem] pl-5"
                   placeholder="Nhập code ưu đãi"
                   onChange={(e) => onChangeDiscountCode(e.target.value)}
-                  value={itemDiscountCode}
+                  value={discountCodeString}
                 />
               </div>
               <div className="mr-10 min-w-[4rem]">
@@ -192,7 +192,7 @@ const Card = ({
               className="w-full h-[2.625rem] pl-5"
               placeholder="Nhập code ưu đãi"
               onChange={(e) => onChangeDiscountCode(e.target.value)}
-              value={itemDiscountCode}
+              value={discountCodeString}
             />
           </div>
           <div className="md:w-max md:hidden">

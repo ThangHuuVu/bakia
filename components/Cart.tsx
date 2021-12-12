@@ -115,15 +115,18 @@ const Cart = ({ discount }: CartProps) => {
               <li key={cartItem.id}>
                 <ItemCard
                   item={cartItem}
-                  isDiscountValid={discount.code === cartItem.discountCode}
+                  isDiscountValid={discount.code?.code === cartItem.discountCode?.code}
                   selected={cartItem.selected}
                   onChangeDiscountCode={(discountCode) =>
                     setCart([
                       ...cart.map<CartItemType>((item) => {
                         if (item.id === cartItem.id) {
-                          item.discountCode = discountCode;
-                          if (discount.code === discountCode) {
+                          item.discountCodeString = discountCode;
+                          if (discount.code.code === discountCode) {
                             item.quantity = 1;
+                            item.discountCode = discount.code;
+                          } else {
+                            item.discountCode = null;
                           }
                         }
                         return item;

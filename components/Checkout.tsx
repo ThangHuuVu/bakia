@@ -82,7 +82,6 @@ const Checkout = ({ discount }: CheckoutProps) => {
   const displayValue = useDisplayValue(checkoutItem, discount.code);
   const router = useRouter();
 
-  console.log(checkoutItem);
   const onChangeDiscountCode = useCallback(
     (discountCodeString: string) => {
       if (discountCodeString === discount?.code?.code) {
