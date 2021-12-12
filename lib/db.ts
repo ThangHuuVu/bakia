@@ -114,9 +114,9 @@ export const createOrder = async (
             id: item.id,
             total: item.total,
             quantity: item.quantity,
-            discountCode: item.discountCodeId
+            discountCode: item.discountCode
               ? {
-                  connect: { id: item.discountCodeId },
+                  connect: { id: item.discountCode.id },
                 }
               : undefined,
             gene: {

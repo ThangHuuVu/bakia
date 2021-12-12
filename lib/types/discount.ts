@@ -1,6 +1,7 @@
+import { DiscountCode } from "@prisma/client";
+
 export type Discount = {
-  code: string;
-  limit: number;
+  code: DiscountCode
   title: string;
   detail: string;
 };

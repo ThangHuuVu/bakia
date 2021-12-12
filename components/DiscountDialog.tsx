@@ -9,14 +9,14 @@ import { StructuredText } from "react-datocms";
 import { Discount } from "@/lib/types/discount";
 
 interface DiscountDialogProps {
-  content: Discount;
+  discount: Discount;
   open: boolean;
   showButton?: boolean;
   onButtonClick?: () => void;
   onClose: () => void;
 }
 const DiscountDialog = ({
-  content,
+  discount: { code, title, detail },
   open,
   showButton,
   onButtonClick,
@@ -45,19 +45,19 @@ const DiscountDialog = ({
           </DialogClose>
         </div>
         <DialogTitle className="text-[1.375rem] leading-7 text-center font-body mt-[0.625rem] flex flex-col items-center">
-          {content.title}
+          {title}
           <div className="flex justify-between w-full divide-x  sub-txt tracking-[-0.2px] px-3 md:max-w-[27rem] md:mt-2">
             <div className="w-1/2 text-left">
-              Mã giảm giá: <strong>{content.code}</strong>
+              Mã giảm giá: <strong>{code.code}</strong>
             </div>
             <div className="w-1/2 text-right">
-              Số lượng còn lại: <strong>{content.limit}</strong>
+              Số lượng còn lại: <strong>{code.limit}</strong>
             </div>
           </div>
         </DialogTitle>
         <div className="w-full p-3">
           <DialogDescription className="mt-4 md:mx-5 text-mainGray">
-            <StructuredText data={content.detail as any} />
+            <StructuredText data={detail as any} />
           </DialogDescription>
         </div>
         <div className="flex items-center justify-center gap-2 text-altGrey md:justify-around sub-txt">

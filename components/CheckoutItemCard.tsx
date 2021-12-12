@@ -3,23 +3,21 @@ import { CartItem } from "@/lib/types/cart";
 import ModelImages from "./ModelImages";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { DisplayValue } from "./Checkout";
 
 interface ItemCardProps {
   item: CartItem;
-  isDiscountValid: boolean;
+  displayValue: DisplayValue;
   onChangeQuantity: (quantity: number) => void;
-  onSetTotal: (quantity: number) => void;
   onChangeDiscountCode: (discount: string) => void;
 }
 const Card = ({
   item,
   onChangeQuantity,
   onChangeDiscountCode,
-  isDiscountValid,
-  onSetTotal,
+  displayValue: { total, price, isDiscountCodeValid, discountAmount },
 }: ItemCardProps) => {
-  const { gene, selectedVariants, quantity, discountCode: itemDiscountCode } = item;
-  const [discountAmount, setDiscountAmount] = useState<number>(0);
+  const { gene, selectedVariants, quantity, discountCodeString } = item;
   const [disablePlus, setDisablePlus] = useState<boolean>(false);
   const [disableMinus, setDisableMinus] = useState<boolean>(quantity === 1);
   const increaseQuantity = () => {
@@ -29,35 +27,10 @@ const Card = ({
     if (quantity > 1) onChangeQuantity(quantity - 1);
   };
 
-  const price = useMemo(() => {
-    return (
-      gene.price +
-      selectedVariants.map((variant) => variant.price).reduce((a, b) => a + b, 0) -
-      discountAmount
-    );
-  }, [gene, selectedVariants, discountAmount]);
-
-  const total = useMemo(() => {
-    return price * quantity;
-  }, [price, quantity]);
-
   useEffect(() => {
-    onSetTotal(total);
-  }, [total]);
-
-  useEffect(() => {
-    setDisablePlus(isDiscountValid);
-    setDisableMinus(isDiscountValid || quantity === 1);
-    setDiscountAmount(
-      isDiscountValid
-        ? selectedVariants
-            // exclude outfit
-            .filter((variant) => variant.product.category.id !== 11)
-            .map((variant) => variant.price)
-            .reduce((a, b) => a + b, 0)
-        : 0
-    );
-  }, [isDiscountValid, quantity, onChangeQuantity, selectedVariants]);
+    setDisablePlus(isDiscountCodeValid);
+    setDisableMinus(isDiscountCodeValid || quantity === 1);
+  }, [quantity, isDiscountCodeValid]);
 
   return (
     <div className="flex flex-col mx-4 mt-[0.625rem] md:flex-row md:gap-14 md:max-h-[23.375rem] md:h-full">
@@ -125,7 +98,7 @@ const Card = ({
               className="w-full h-[2.625rem] pl-5"
               placeholder="Nhập code ưu đãi"
               onChange={(e) => onChangeDiscountCode(e.target.value)}
-              value={itemDiscountCode}
+              value={discountCodeString}
             />
           </div>
           <div className="md:w-max">

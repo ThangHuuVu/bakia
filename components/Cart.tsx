@@ -215,7 +215,7 @@ const Cart = ({ discount }: CartProps) => {
         onDeleteClick={onDeleteDialogConfirmClick}
       />
       <DiscountDialog
-        content={discount}
+        discount={discount}
         open={isDiscountPopupShow}
         onClose={() => {
           setDiscountPopupShow(false);

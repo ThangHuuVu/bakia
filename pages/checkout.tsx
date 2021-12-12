@@ -11,8 +11,7 @@ export const getStaticProps = async ({ preview = false }) => {
   const discountCode = await getDiscountCode();
   const { title, detail } = await getDiscountCodeDescription(preview);
   const discount: Discount = {
-    code: discountCode.code,
-    limit: discountCode.limit,
+    code: discountCode,
     detail,
     title,
   };

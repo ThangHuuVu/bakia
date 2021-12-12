@@ -9,6 +9,7 @@ const nextConfig = {
       "www.datocms-assets.com",
       // img
       "img.bakia.vn",
+      "d162axpj60wjwa.cloudfront.net",
     ],
   },
 };

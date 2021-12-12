@@ -6,63 +6,103 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Discount } from "@/lib/types/discount";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { DiscountCode } from "@prisma/client";
 
 interface CheckoutProps {
   discount: Discount;
 }
 
-const Checkout = ({ discount }: CheckoutProps) => {
-  const [isDiscountPopupShow, setDiscountPopupShow] = useState<boolean>(false);
-  const onOpenDiscountPopup = () => {
-    setDiscountPopupShow(true);
-  };
-
+const useCheckoutItem = () => {
   const [cart, setCart] = useLocalStorage<CartItem[]>("cart", []);
   const latestCartItem = cart.sort(
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   )[0];
   const [checkoutItem, setCheckoutItem] = useState<CartItem>(latestCartItem);
 
-  useEffect(() => {
-    setCheckoutItem(latestCartItem);
-  }, [latestCartItem]);
-
   const saveItem = useCallback(
-    (selected = false) => {
+    (total: number, selected = false) => {
       setCart([
         ...cart.filter((item) => item.id !== checkoutItem.id),
-        { ...checkoutItem, selected },
+        { ...checkoutItem, total, selected },
       ]);
     },
     [cart, setCart, checkoutItem]
   );
-
-  const router = useRouter();
-  const isDiscountValid = useMemo(
-    () =>
-      Boolean(
-        checkoutItem.discountCode && discount.code && checkoutItem.discountCode === discount.code
-      ),
-    [checkoutItem, discount]
+  const updateCheckoutItem = useCallback(
+    (item: Partial<CartItem>) => {
+      setCheckoutItem({ ...checkoutItem, ...item });
+    },
+    [checkoutItem]
   );
 
+  useEffect(() => {
+    setCheckoutItem(latestCartItem);
+  }, [latestCartItem]);
+
+  return [checkoutItem, updateCheckoutItem, saveItem] as const;
+};
+
+export type DisplayValue = ReturnType<typeof useDisplayValue>;
+const useDisplayValue = (item: CartItem, discountCode: DiscountCode) => {
+  const { gene, selectedVariants, quantity, discountCode: itemDiscountCode } = item;
+  const [discountAmount, setDiscountAmount] = useState<number>(0);
+
+  const price = useMemo(() => {
+    return (
+      gene.price +
+      selectedVariants.map((variant) => variant.price).reduce((a, b) => a + b, 0) -
+      discountAmount
+    );
+  }, [gene, selectedVariants, discountAmount]);
+
+  const total = useMemo(() => {
+    return price * quantity;
+  }, [price, quantity]);
+
+  const isDiscountCodeValid = itemDiscountCode?.code === discountCode?.code;
+
+  useEffect(() => {
+    setDiscountAmount(
+      isDiscountCodeValid
+        ? selectedVariants
+            // exclude outfit
+            .filter((variant) => variant.product.category.id !== 11)
+            .map((variant) => variant.price)
+            .reduce((a, b) => a + b, 0)
+        : 0
+    );
+  }, [isDiscountCodeValid, selectedVariants]);
+
+  return { price, discountAmount, isDiscountCodeValid, total };
+};
+
+const Checkout = ({ discount }: CheckoutProps) => {
+  const [isDiscountPopupShow, setDiscountPopupShow] = useState<boolean>(false);
+  const [checkoutItem, updateCheckoutItem, saveItem] = useCheckoutItem();
+  const displayValue = useDisplayValue(checkoutItem, discount.code);
+  const router = useRouter();
+
+  console.log(checkoutItem);
   const onChangeDiscountCode = useCallback(
-    (discountCode) => {
-      setCheckoutItem({
-        ...checkoutItem,
-        discountCode,
-        quantity: discountCode === discount.code ? 1 : checkoutItem.quantity,
-      });
+    (discountCodeString: string) => {
+      if (discountCodeString === discount?.code?.code) {
+        updateCheckoutItem({
+          discountCode: discount.code,
+          discountCodeString,
+          quantity: 1,
+        });
+      } else {
+        updateCheckoutItem({
+          discountCode: null,
+          discountCodeString,
+        });
+      }
     },
-    [checkoutItem, discount]
+    [discount, updateCheckoutItem]
   );
   const onChangeQuantity = useCallback(
-    (quantity) => setCheckoutItem({ ...checkoutItem, quantity }),
-    [checkoutItem]
-  );
-  const onSetTotal = useCallback(
-    (total: number) => setCheckoutItem({ ...checkoutItem, total }),
-    [checkoutItem]
+    (quantity) => updateCheckoutItem({ quantity }),
+    [updateCheckoutItem]
   );
 
   return (
@@ -85,19 +125,18 @@ const Checkout = ({ discount }: CheckoutProps) => {
             Quay lại Customize Lab
           </a>
         </Link>
-        {latestCartItem && (
+        {checkoutItem && (
           <ItemCard
             onChangeDiscountCode={onChangeDiscountCode}
             onChangeQuantity={onChangeQuantity}
             item={checkoutItem}
-            isDiscountValid={isDiscountValid}
-            onSetTotal={onSetTotal}
+            displayValue={displayValue}
           />
         )}
         <div className="flex flex-col justify-between w-full px-[0.938rem] py-[0.813rem] bg-white md:bg-transparent md:flex-row md:items-center md:justify-end md:gap-4">
           <div className="flex gap-1 mb-2 md:mb-0">
             Bạn còn 01 code giảm giá chưa sử dụng. <br />
-            <button className="underline text-darkMint" onClick={onOpenDiscountPopup}>
+            <button className="underline text-darkMint" onClick={() => setDiscountPopupShow(true)}>
               Xem code
             </button>
           </div>
@@ -107,7 +146,7 @@ const Checkout = ({ discount }: CheckoutProps) => {
                 className="button-txt w-[10.25rem] h-[3.25rem] rounded-lg border border-solid border-black grid place-content-center cursor-pointer md:button-txt md:h-[2.625rem] md:w-40"
                 onClick={(e) => {
                   e.preventDefault();
-                  saveItem();
+                  saveItem(displayValue.total);
                   router.push("/cart");
                 }}
               >
@@ -119,7 +158,7 @@ const Checkout = ({ discount }: CheckoutProps) => {
                 className="button-txt w-[10.25rem] h-[3.25rem] rounded-lg bg-main grid place-content-center  md:button-txt md:h-[2.625rem] md:w-40"
                 onClick={(e) => {
                   e.preventDefault();
-                  saveItem(true);
+                  saveItem(displayValue.total, true);
                   router.push("/payment");
                 }}
               >
@@ -131,10 +170,10 @@ const Checkout = ({ discount }: CheckoutProps) => {
       </div>
       <DiscountDialog
         showButton
-        content={discount}
+        discount={discount}
         open={isDiscountPopupShow}
         onButtonClick={() => {
-          onChangeDiscountCode(discount.code);
+          onChangeDiscountCode(discount.code.code);
           setDiscountPopupShow(false);
         }}
         onClose={() => {
