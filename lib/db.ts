@@ -72,7 +72,11 @@ export const getGene = async () => {
 
 export const getDiscountCode = async () => {
   try {
-    const discountCode = await prisma.discountCode.findFirst();
+    const discountCode = await prisma.discountCode.findFirst({
+      include: {
+        orderItems: true
+      }
+    });
     return discountCode;
   } catch (e) {
     console.error(e);

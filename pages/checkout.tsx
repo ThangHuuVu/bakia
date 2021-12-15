@@ -10,8 +10,11 @@ const Checkout = dynamic(() => import("@/components/Checkout"), { ssr: false });
 export const getStaticProps = async ({ preview = false }) => {
   const discountCode = await getDiscountCode();
   const { title, detail } = await getDiscountCodeDescription(preview);
+  if (discountCode.limit < discountCode.orderItems.length) {
+    return {};
+  }
   const discount: Discount = {
-    code: discountCode,
+    code: { ...discountCode, limit: discountCode.limit - discountCode.orderItems.length },
     detail,
     title,
   };
