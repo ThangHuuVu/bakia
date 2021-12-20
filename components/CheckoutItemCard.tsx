@@ -36,7 +36,9 @@ const Card = ({
     <div className="flex flex-col mx-4 mt-[0.625rem] md:flex-row md:gap-14 md:max-h-[23.375rem] md:h-full">
       <div className="flex flex-col-reverse mb-6 md:hidden">
         <p className="body-txt">{item.gene.name}</p>
-        <p className="text-black heading-3">{item.gene.description}</p>
+        <p className="text-base italic font-bold leading-5 text-black uppercase">
+          {item.gene.description}
+        </p>
       </div>
       <div className="flex justify-between w-full mb-5 md:mb-0 md:w-max md:gap-[3.125rem]">
         <div className="md:flex md:flex-col md:gap-8 md:max-w-[16rem] md:flex-none md:items-center md:justify-center">
@@ -45,7 +47,9 @@ const Card = ({
           </div>
           <div className="flex-col-reverse hidden mb-6 md:flex md:mb-0">
             <p className="body-txt">{item.gene.name}</p>
-            <p className="text-black heading-3">{item.gene.description}</p>
+            <p className="text-base italic font-bold leading-5 text-black uppercase">
+              {item.gene.description}
+            </p>
           </div>
         </div>
         <div className="flex flex-col w-full max-w-[12.75rem] max-h-[12.5rem] relative md:max-w-full md:w-[21.875rem] md:flex-none md:max-h-full">
@@ -67,7 +71,7 @@ const Card = ({
                 Thay đổi
               </a>
             </Link>
-            <h3 className="heading-3">chi tiết</h3>
+            <h3 className="text-base italic font-black leading-5 uppercase">chi tiết</h3>
           </div>
           <dl className="w-full flex flex-col gap-[0.875rem] bg-white px-5 py-3 overflow-y-auto rounded h-full">
             <div className="flex flex-col">
@@ -87,7 +91,9 @@ const Card = ({
         </div>
       </div>
       <div className="flex flex-col justify-between md:gap-5 md:h-full">
-        <h3 className="hidden text-right md:block heading-3">định giá</h3>
+        <h3 className="hidden text-base italic font-black leading-5 text-right uppercase md:block">
+          định giá
+        </h3>
         <div className="flex flex-wrap gap-[1.625rem] justify-between md:flex-nowrap md:flex-col w-full h-full md:justify-between md:border-t md:border-b md:border-altGrey py-4 md:gap-0">
           <div className="flex-none">
             <div className="text-altGrey">Đơn giá</div>
@@ -146,7 +152,7 @@ const Card = ({
           </div>
         </div>
         <div className="pt-2 text-right border-t border-altGrey md:block md:border-none">
-          <div className="heading-3 md:text-mainGray md:body-txt md:capitalize md:not-italic md:font-normal">
+          <div className="text-base italic font-bold leading-6 uppercase md:text-mainGray md:body-txt md:capitalize md:not-italic md:font-normal">
             Tổng
           </div>
           <div className="font-bold body-txt text-darkMint md:text-black md:font-normal">

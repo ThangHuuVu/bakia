@@ -168,7 +168,7 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
             setShippingMethod(ShippingMethod.FAST);
           }}
         >
-          <h3 className="heading-3-black md:mb-2">ship nhanh</h3>
+          <h3 className="text-base italic font-black leading-5 uppercase md:mb-2">ship nhanh</h3>
           <p>{format(ShippingDetail["FAST"].price, "VND")}</p>
           <p className="text-altGrey md:mb-1">
             Thời gian giao hàng trong {ShippingDetail["FAST"].time}
@@ -182,7 +182,7 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
             setShippingMethod(ShippingMethod.STANDARD);
           }}
         >
-          <h3 className="heading-3-black md:mb-2">ship tiêu chuẩn</h3>
+          <h3 className="text-base italic font-black leading-5 uppercase md:mb-2">ship tiêu chuẩn</h3>
           <p>{format(ShippingDetail["STANDARD"].price, "VND")}</p>
           <p className="text-altGrey md:mb-1">
             Thời gian giao hàng trong {ShippingDetail["STANDARD"].time}

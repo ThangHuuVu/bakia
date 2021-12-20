@@ -142,19 +142,19 @@ const Checkout = ({ discount }: CheckoutProps) => {
           <div className="flex items-center justify-between w-full md:w-auto md:gap-4">
             <Link href="/cart">
               <a
-                className="button-txt w-[10.25rem] h-[3.25rem] rounded-lg border border-solid border-black grid place-content-center cursor-pointer md:button-txt md:h-[2.625rem] md:w-40"
+                className="w-[10.25rem] h-[3.25rem] rounded-lg border border-solid border-black grid place-content-center cursor-pointer text-[1.125rem] italic font-bold leading-[1.375rem] uppercase md:h-[2.625rem] md:w-40"
                 onClick={(e) => {
                   e.preventDefault();
                   saveItem(displayValue.total);
                   router.push("/cart");
                 }}
               >
-                <span>xem giỏ hàng</span>
+                xem giỏ hàng
               </a>
             </Link>
             <Link href="/payment">
               <a
-                className="button-txt w-[10.25rem] h-[3.25rem] rounded-lg bg-main grid place-content-center  md:button-txt md:h-[2.625rem] md:w-40"
+                className="w-[10.25rem] h-[3.25rem] rounded-lg bg-main grid place-content-center text-[1.125rem] italic font-bold leading-[1.375rem] uppercase md:h-[2.625rem] md:w-40"
                 onClick={(e) => {
                   e.preventDefault();
                   saveItem(displayValue.total, true);

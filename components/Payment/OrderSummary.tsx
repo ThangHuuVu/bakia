@@ -57,7 +57,8 @@ const OrderSummary = ({ items, total, shippingInfo, paymentInfo, orderId }: Orde
       <div>Tổng số Bakia của bạn: {items.length}</div>
       {orderId && (
         <div>
-          Order ID: <span className="heading-3-black">{orderId}</span>
+          Order ID:{" "}
+          <span className="text-base italic font-black leading-5 uppercase">{orderId}</span>
         </div>
       )}
       <div
@@ -66,12 +67,14 @@ const OrderSummary = ({ items, total, shippingInfo, paymentInfo, orderId }: Orde
         } mt-[0.375rem] gap-2`}
       >
         <div>
-          <span className="heading-3-black">{currentIdx + 1}</span> /{" "}
-          <span className="body-txt">{items.length}</span>
+          <span className="text-base italic font-black leading-5 uppercase">{currentIdx + 1}</span>{" "}
+          / <span className="body-txt">{items.length}</span>
         </div>
         <div className="flex flex-col-reverse w-full">
           <p className="body-txt">{currentItem.gene.name}</p>
-          <p className="text-black heading-3">{currentItem.gene.description}</p>
+          <p className="text-base italic font-black leading-5 text-black uppercase">
+            {currentItem.gene.description}
+          </p>
         </div>
         <div className="flex items-center justify-between w-full px-10">
           <button
@@ -133,7 +136,7 @@ const OrderSummary = ({ items, total, shippingInfo, paymentInfo, orderId }: Orde
           onClick={() => setInfoOpen(!isInfoOpen)}
           className="flex items-center justify-end gap-[0.625rem] w-full pb-[0.875rem] px-[0.875rem] border-b-0.5 border-altGrey mt-5"
         >
-          <div className="heading-3-black">Thông tin</div>
+          <div className="text-base italic font-black leading-5 uppercase">Thông tin</div>
           <svg
             width="10"
             height="12"
@@ -200,7 +203,7 @@ const OrderSummary = ({ items, total, shippingInfo, paymentInfo, orderId }: Orde
             isDetailOpen ? "" : "mb-4"
           }`}
         >
-          <div className="heading-3-black">chi tiết</div>
+          <div className="text-base italic font-black leading-5 uppercase">chi tiết</div>
           <svg
             width="10"
             height="12"

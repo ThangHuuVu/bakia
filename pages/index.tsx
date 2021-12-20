@@ -43,10 +43,8 @@ const IndexPage = ({ slides }: InferGetStaticPropsType<typeof getStaticProps>) =
         </div>
 
         <Link href={slides[0].cta.href}>
-          <a>
-            <div className="flex items-center justify-center w-full text-xl italic font-black uppercase rounded-lg h-14 bg-main">
-              {slides[0].cta.title}
-            </div>
+          <a className="flex items-center justify-center w-full rounded-lg h-14 bg-main text-lg italic font-bold leading-[1.438rem] text-center uppercase">
+            {slides[0].cta.title}
           </a>
         </Link>
       </div>

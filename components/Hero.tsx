@@ -86,10 +86,8 @@ const SlideItem = ({ slide, currentHighlight, progress, order }: SlideItemProps)
             ></p>
             {slide.cta && (
               <Link href={slide.cta.href}>
-                <a>
-                  <div className="w-[8.5rem] h-10 flex items-center justify-center mt-4 rounded-lg bg-main uppercase italic text-lg font-bold">
-                    {slide.cta.title}
-                  </div>
+                <a className="w-[8.5rem] h-[2.625rem] flex items-center justify-center mt-4 rounded-lg bg-main text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem]">
+                  {slide.cta.title}
                 </a>
               </Link>
             )}

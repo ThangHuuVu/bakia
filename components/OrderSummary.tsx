@@ -50,7 +50,7 @@ const OrderSummary = ({
             <div>Tổng số Bakia của bạn: {items.length}</div>
             {orderId && (
               <div>
-                Order ID: <span className="heading-3-black">{orderId}</span>
+                Order ID: <span className="text-base italic font-black leading-5 uppercase">{orderId}</span>
               </div>
             )}
           </div>
@@ -111,7 +111,7 @@ const OrderSummary = ({
             </div>
             <div className="flex flex-col w-full h-full">
               <div className="flex items-center justify-end gap-[0.625rem] w-full pb-[0.875rem] px-[0.875rem] border-b-0.5 border-altGrey mt-5">
-                <div className="heading-3-black">Thông tin</div>
+                <div className="text-base italic font-black leading-5 uppercase">Thông tin</div>
               </div>
               <dl className="mt-[0.875rem] w-full pl-[0.625rem]">
                 {shippingInfo && (
@@ -163,7 +163,7 @@ const OrderSummary = ({
               <div
                 className={`flex items-center justify-end gap-[0.625rem] w-full pb-[0.875rem] px-[0.875rem] border-b-0.5 border-altGrey mt-5 mb-4`}
               >
-                <div className="heading-3-black">chi tiết</div>
+                <div className="text-base italic font-black leading-5 uppercase">chi tiết</div>
               </div>
               <dl className="w-full flex flex-col gap-[0.875rem] bg-white px-[0.625rem] py-[0.875rem] overflow-y-auto rounded h-full mb-4">
                 <div>
@@ -202,17 +202,20 @@ const OrderSummary = ({
       <div>Tổng số Bakia của bạn: {items.length}</div>
       {orderId && (
         <div>
-          Order ID: <span className="heading-3-black">{orderId}</span>
+          Order ID:{" "}
+          <span className="text-base italic font-black leading-5 uppercase">{orderId}</span>
         </div>
       )}
       <div className={`flex flex-col items-center mt-[0.375rem] gap-2`}>
         <div>
-          <span className="heading-3-black">{currentIdx + 1}</span> /{" "}
-          <span className="body-txt">{items.length}</span>
+          <span className="text-base italic font-black leading-5 uppercase">{currentIdx + 1}</span>{" "}
+          / <span className="body-txt">{items.length}</span>
         </div>
         <div className="flex flex-col-reverse w-full">
           <p className="body-txt">{currentItem.gene.name}</p>
-          <p className="text-black heading-3">{currentItem.gene.description}</p>
+          <p className="text-base italic font-black leading-5 uppercase">
+            {currentItem.gene.description}
+          </p>
         </div>
         <div className="flex items-center justify-between w-full px-10">
           <button
@@ -271,7 +274,7 @@ const OrderSummary = ({
           <div>{format(currentItem.total, "VND")}</div>
         </div>
         <div className="flex items-center justify-end gap-[0.625rem] w-full pb-[0.875rem] px-[0.875rem] border-b-0.5 border-altGrey mt-5">
-          <div className="heading-3-black">Thông tin</div>
+          <div className="text-base italic font-black leading-5 uppercase">Thông tin</div>
         </div>
         <dl className="mt-[0.875rem] w-full pl-[0.625rem]">
           {shippingInfo && (
@@ -319,7 +322,7 @@ const OrderSummary = ({
         <div
           className={`flex items-center justify-end gap-[0.625rem] w-full pb-[0.875rem] px-[0.875rem] border-b-0.5 border-altGrey mt-5 mb-4`}
         >
-          <div className="heading-3-black">chi tiết</div>
+          <div className="text-base italic font-black leading-5 uppercase">chi tiết</div>
         </div>
         <dl className="w-full flex flex-col gap-[0.875rem] bg-white px-[0.625rem] py-[0.875rem] overflow-y-auto rounded h-full mb-4">
           <div>

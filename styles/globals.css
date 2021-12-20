@@ -24,16 +24,7 @@
 }
 
 .button-txt {
-  @apply text-lg italic font-bold leading-[1.313rem] text-center uppercase md:text-xl md:leading-[1.438rem];
-}
-.heading-2 {
-  @apply italic text-[1.625rem] leading-[1.875rem] font-black uppercase;
-}
-.heading-3 {
-  @apply text-base leading-[1.188rem] italic font-bold uppercase md:text-xl md:leading-[1.438rem];
-}
-.heading-3-black {
-  @apply text-base leading-[1.188rem] italic font-black uppercase md:text-xl md:leading-[1.438rem];
+  @apply text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem];
 }
 .body-txt {
   @apply font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px];

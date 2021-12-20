@@ -159,7 +159,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
             </div>
           </div>
           <div className={`${step === 1 ? "block" : "hidden"} md:h-[48.875rem]`}>
-            <h2 className="heading-2 mt-[4.75rem] gradient-footer hidden md:block">
+            <h2 className="italic text-[1.625rem] leading-[1.875rem] font-black uppercase mt-[4.75rem] gradient-footer hidden md:block">
               thông tin giao hàng
             </h2>
             <ShippingInfoForm
@@ -174,7 +174,9 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                 : "hidden"
             }`}
           >
-            <h2 className="hidden md:block heading-2 gradient-footer">thanh toán pre-order</h2>
+            <h2 className="hidden md:block italic text-[1.625rem] leading-[1.875rem] font-black uppercase gradient-footer">
+              thanh toán pre-order
+            </h2>
             <PaymentInfoForm
               total={total}
               paymentContent={paymentContent}
@@ -209,7 +211,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                     </svg>
                     Quay lại Thanh toán Pre-order
                   </div>
-                  <h2 className="heading-2 mt-[4.75rem] gradient-footer hidden md:block">
+                  <h2 className="italic text-[1.625rem] leading-[1.875rem] font-black uppercase mt-[4.75rem] gradient-footer hidden md:block">
                     hoàn tất đơn đặt hàng
                   </h2>
                   <div className="h-full mx-4 mt-5 space-y-5">
@@ -267,7 +269,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                     </svg>
                     Quay lại Thanh toán Pre-order
                   </div>
-                  <h2 className="heading-2 mt-[4.75rem] gradient-footer hidden md:block">
+                  <h2 className="italic text-[1.625rem] leading-[1.875rem] font-black uppercase mt-[4.75rem] gradient-footer hidden md:block">
                     hoàn tất đơn đặt hàng
                   </h2>
                   <p className="mx-4">

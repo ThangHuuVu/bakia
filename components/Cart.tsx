@@ -81,7 +81,7 @@ const Cart = ({ discount }: CartProps) => {
               onClick={onGoToPayment}
             >
               <div>Tổng cộng: {format(total, "VND")}</div>
-              <div className="heading-3">thanh toán ngay</div>
+              <div className="text-base italic font-bold leading-5 uppercase">thanh toán ngay</div>
             </button>
           </div>
         </div>
@@ -101,10 +101,10 @@ const Cart = ({ discount }: CartProps) => {
               <button
                 className={`w-full min-w-[8.5rem] h-[2.625rem] rounded-lg ${
                   selectedItemCount > 0 ? "bg-main text-black" : "bg-grey3 text-altGrey"
-                }`}
+                } text-base italic font-bold leading-5 uppercase`}
                 onClick={onGoToPayment}
               >
-                <div className="heading-3">thanh toán</div>
+                thanh toán
               </button>
             </div>
           </div>
@@ -181,7 +181,7 @@ const Cart = ({ discount }: CartProps) => {
           </div>
         )}
         <div className="hidden md:block w-full px-4 py-6 text-center bg-white max-h-[20.5rem] min-w-[17.875rem]">
-          <h3 className="heading-3">thanh toán trước</h3>
+          <h3 className="text-base italic font-black leading-5 uppercase">thanh toán trước</h3>
           <div className="mt-8 text-left">
             <p>Chọn thanh toán trước</p>
             <dl>
@@ -202,13 +202,13 @@ const Cart = ({ discount }: CartProps) => {
           <button
             className={`w-full h-[2.625rem] rounded-lg ${
               selectedItemCount > 0 ? "bg-main text-black" : "bg-grey3 text-altGrey"
-            } mt-6`}
+            } mt-6 text-base italic font-bold leading-5 uppercase`}
             onClick={onGoToPayment}
           >
-            <div className="heading-3">thanh toán trước</div>
+            thanh toán trước
           </button>
-          <button className="w-full h-[2.625rem] rounded-lg bg-transparent text-black border-black border mt-2">
-            <div className="heading-3">huỷ</div>
+          <button className="w-full h-[2.625rem] rounded-lg bg-transparent text-black border-black border mt-2 text-base italic font-bold leading-5 uppercase">
+            huỷ
           </button>
         </div>
       </div>
