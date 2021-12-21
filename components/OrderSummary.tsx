@@ -50,7 +50,8 @@ const OrderSummary = ({
             <div>Tổng số Bakia của bạn: {items.length}</div>
             {orderId && (
               <div>
-                Order ID: <span className="text-base italic font-black leading-5 uppercase">{orderId}</span>
+                Order ID:{" "}
+                <span className="text-base italic font-black leading-5 uppercase">{orderId}</span>
               </div>
             )}
           </div>
@@ -209,10 +210,15 @@ const OrderSummary = ({
       <div className={`flex flex-col items-center mt-[0.375rem] gap-2`}>
         <div>
           <span className="text-base italic font-black leading-5 uppercase">{currentIdx + 1}</span>{" "}
-          / <span className="body-txt">{items.length}</span>
+          /{" "}
+          <span className="font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px]">
+            {items.length}
+          </span>
         </div>
         <div className="flex flex-col-reverse w-full">
-          <p className="body-txt">{currentItem.gene.name}</p>
+          <p className="font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px]">
+            {currentItem.gene.name}
+          </p>
           <p className="text-base italic font-black leading-5 uppercase">
             {currentItem.gene.description}
           </p>

@@ -362,7 +362,9 @@ export default function Header() {
               </Link>
             </p>
           ) : (
-            <p className="text-center body-txt">Tìm kiếm đơn đặt hàng của bạn</p>
+            <p className="text-center font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px]">
+              Tìm kiếm đơn đặt hàng của bạn
+            </p>
           )}
           <div className="flex items-center gap-4">
             <svg

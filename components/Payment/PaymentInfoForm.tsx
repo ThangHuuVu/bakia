@@ -155,7 +155,7 @@ const PaymentInfoForm = ({
         <div className="hidden w-full px-4 py-5 rounded md:justify-end md:px-0 md:pt-12 md:pb-0 md:flex">
           <input
             type="submit"
-            className="cursor-pointer w-full h-[3.25rem] md:w-[8.5rem] rounded-lg bg-main button-txt"
+            className="cursor-pointer w-full h-[3.25rem] md:w-[8.5rem] rounded-lg bg-main text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem]"
             value="
               tiếp tục"
           />

@@ -35,7 +35,9 @@ const Card = ({
   return (
     <div className="flex flex-col mx-4 mt-[0.625rem] md:flex-row md:gap-14 md:max-h-[23.375rem] md:h-full">
       <div className="flex flex-col-reverse mb-6 md:hidden">
-        <p className="body-txt">{item.gene.name}</p>
+        <p className="font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px]">
+          {item.gene.name}
+        </p>
         <p className="text-base italic font-bold leading-5 text-black uppercase">
           {item.gene.description}
         </p>
@@ -46,7 +48,9 @@ const Card = ({
             <ModelImages width={125} height={200} gene={gene} displayVariants={selectedVariants} />
           </div>
           <div className="flex-col-reverse hidden mb-6 md:flex md:mb-0">
-            <p className="body-txt">{item.gene.name}</p>
+            <p className="font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px]">
+              {item.gene.name}
+            </p>
             <p className="text-base italic font-bold leading-5 text-black uppercase">
               {item.gene.description}
             </p>
@@ -152,10 +156,10 @@ const Card = ({
           </div>
         </div>
         <div className="pt-2 text-right border-t border-altGrey md:block md:border-none">
-          <div className="text-base italic font-bold leading-6 uppercase md:text-mainGray md:body-txt md:capitalize md:not-italic md:font-normal">
+          <div className="text-base italic font-bold leading-6 uppercase md:text-mainGray md:font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px] md:capitalize md:not-italic md:font-normal">
             Tổng
           </div>
-          <div className="font-bold body-txt text-darkMint md:text-black md:font-normal">
+          <div className="font-bold font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px] text-darkMint md:text-black md:font-normal">
             {format(total, gene.currency.abbreviationSign)}
           </div>
         </div>

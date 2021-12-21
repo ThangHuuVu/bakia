@@ -215,10 +215,10 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                     hoàn tất đơn đặt hàng
                   </h2>
                   <div className="h-full mx-4 mt-5 space-y-5">
-                    <p className="font-bold body-txt">
+                    <p className="font-bold font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px]">
                       Chúc mừng, BAKIA team đã nhận được đơn đặt hàng của bạn! :-)
                     </p>
-                    <p className="body-txt">
+                    <p className="font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px]">
                       Bạn đã đặt {displayItems.length} Bakia GENE1: Van Lang Heritage với mã đặt
                       hàng là {orderId}
                     </p>
@@ -241,7 +241,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                 <div className="w-full px-4 py-5 md:flex md:justify-end md:px-0 md:pt-8 md:pb-0">
                   <Link href="/">
                     <a>
-                      <div className="w-full h-[3.25rem] md:w-[8.5rem] rounded-lg bg-main button-txt flex items-center justify-center">
+                      <div className="w-full h-[3.25rem] md:w-[8.5rem] rounded-lg bg-main text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem] flex items-center justify-center">
                         hoàn tất
                       </div>
                     </a>
@@ -292,7 +292,7 @@ const Payment = ({ paymentContent }: { paymentContent: PaymentContent }) => {
                 </div>
                 <div className="w-full px-4 py-5 md:flex md:justify-end md:px-0 md:pt-9 md:pb-0">
                   <button
-                    className="w-full h-[3.25rem] md:w-[8.5rem] rounded-lg bg-main button-txt"
+                    className="w-full h-[3.25rem] md:w-[8.5rem] rounded-lg bg-main text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem]"
                     onClick={onSubmitOrder}
                   >
                     xác nhận

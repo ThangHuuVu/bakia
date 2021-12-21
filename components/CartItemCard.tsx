@@ -68,7 +68,9 @@ const Card = ({
   return (
     <div className="flex flex-col mx-4 mt-[0.625rem] md:flex-row md:gap-14 md:max-h-[24.75rem] md:h-full md:border-b md:border-b-altGrey md:pb-8">
       <div className="flex flex-col-reverse mb-6 md:hidden">
-        <p className="body-txt">{item.gene.name}</p>
+        <p className="font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px]">
+          {item.gene.name}
+        </p>
         <p className="text-base italic font-bold leading-5 text-black uppercase">
           {item.gene.description}
         </p>
@@ -79,7 +81,9 @@ const Card = ({
             <ModelImages width={125} height={200} gene={gene} displayVariants={selectedVariants} />
           </div>
           <div className="flex-col-reverse hidden mb-6 md:flex md:mb-0">
-            <p className="body-txt">{item.gene.name}</p>
+            <p className="font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px]">
+              {item.gene.name}
+            </p>
             <p className="text-base italic font-bold leading-5 text-black uppercase">
               {item.gene.description}
             </p>
@@ -247,10 +251,10 @@ const Card = ({
         </div>
         <div className="flex items-end justify-between pt-6 pb-4 text-left border-b border-altGrey md:flex-col md:border-none md:h-full md:justify-between md:p-0">
           <div className="md:text-right">
-            <div className="md:text-mainGray md:body-txt md:not-italic md:font-normal md:uppercase">
+            <div className="md:text-mainGray md:font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px] md:not-italic md:font-normal md:uppercase">
               Tổng
             </div>
-            <div className="font-bold body-txt text-darkMint md:text-black md:font-normal">
+            <div className="font-bold font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px] text-darkMint md:text-black md:font-normal">
               {format(total, gene.currency.abbreviationSign)}
             </div>
           </div>

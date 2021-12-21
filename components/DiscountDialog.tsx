@@ -46,7 +46,7 @@ const DiscountDialog = ({
         </div>
         <DialogTitle className="text-[1.375rem] leading-7 text-center font-body mt-[0.625rem] flex flex-col items-center">
           {title}
-          <div className="flex justify-between w-full divide-x  sub-txt tracking-[-0.2px] px-3 md:max-w-[27rem] md:mt-2">
+          <div className="flex justify-between w-full divide-x  font-body text-[0.813rem] leading-4 tracking-[-0.2px] px-3 md:max-w-[27rem] md:mt-2">
             <div className="w-1/2 text-left">
               Mã giảm giá: <strong>{code.code}</strong>
             </div>
@@ -60,7 +60,7 @@ const DiscountDialog = ({
             <StructuredText data={detail as any} />
           </DialogDescription>
         </div>
-        <div className="flex items-center justify-center gap-2 text-altGrey md:justify-around sub-txt">
+        <div className="flex items-center justify-center gap-2 text-altGrey md:justify-around font-body text-[0.813rem] leading-4">
           <div className="hidden md:block">Thông tin liên hệ</div>
           <div className="flex items-center gap-2">
             <svg
@@ -98,7 +98,7 @@ const DiscountDialog = ({
         {showButton && (
           <div className="w-full px-4 pt-4">
             <button
-              className="button-txt h-[3.25rem] rounded-lg bg-main grid place-content-center w-full"
+              className="text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem] h-[3.25rem] rounded-lg bg-main grid place-content-center w-full"
               onClick={onButtonClick}
             >
               dùng ngay

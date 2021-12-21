@@ -68,10 +68,15 @@ const OrderSummary = ({ items, total, shippingInfo, paymentInfo, orderId }: Orde
       >
         <div>
           <span className="text-base italic font-black leading-5 uppercase">{currentIdx + 1}</span>{" "}
-          / <span className="body-txt">{items.length}</span>
+          /{" "}
+          <span className="font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px]">
+            {items.length}
+          </span>
         </div>
         <div className="flex flex-col-reverse w-full">
-          <p className="body-txt">{currentItem.gene.name}</p>
+          <p className="font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px]">
+            {currentItem.gene.name}
+          </p>
           <p className="text-base italic font-black leading-5 text-black uppercase">
             {currentItem.gene.description}
           </p>

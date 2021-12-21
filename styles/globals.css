@@ -23,16 +23,6 @@
     0px 2.76726px 2.21381px rgba(0, 0, 0, 0.0196802);
 }
 
-.button-txt {
-  @apply text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem];
-}
-.body-txt {
-  @apply font-body text-base leading-[1.375rem] md:leading-5 md:tracking-[-0.3px];
-}
-.sub-txt {
-  @apply font-body text-[0.813rem] leading-4;
-}
-
 .faded-bg {
   background: linear-gradient(
     180deg,

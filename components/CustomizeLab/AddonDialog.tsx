@@ -42,7 +42,9 @@ const AddonDialog = () => {
     >
       <DialogContent className="fixed transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 w-[19.75rem] h-[12.875rem] bg-white popup-shadow flex flex-col justify-between rounded-[0.875rem]">
         <div className="w-full py-[0.875rem] relative border-b">
-          <DialogTitle className="button-txt">item chưa kích hoạt</DialogTitle>
+          <DialogTitle className="text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem]">
+            item chưa kích hoạt
+          </DialogTitle>
           <DialogClose className="absolute top-[0.625rem] right-[0.625rem]">
             <svg
               width="14"

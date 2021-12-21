@@ -182,7 +182,9 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
             setShippingMethod(ShippingMethod.STANDARD);
           }}
         >
-          <h3 className="text-base italic font-black leading-5 uppercase md:mb-2">ship tiêu chuẩn</h3>
+          <h3 className="text-base italic font-black leading-5 uppercase md:mb-2">
+            ship tiêu chuẩn
+          </h3>
           <p>{format(ShippingDetail["STANDARD"].price, "VND")}</p>
           <p className="text-altGrey md:mb-1">
             Thời gian giao hàng trong {ShippingDetail["STANDARD"].time}
@@ -197,7 +199,7 @@ const ShippingInfoForm = ({ onSubmitShippingInfo, onGoNext }: ShippingInfoFormPr
       <div className="w-full px-4 py-5 rounded md:flex md:justify-end md:px-0 md:pt-9 md:pb-0">
         <input
           type="submit"
-          className="cursor-pointer w-full h-[3.25rem] md:w-[8.5rem] rounded-lg bg-main button-txt"
+          className="cursor-pointer w-full h-[3.25rem] md:w-[8.5rem] rounded-lg bg-main text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem]"
           value="
               tiếp tục"
         />

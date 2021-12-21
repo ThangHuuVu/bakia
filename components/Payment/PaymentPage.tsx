@@ -63,7 +63,7 @@ const PaymentPage = ({ onGoBack, register, errors, accounts }: PaymentPageProps)
       <div className="w-full px-4 py-5 rounded md:hidden">
         <input
           type="submit"
-          className="w-full h-[3.25rem] rounded-lg bg-main button-txt"
+          className="w-full h-[3.25rem] rounded-lg bg-main text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem]"
           value="
               tiếp tục"
         />

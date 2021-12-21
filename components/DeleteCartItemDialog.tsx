@@ -34,10 +34,16 @@ const DeleteCartItemDialog = ({ open, onClose, onDeleteClick }) => {
           <p>Bạn có muốn xoá Bakia?</p>
         </div>
         <div className="flex w-full h-[3.25rem] gap-0.5 ">
-          <button className="w-full bg-main button-txt" onClick={onDeleteClick}>
+          <button
+            className="w-full bg-main text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem]"
+            onClick={onDeleteClick}
+          >
             có
           </button>
-          <button className="w-full bg-main button-txt" onClick={onClose}>
+          <button
+            className="w-full bg-main text-lg italic font-bold leading-[1.438rem] text-center uppercase md:text-xl md:leading-[1.313rem]"
+            onClick={onClose}
+          >
             không
           </button>
         </div>
